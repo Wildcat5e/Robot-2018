@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * project.
  */
 
-/*Test Commit*/
 public class Robot extends IterativeRobot {
 	private String gameData;
 	private static final String powerCubeAuto = "Place Power Cube";

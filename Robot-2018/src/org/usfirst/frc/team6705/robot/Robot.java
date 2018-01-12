@@ -83,7 +83,7 @@ public class Robot extends IterativeRobot {
 				} else {
 					//Put right auto code here
 				}
-				
+				break;
 			default:
 				// Put default auto code here
 				break;

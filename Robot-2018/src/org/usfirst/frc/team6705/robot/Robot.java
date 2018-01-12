@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * project.
  */
 public class Robot extends IterativeRobot {
+	private String gameData;
 	private static final String powerCubeAuto = "Place Power Cube";
 	private static final String baselineAuto = "Cross Baseline Only";
 	private String autoSelected;
@@ -53,15 +54,9 @@ public class Robot extends IterativeRobot {
 		// defaultAuto);
 		System.out.println("Auto selected: " + autoSelected);
 		
-		String gameData;
-		gameData = DriverStation.getInstance().getGameSpecificMessage();
 		
-		if(gameData.charAt(0) == 'L')
-		{
-			//Put left auto code here
-		} else {
-			//Put right auto code here
-		}
+		gameData = DriverStation.getInstance().getGameSpecificMessage();
+
 	}
 
 	/**
@@ -71,9 +66,24 @@ public class Robot extends IterativeRobot {
 	public void autonomousPeriodic() {
 		switch (autoSelected) {
 			case powerCubeAuto:
-				// Put custom auto code here
+				
+				if(gameData.charAt(0) == 'L')
+				{
+					//Put left auto code here
+				} else {
+					//Put right auto code here
+				}
+				
 				break;
 			case baselineAuto:
+				
+				if(gameData.charAt(0) == 'L')
+				{
+					//Put left auto code here
+				} else {
+					//Put right auto code here
+				}
+				
 			default:
 				// Put default auto code here
 				break;
@@ -85,6 +95,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
+		
 	}
 
 	/**
@@ -92,5 +103,6 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
+		
 	}
 }

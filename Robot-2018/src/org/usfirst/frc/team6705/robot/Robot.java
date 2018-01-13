@@ -5,9 +5,14 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+/*----------------------------------------------------------------------------*/
+/* FRC Team 6705 2018 Robot Code: Power Up                                    */
+/*----------------------------------------------------------------------------*/
+
 package org.usfirst.frc.team6705.robot;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -25,6 +30,8 @@ public class Robot extends IterativeRobot {
 	private static final String baselineAuto = "Cross Baseline Only";
 	private String autoSelected;
 	private SendableChooser<String> chooser = new SendableChooser<>();
+	
+	Spark controlFrontLeftMotor = new Spark(3);
 
 	/**
 	 * This function is run when the robot is first started up and should be

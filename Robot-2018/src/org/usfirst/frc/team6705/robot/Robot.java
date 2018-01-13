@@ -12,7 +12,10 @@
 package org.usfirst.frc.team6705.robot;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -31,8 +34,20 @@ public class Robot extends IterativeRobot {
 	private String autoSelected;
 	private SendableChooser<String> chooser = new SendableChooser<>();
 	
-	Spark controlFrontLeftMotor = new Spark(3);
-//test
+	Spark frontLeftMotor = new Spark(0);
+	Spark frontRightMotor = new Spark(1);
+	Spark backLeftMotor = new Spark (2);
+	Spark backRightMotor = new Spark (3);
+	
+	SpeedControllerGroup left = new SpeedControllerGroup(frontLeftMotor, backLeftMotor);
+	SpeedControllerGroup right = new SpeedControllerGroup(frontRightMotor, backRightMotor);
+	
+	DifferentialDrive robotDrive = new DifferentialDrive(left, right);
+	
+	Joystick driveStick = new Joystick(1);
+	
+	
+	
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
@@ -103,6 +118,8 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
+		
+		robotDrive.tankDrive(driveStick.getRawAxis(2), driveStick.getRawAxis(5), true);
 		
 	}
 

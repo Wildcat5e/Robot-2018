@@ -10,6 +10,7 @@
 /*----------------------------------------------------------------------------*/
 
 package org.usfirst.frc.team6705.robot;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
@@ -18,6 +19,7 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -29,15 +31,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
 	private String gameData;
-	private static final String powerCubeAuto = "Place Power Cube";
+	private static final String switchAuto = "Place Power Cube on Switch";
+	private static final String scaleAuto = "Place Power Cube on Scale";
 	private static final String baselineAuto = "Cross Baseline Only";
 	private String autoSelected;
 	private SendableChooser<String> chooser = new SendableChooser<>();
 	
-	Spark frontLeftMotor = new Spark(0);
-	Spark frontRightMotor = new Spark(1);
-	Spark backLeftMotor = new Spark (2);
-	Spark backRightMotor = new Spark (3);
+	Spark frontLeftMotor = new Spark(Constants.frontLeftMotor);
+	Spark frontRightMotor = new Spark(Constants.frontRightMotor);
+	Spark backLeftMotor = new Spark (Constants.backLeftMotor);
+	Spark backRightMotor = new Spark (Constants.backRightMotor);
 	
 	SpeedControllerGroup left = new SpeedControllerGroup(frontLeftMotor, backLeftMotor);
 	SpeedControllerGroup right = new SpeedControllerGroup(frontRightMotor, backRightMotor);
@@ -54,7 +57,8 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void robotInit() {
-		chooser.addDefault("Place Power Cube", powerCubeAuto);
+		chooser.addDefault("Power Cube on Switch", switchAuto);
+		chooser.addObject("Power Cube on Scale", scaleAuto);
 		chooser.addObject("Cross Baseline Only", baselineAuto);
 		SmartDashboard.putData("Auto choices", chooser);
 	}
@@ -88,24 +92,25 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {
 		switch (autoSelected) {
-			case powerCubeAuto:
+			case switchAuto:
 				
-				if(gameData.charAt(0) == 'L')
-				{
-					//Put left auto code here
+				if(gameData.charAt(0) == 'L') {
+					//Put left switch auto code here
 				} else {
-					//Put right auto code here
+					//Put right switch auto code here
 				}
+				break;
+			case scaleAuto:
 				
+				if(gameData.charAt(1) == 'L') {
+					//Put left scale auto code here
+				} else {
+					//Put right scale auto code here
+				}
 				break;
 			case baselineAuto:
 				
-				if(gameData.charAt(0) == 'L')
-				{
-					//Put left auto code here
-				} else {
-					//Put right auto code here
-				}
+				//Drive forward to cross baseline
 				break;
 			default:
 				// Put default auto code here
@@ -119,7 +124,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		
-		robotDrive.tankDrive(driveStick.getRawAxis(2), driveStick.getRawAxis(5), true);
+		robotDrive.tankDrive(driveStick.getRawAxis(Constants.driveStickLeftYAxis), driveStick.getRawAxis(Constants.driveStickRightYAxis), true);
 		
 	}
 
@@ -128,6 +133,9 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
+		
+		robotDrive.tankDrive(driveStick.getRawAxis(Constants.driveStickLeftYAxis), driveStick.getRawAxis(Constants.driveStickRightYAxis), true);
+
 		
 	}
 }

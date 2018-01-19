@@ -14,6 +14,7 @@ package org.usfirst.frc.team6705.robot;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -124,8 +125,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		
-		robotDrive.tankDrive(driveStick.getRawAxis(Constants.driveStickLeftYAxis), driveStick.getRawAxis(Constants.driveStickRightYAxis), true);
-		
+		operatorControl();
 	}
 
 	/**
@@ -134,9 +134,13 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void testPeriodic() {
 		
+		operatorControl();
+		
+	}
+	
+	public void operatorControl() {
 		robotDrive.tankDrive(driveStick.getRawAxis(Constants.driveStickLeftYAxis), driveStick.getRawAxis(Constants.driveStickRightYAxis), true);
 
-		
 	}
 }
 

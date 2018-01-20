@@ -38,6 +38,7 @@ public class Autonomous {
 				DriveTrain.stop();
 				break;
 		}
+		
 	}
 	
 	static public void leftSwitchAuto() {

@@ -39,6 +39,9 @@ public class DriveTrain {
 	}
 
 	public static void moveByDistance(double inches) {
+		leftTalon.setSelectedSensorPosition(0, 0, 0);
+		rightTalon.setSelectedSensorPosition(0, 0, 0);
+		
 		double targetEncoderTicks = (inches/(2 * Math.PI * wheelRadius)) * pulsesPerRotation;
 		double maxVelocity = (autoForwardSpeedRPM * pulsesPerRotation) / 600.0;
 		double ticksRemaining;

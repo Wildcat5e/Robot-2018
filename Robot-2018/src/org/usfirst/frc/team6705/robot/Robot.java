@@ -51,23 +51,12 @@ public class Robot extends IterativeRobot {
 	private SendableChooser<String> autoChooser = new SendableChooser<>();
 	private SendableChooser<String> positionChooser = new SendableChooser<>();
 	
-	/*
-	Spark frontLeftMotor = new Spark(frontLeftMotorChannel);
-	Spark frontRightMotor = new Spark(frontRightMotorChannel);
-	Spark backLeftMotor = new Spark (backLeftMotorChannel);
-	Spark backRightMotor = new Spark (backRightMotorChannel);
-	*/
-	
 	boolean intakeOpen = true; 
 	boolean intakeRolling = false;
 	double intakeStartTime = 0;
 	
 	Timer timer = new Timer();
 	
-	//SpeedControllerGroup left = new SpeedControllerGroup(frontLeftMotor, backLeftMotor);
-	//SpeedControllerGroup right = new SpeedControllerGroup(frontRightMotor, backRightMotor);
-	
-	//DifferentialDrive robotDrive = new DifferentialDrive(left, right);
 	
 	XboxController driveStick = new XboxController(1);
 	

@@ -13,7 +13,6 @@ package org.usfirst.frc.team6705.robot;
 
 import edu.wpi.first.wpilibj.CounterBase;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PIDController;
@@ -25,6 +24,8 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import static org.usfirst.frc.team6705.robot.Constants.*;
+
+import org.usfirst.frc.team6705.robot.Autonomous.BaselineAutoState;
 
 
 /**
@@ -50,10 +51,12 @@ public class Robot extends IterativeRobot {
 	private SendableChooser<String> autoChooser = new SendableChooser<>();
 	private SendableChooser<String> positionChooser = new SendableChooser<>();
 	
+	/*
 	Spark frontLeftMotor = new Spark(frontLeftMotorChannel);
 	Spark frontRightMotor = new Spark(frontRightMotorChannel);
 	Spark backLeftMotor = new Spark (backLeftMotorChannel);
 	Spark backRightMotor = new Spark (backRightMotorChannel);
+	*/
 	
 	boolean intakeOpen = true; 
 	boolean intakeRolling = false;
@@ -61,14 +64,10 @@ public class Robot extends IterativeRobot {
 	
 	Timer timer = new Timer();
 	
-	Encoder driveTrainEncoderLeft = new Encoder(driveEncoderLeftChannelA, driveEncoderLeftChannelB, false, CounterBase.EncodingType.k4X);
-	Encoder driveTrainEncoderRight = new Encoder(driveEncoderRightChannelA, driveEncoderRightChannelB, false, CounterBase.EncodingType.k4X);
-
+	//SpeedControllerGroup left = new SpeedControllerGroup(frontLeftMotor, backLeftMotor);
+	//SpeedControllerGroup right = new SpeedControllerGroup(frontRightMotor, backRightMotor);
 	
-	SpeedControllerGroup left = new SpeedControllerGroup(frontLeftMotor, backLeftMotor);
-	SpeedControllerGroup right = new SpeedControllerGroup(frontRightMotor, backRightMotor);
-	
-	DifferentialDrive robotDrive = new DifferentialDrive(left, right);
+	//DifferentialDrive robotDrive = new DifferentialDrive(left, right);
 	
 	XboxController driveStick = new XboxController(1);
 	
@@ -89,8 +88,6 @@ public class Robot extends IterativeRobot {
 		positionChooser.addObject("Right Starting Position", rightPosition);
 		SmartDashboard.putData("Starting position", positionChooser);
 		
-		driveTrainEncoderLeft.setDistancePerPulse(distancePerPulse);
-		driveTrainEncoderRight.setDistancePerPulse(distancePerPulse);
 
 	}
 
@@ -115,8 +112,8 @@ public class Robot extends IterativeRobot {
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 		
 		timer.start();
-		driveTrainEncoderLeft.reset();
-		driveTrainEncoderRight.reset();
+		//driveTrainEncoderLeft.reset();
+		//driveTrainEncoderRight.reset();
 	}
 
 	/**
@@ -124,33 +121,33 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
-		double currentDistanceLeft = driveTrainEncoderLeft.getDistance();
-		double currentDistanceRight = driveTrainEncoderRight.getDistance();
+		//double currentDistanceLeft = driveTrainEncoderLeft.getDistance();
+		//double currentDistanceRight = driveTrainEncoderRight.getDistance();
 		
 		switch (autoSelected) {
 			case switchAuto:
 				
 				if(gameData.charAt(0) == 'L') {
 					//Put left switch auto code here
+					Autonomous.leftSwitchAuto();
 				} else {
 					//Put right switch auto code here
+					Autonomous.rightSwitchAuto();
 				}
 				break;
 			case scaleAuto:
 				
 				if(gameData.charAt(1) == 'L') {
 					//Put left scale auto code here
+					Autonomous.leftScaleAuto();
 				} else {
 					//Put right scale auto code here
+					Autonomous.rightScaleAuto();
 				}
 				break;
 			case baselineAuto:
+				Autonomous.baselineAuto();
 				//Drive forward to cross baseline
-				if (currentDistanceRight <= 60) {
-					Autonomous.driveForward(robotDrive, autoForwardSpeed);
-				} else {
-					Autonomous.stop(robotDrive);
-				}
 				break;
 			default:
 				// Put default auto code here
@@ -181,7 +178,7 @@ public class Robot extends IterativeRobot {
 		
 		double currentTime = timer.get();
 		
-		robotDrive.tankDrive(driveStick.getRawAxis(driveStickLeftYAxis), driveStick.getRawAxis(driveStickRightYAxis), true);
+		//robotDrive.tankDrive(driveStick.getRawAxis(driveStickLeftYAxis), driveStick.getRawAxis(driveStickRightYAxis), true);
 
 		if (driveStick.getBumper(GenericHID.Hand.kRight) && intakeOpen && !intakeRolling) {
 			//Pressed right bumper, close intake

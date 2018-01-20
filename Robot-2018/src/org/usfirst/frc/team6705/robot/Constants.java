@@ -7,10 +7,10 @@ package org.usfirst.frc.team6705.robot;
 public class Constants {
 
 	//Motor Controllers
-	public static int frontLeftMotorChannel = 0,
-			frontRightMotorChannel = 1,
-			backLeftMotorChannel = 2,
-			backRightMotorChannel = 3,
+	public static int leftTalonChannel = 15,
+			rightTalonChannel = 1,
+			leftVictorChannel = 2,
+			rightVictorChannel = 3,
 			leftIntakeSparkChannel = 4,
 			rightIntakeSparkChannel = 5;
 	
@@ -33,14 +33,13 @@ public class Constants {
 			driveEncoderRightChannelB = 3;
 	
 	//Speed, time, and other constants
-	public static int rollersSpeed = 1;
-			
-	
 	public static double timeToRoll = 1.5,
-		autoForwardSpeed = 0.4,
+		autoForwardSpeedRPM = 0.4,
 		wheelRadius = 2.0,
-		pulsesPerRotation = 100,
-		distancePerPulse = (wheelRadius * 2.0 * Math.PI)/pulsesPerRotation;
+		pulsesPerRotation = 256,
+		distancePerPulse = (wheelRadius * 2.0 * Math.PI)/pulsesPerRotation,
+		rollersSpeed = 1.0,
+		talonAcceleration = 100;
 	
 	
 }

@@ -27,11 +27,20 @@ public class Constants {
 	
 	
 	//Sensors
+	public static int driveEncoderLeftChannelA = 0,
+			driveEncoderLeftChannelB = 1,
+			driveEncoderRightChannelA = 2,
+			driveEncoderRightChannelB = 3;
 	
 	//Speed, time, and other constants
 	public static int rollersSpeed = 1;
+			
 	
-	public static double timeToRoll = 1.5;
+	public static double timeToRoll = 1.5,
+		autoForwardSpeed = 0.4,
+		wheelRadius = 2.0,
+		pulsesPerRotation = 100,
+		distancePerPulse = (wheelRadius * 2.0 * Math.PI)/pulsesPerRotation;
 	
 	
 }

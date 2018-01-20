@@ -11,7 +11,9 @@
 
 package org.usfirst.frc.team6705.robot;
 
+import edu.wpi.first.wpilibj.CounterBase;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PIDController;
@@ -59,6 +61,10 @@ public class Robot extends IterativeRobot {
 	
 	Timer timer = new Timer();
 	
+	Encoder driveTrainEncoderLeft = new Encoder(driveEncoderLeftChannelA, driveEncoderLeftChannelB, false, CounterBase.EncodingType.k4X);
+	Encoder driveTrainEncoderRight = new Encoder(driveEncoderRightChannelA, driveEncoderRightChannelB, false, CounterBase.EncodingType.k4X);
+
+	
 	SpeedControllerGroup left = new SpeedControllerGroup(frontLeftMotor, backLeftMotor);
 	SpeedControllerGroup right = new SpeedControllerGroup(frontRightMotor, backRightMotor);
 	
@@ -82,6 +88,10 @@ public class Robot extends IterativeRobot {
 		positionChooser.addObject("Middle Starting Position", middlePosition);
 		positionChooser.addObject("Right Starting Position", rightPosition);
 		SmartDashboard.putData("Starting position", positionChooser);
+		
+		driveTrainEncoderLeft.setDistancePerPulse(distancePerPulse);
+		driveTrainEncoderRight.setDistancePerPulse(distancePerPulse);
+
 	}
 
 	/**
@@ -103,7 +113,10 @@ public class Robot extends IterativeRobot {
 		System.out.println("Auto selected: " + autoSelected);
 		
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
+		
 		timer.start();
+		driveTrainEncoderLeft.reset();
+		driveTrainEncoderRight.reset();
 	}
 
 	/**
@@ -111,6 +124,9 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
+		double currentDistanceLeft = driveTrainEncoderLeft.getDistance();
+		double currentDistanceRight = driveTrainEncoderRight.getDistance();
+		
 		switch (autoSelected) {
 			case switchAuto:
 				
@@ -129,8 +145,12 @@ public class Robot extends IterativeRobot {
 				}
 				break;
 			case baselineAuto:
-				
 				//Drive forward to cross baseline
+				if (currentDistanceRight <= 60) {
+					Autonomous.driveForward(robotDrive, autoForwardSpeed);
+				} else {
+					Autonomous.stop(robotDrive);
+				}
 				break;
 			default:
 				// Put default auto code here

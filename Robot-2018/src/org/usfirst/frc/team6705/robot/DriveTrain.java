@@ -4,8 +4,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
-import edu.wpi.first.wpilibj.CounterBase;
-import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 
 import static org.usfirst.frc.team6705.robot.Constants.*;
@@ -27,33 +26,37 @@ public class DriveTrain {
 		rightTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 		
 		gyro.reset();
-
-		
 	}
 	
-	
+	//Tank drive for teleop control
 	public static void tankDrive(double leftSpeed, double rightSpeed) {
-		//TODO: look at squred inputs
 		leftTalon.set(ControlMode.PercentOutput, leftSpeed);
 		rightTalon.set(ControlMode.PercentOutput, rightSpeed);
 	}
 
 	public static void moveByDistance(double inches) {
-		leftTalon.setSelectedSensorPosition(0, 0, 0);
-		rightTalon.setSelectedSensorPosition(0, 0, 0);
+		//Reset encoders
+		resetEncoders();
 		
-		double targetEncoderTicks = (inches/(2 * Math.PI * wheelRadius)) * pulsesPerRotation;
-		double maxVelocity = (autoForwardSpeedRPM * pulsesPerRotation) / 600.0;
+		//Convert argument from inches to encoder ticks
+		double targetEncoderTicks = (inches/(2 * Math.PI * wheelRadius)) * ticksPerRevolution;
+		
+		double maxVelocity = (autoForwardSpeedRPM * ticksPerRevolution) / 600.0; // Rev/Min * Ticks/Rev * Min/100ms -> Ticks/100ms
 		double ticksRemaining;
 		
 		do {
 			ticksRemaining = targetEncoderTicks - leftTalon.getSelectedSensorPosition(0);
-			double velocity = (ticksRemaining/targetEncoderTicks) * maxVelocity;
+			double fractionRemaining = ticksRemaining/targetEncoderTicks;
+			double scaledFraction = fractionRemaining * 3; //Start slowing down 2/3 of the way there
+			if (scaledFraction > 1) {
+				scaledFraction = 1;
+			}
+			
+			double velocity = scaledFraction * maxVelocity;
 			setVelocity(velocity, velocity);
-		} while (leftTalon.getSelectedSensorPosition(0) < targetEncoderTicks);
+		} while (leftTalon.getSelectedSensorPosition(0) < targetEncoderTicks && DriverStation.getInstance().isAutonomous());
 		
-		stop();
-
+		stop(); //Stop driving when loop finishes
 	}
 		
 	
@@ -62,13 +65,20 @@ public class DriveTrain {
 		rightTalon.set(ControlMode.Velocity, right);
 	}
 	
+	public static void turnDegrees(double degrees) {
+		//Fill in method to turn by certain # of degrees using gyro and encoders
+		//Positive degrees -> counterclockwise; negative degrees -> clockwise
+	}
+	
 	public static void stop() {
 		leftTalon.set(ControlMode.PercentOutput, 0);
 		rightTalon.set(ControlMode.PercentOutput, 0);
 	}
 	
-	public static void turnDegrees(double degrees) {
-		
+	public static void resetEncoders() {
+		leftTalon.setSelectedSensorPosition(0, 0, 0);
+		rightTalon.setSelectedSensorPosition(0, 0, 0);
 	}
+	
 	
 }

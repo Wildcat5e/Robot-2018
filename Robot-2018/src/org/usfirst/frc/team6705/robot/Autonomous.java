@@ -1,60 +1,76 @@
 package org.usfirst.frc.team6705.robot;
 
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import static org.usfirst.frc.team6705.robot.Constants.*;
-
-import org.usfirst.frc.team6705.robot.Autonomous.BaselineAutoState;
 
 
 public class Autonomous {
-
-	static public void driveForward(DifferentialDrive drive, double speed, double leftMinusRightDifference) {
-		if (leftMinusRightDifference > 1) {
-			drive.tankDrive(speed - 0.5, speed);
-		} else if (leftMinusRightDifference < -1) {
-			
-		} else {
-			drive.tankDrive(speed, speed);
-		}
-	}
-	
-	static public void stop(DifferentialDrive drive) {
-		drive.tankDrive(0, 0);
-	}
-	
-	enum BaselineAutoState {
-		DRIVEFORWARD, WAIT
-	}
 	
 	static public void baselineAuto() {
-		BaselineAutoState state = BaselineAutoState.DRIVEFORWARD;
+		boolean operating = true;
 		
-		switch (state) {
-			case DRIVEFORWARD:
-				DriveTrain.moveByDistance(132);
-				state = BaselineAutoState.WAIT;
-				break;
-			case WAIT:
-				DriveTrain.stop();
-				break;
+		if (operating) {
+			DriveTrain.moveByDistance(132); //Move forward 11 feet = 132 inches
+			operating = false; //Change operating to false; now done with auto routine
+		} else {
+			DriveTrain.stop(); //Stop moving
 		}
 		
 	}
 	
-	static public void leftSwitchAuto() {
-		
+	static public void leftSwitchAuto(String startingPosition) {
+		switch (startingPosition) {
+			case left:
+				//Code for starting on left
+				break;
+			case middle:
+				//Code for starting in middle; most likely scenario
+				break;
+			case right:
+				//Code for starting on right
+				break;
+		}
 	}
 	
-	static public void rightSwitchAuto() {
-		
+	static public void rightSwitchAuto(String startingPosition) {
+		switch (startingPosition) {
+			case left:
+				//Code for starting on left
+				break;
+			case middle:
+				//Code for starting in middle; most likely scenario
+				break;
+			case right:
+				//Code for starting on right
+				break;
+		}
 	}
 	
-	static public void leftScaleAuto() {
-		
+	static public void leftScaleAuto(String startingPosition) {
+			switch (startingPosition) {
+			case left:
+				//Code for starting on left
+				break;
+			case middle:
+				//Code for starting in middle; most likely scenario
+				break;
+			case right:
+				//Code for starting on right
+				break;
+			}
 	}
 
-	static public void rightScaleAuto() {
-	
+	static public void rightScaleAuto(String startingPosition) {
+		switch (startingPosition) {
+			case left:
+				//Code for starting on left
+				break;
+			case middle:
+				//Code for starting in middle; most likely scenario
+				break;
+			case right:
+				//Code for starting on right
+				break;
+		}	
 	}
 	
 	

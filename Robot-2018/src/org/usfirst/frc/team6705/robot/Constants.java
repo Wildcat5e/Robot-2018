@@ -22,9 +22,14 @@ public class Constants {
 	
 	//Joysticks
 	public static int driveStickLeftYAxis = 1,
-			driveStickRightYAxis = 5;
+			driveStickRightYAxis = 5,
+			dPadChannel = 1;
 	
 	
+	//Auto Starting Positions
+	public static final String left = "left",
+			middle = "middle",
+			right = "right";
 	
 	//Sensors
 
@@ -33,8 +38,8 @@ public class Constants {
 	public static double timeToRoll = 1.5,
 		autoForwardSpeedRPM = 0.4,
 		wheelRadius = 2.0,
-		pulsesPerRotation = 256,
-		distancePerPulse = (wheelRadius * 2.0 * Math.PI)/pulsesPerRotation,
+		ticksPerRevolution = 256,
+		distancePerPulse = (wheelRadius * 2.0 * Math.PI)/ticksPerRevolution,
 		rollersSpeed = 1.0,
 		talonAcceleration = 100;
 	

@@ -11,21 +11,14 @@
 
 package org.usfirst.frc.team6705.robot;
 
-import edu.wpi.first.wpilibj.CounterBase;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.PIDController;
-import edu.wpi.first.wpilibj.Spark;
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import static org.usfirst.frc.team6705.robot.Constants.*;
-
-import org.usfirst.frc.team6705.robot.Autonomous.BaselineAutoState;
 
 
 /**
@@ -44,9 +37,7 @@ public class Robot extends IterativeRobot {
 	private static final String baselineAuto = "Cross Baseline Only";
 	private String autoSelected;
 	
-	private static final String leftPosition = "Left Starting Position";
-	private static final String middlePosition = "Middle Starting Position";
-	private static final String rightPosition = "Right Starting Position";
+	private String startingPosition;
 	
 	private SendableChooser<String> autoChooser = new SendableChooser<>();
 	private SendableChooser<String> positionChooser = new SendableChooser<>();
@@ -56,7 +47,6 @@ public class Robot extends IterativeRobot {
 	double intakeStartTime = 0;
 	
 	Timer timer = new Timer();
-	
 	
 	XboxController driveStick = new XboxController(1);
 	
@@ -72,12 +62,11 @@ public class Robot extends IterativeRobot {
 		autoChooser.addObject("Cross Baseline Only", baselineAuto);
 		SmartDashboard.putData("Auto choices", autoChooser);
 		
-		positionChooser.addObject("Left Starting Position", leftPosition);
-		positionChooser.addObject("Middle Starting Position", middlePosition);
-		positionChooser.addObject("Right Starting Position", rightPosition);
+		positionChooser.addObject("Left Starting Position", left);
+		positionChooser.addObject("Middle Starting Position", middle);
+		positionChooser.addObject("Right Starting Position", right);
 		SmartDashboard.putData("Starting position", positionChooser);
 		
-
 	}
 
 	/**
@@ -94,6 +83,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		autoSelected = autoChooser.getSelected();
+		startingPosition = positionChooser.getSelected();
 		// autoSelected = SmartDashboard.getString("Auto Selector",
 		// defaultAuto);
 		System.out.println("Auto selected: " + autoSelected);
@@ -114,25 +104,25 @@ public class Robot extends IterativeRobot {
 				
 				if(gameData.charAt(0) == 'L') {
 					//Put left switch auto code here
-					Autonomous.leftSwitchAuto();
+					Autonomous.leftSwitchAuto(startingPosition);
 				} else {
 					//Put right switch auto code here
-					Autonomous.rightSwitchAuto();
+					Autonomous.rightSwitchAuto(startingPosition);
 				}
 				break;
 			case scaleAuto:
 				
 				if(gameData.charAt(1) == 'L') {
 					//Put left scale auto code here
-					Autonomous.leftScaleAuto();
+					Autonomous.leftScaleAuto(startingPosition);
 				} else {
 					//Put right scale auto code here
-					Autonomous.rightScaleAuto();
+					Autonomous.rightScaleAuto(startingPosition);
 				}
 				break;
 			case baselineAuto:
-				Autonomous.baselineAuto();
 				//Drive forward to cross baseline
+				Autonomous.baselineAuto();
 				break;
 			default:
 				// Put default auto code here
@@ -159,22 +149,29 @@ public class Robot extends IterativeRobot {
 		
 	}
 	
+	//operatorControl() is called periodically in both teleop and test periodic
 	public void operatorControl() {
 		
 		double currentTime = timer.get();
 		
-		DriveTrain.tankDrive(driveStick.getRawAxis(driveStickLeftYAxis), driveStick.getRawAxis(driveStickRightYAxis));
+		//Joysticks - control tank drive
+		DriveTrain.tankDrive(driveStick.getY(GenericHID.Hand.kLeft), driveStick.getY(GenericHID.Hand.kRight));
 		
+		//Bumpers - control intake pneumatics and rollers
 		if (driveStick.getBumper(GenericHID.Hand.kRight) && intakeOpen && !intakeRolling) {
-			//Pressed right bumper, close intake
-			bumperRight();
-			
+			bumperRight(); //Handle right bumper press
 		} else if (driveStick.getBumper(GenericHID.Hand.kLeft) && !intakeOpen && !intakeRolling) {
-			//Pressed left bump, close outtake
-			bumperLeft();
+			bumperLeft(); //Handle left bumper press
 		}
 		
-		//Stop intaking
+		//dpad - control only rollers
+		if (driveStick.getPOV(dPadChannel) > 315 || driveStick.getPOV(dPadChannel) < 45) {
+			dPadUp(); //Handle dpad up press
+		} else if (driveStick.getPOV(dPadChannel) > 135 && driveStick.getPOV(dPadChannel) < 225) {
+			dPadDown(); //Handle dpad down press
+		}
+		
+		//Stop intaking if enough time has passed
 		if (intakeRolling && currentTime - intakeStartTime > timeToRoll) {
 			Intake.stopRollers();
 			intakeRolling = false;
@@ -182,6 +179,7 @@ public class Robot extends IterativeRobot {
 		
 	}
 	
+	//Called when driver presses right bumper
 	public void bumperRight() {
 		intakeStartTime = timer.get();
 		Intake.close();
@@ -190,6 +188,7 @@ public class Robot extends IterativeRobot {
 		intakeRolling = true;
 	}
 	
+	//Called when driver presses left bumper
 	public void bumperLeft() {
 		intakeStartTime = timer.get();
 		Intake.open();
@@ -198,6 +197,15 @@ public class Robot extends IterativeRobot {
 		intakeRolling = true;
 	}
 	
+	//Called when driver presses dpad in general up direction
+	public void dPadUp() {
+		Intake.outtakeCube();
+	}
+	
+	//Called when driver presses dpad in general down direction
+	public void dPadDown() {
+		Intake.intakeCube();
+	}
 	
 }
 

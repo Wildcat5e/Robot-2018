@@ -12,11 +12,14 @@
 package org.usfirst.frc.team6705.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -32,24 +35,36 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
 	private String gameData;
+	
 	private static final String switchAuto = "Place Power Cube on Switch";
 	private static final String scaleAuto = "Place Power Cube on Scale";
 	private static final String baselineAuto = "Cross Baseline Only";
 	private String autoSelected;
-	private SendableChooser<String> chooser = new SendableChooser<>();
+	
+	private static final String leftPosition = "Left Starting Position";
+	private static final String middlePosition = "Middle Starting Position";
+	private static final String rightPosition = "Right Starting Position";
+	
+	private SendableChooser<String> autoChooser = new SendableChooser<>();
+	private SendableChooser<String> positionChooser = new SendableChooser<>();
 	
 	Spark frontLeftMotor = new Spark(Constants.frontLeftMotor);
 	Spark frontRightMotor = new Spark(Constants.frontRightMotor);
 	Spark backLeftMotor = new Spark (Constants.backLeftMotor);
 	Spark backRightMotor = new Spark (Constants.backRightMotor);
 	
+	boolean intakeOpen = true; 
+	boolean intakeRolling = false;
+	double intakeStartTime = 0;
+	
+	Timer timer = new Timer();
+	
 	SpeedControllerGroup left = new SpeedControllerGroup(frontLeftMotor, backLeftMotor);
 	SpeedControllerGroup right = new SpeedControllerGroup(frontRightMotor, backRightMotor);
 	
 	DifferentialDrive robotDrive = new DifferentialDrive(left, right);
 	
-	Joystick driveStick = new Joystick(1);
-	
+	XboxController driveStick = new XboxController(1);
 	
 	
 	/**
@@ -58,10 +73,15 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void robotInit() {
-		chooser.addDefault("Power Cube on Switch", switchAuto);
-		chooser.addObject("Power Cube on Scale", scaleAuto);
-		chooser.addObject("Cross Baseline Only", baselineAuto);
-		SmartDashboard.putData("Auto choices", chooser);
+		autoChooser.addDefault("Power Cube on Switch", switchAuto);
+		autoChooser.addObject("Power Cube on Scale", scaleAuto);
+		autoChooser.addObject("Cross Baseline Only", baselineAuto);
+		SmartDashboard.putData("Auto choices", autoChooser);
+		
+		positionChooser.addObject("Left Starting Position", leftPosition);
+		positionChooser.addObject("Middle Starting Position", middlePosition);
+		positionChooser.addObject("Right Starting Position", rightPosition);
+		SmartDashboard.putData("Starting position", positionChooser);
 	}
 
 	/**
@@ -77,14 +97,13 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		autoSelected = chooser.getSelected();
+		autoSelected = autoChooser.getSelected();
 		// autoSelected = SmartDashboard.getString("Auto Selector",
 		// defaultAuto);
 		System.out.println("Auto selected: " + autoSelected);
 		
-		
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
-
+		timer.start();
 	}
 
 	/**
@@ -139,8 +158,43 @@ public class Robot extends IterativeRobot {
 	}
 	
 	public void operatorControl() {
+		
+		double currentTime = timer.get();
+		
 		robotDrive.tankDrive(driveStick.getRawAxis(Constants.driveStickLeftYAxis), driveStick.getRawAxis(Constants.driveStickRightYAxis), true);
 
+		if (driveStick.getBumper(GenericHID.Hand.kRight) && intakeOpen && !intakeRolling) {
+			//Pressed right bumper, close intake
+			bumperRight();
+			
+		} else if (driveStick.getBumper(GenericHID.Hand.kLeft) && !intakeOpen && !intakeRolling) {
+			//Pressed left bump, close outtake
+			bumperLeft();
+		}
+		
+		if (intakeRolling && currentTime - intakeStartTime > Constants.timeToRoll) {
+			Intake.stopRollers();
+			intakeRolling = false;
+		}
+		
 	}
+	
+	public void bumperRight() {
+		intakeStartTime = timer.get();
+		Intake.close();
+		intakeOpen = false;
+		Intake.intakeCube();
+		intakeRolling = true;
+	}
+	
+	public void bumperLeft() {
+		intakeStartTime = timer.get();
+		Intake.open();
+		intakeOpen = true;
+		Intake.outtakeCube();
+		intakeRolling = true;
+	}
+	
+	
 }
 

@@ -14,7 +14,6 @@ package org.usfirst.frc.team6705.robot;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
@@ -23,6 +22,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import static org.usfirst.frc.team6705.robot.Constants.*;
 
 
 /**
@@ -48,10 +48,10 @@ public class Robot extends IterativeRobot {
 	private SendableChooser<String> autoChooser = new SendableChooser<>();
 	private SendableChooser<String> positionChooser = new SendableChooser<>();
 	
-	Spark frontLeftMotor = new Spark(Constants.frontLeftMotor);
-	Spark frontRightMotor = new Spark(Constants.frontRightMotor);
-	Spark backLeftMotor = new Spark (Constants.backLeftMotor);
-	Spark backRightMotor = new Spark (Constants.backRightMotor);
+	Spark frontLeftMotor = new Spark(frontLeftMotorChannel);
+	Spark frontRightMotor = new Spark(frontRightMotorChannel);
+	Spark backLeftMotor = new Spark (backLeftMotorChannel);
+	Spark backRightMotor = new Spark (backRightMotorChannel);
 	
 	boolean intakeOpen = true; 
 	boolean intakeRolling = false;
@@ -161,7 +161,7 @@ public class Robot extends IterativeRobot {
 		
 		double currentTime = timer.get();
 		
-		robotDrive.tankDrive(driveStick.getRawAxis(Constants.driveStickLeftYAxis), driveStick.getRawAxis(Constants.driveStickRightYAxis), true);
+		robotDrive.tankDrive(driveStick.getRawAxis(driveStickLeftYAxis), driveStick.getRawAxis(driveStickRightYAxis), true);
 
 		if (driveStick.getBumper(GenericHID.Hand.kRight) && intakeOpen && !intakeRolling) {
 			//Pressed right bumper, close intake
@@ -172,7 +172,8 @@ public class Robot extends IterativeRobot {
 			bumperLeft();
 		}
 		
-		if (intakeRolling && currentTime - intakeStartTime > Constants.timeToRoll) {
+		//Stop intaking
+		if (intakeRolling && currentTime - intakeStartTime > timeToRoll) {
 			Intake.stopRollers();
 			intakeRolling = false;
 		}

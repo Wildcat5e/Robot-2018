@@ -2,27 +2,28 @@ package org.usfirst.frc.team6705.robot;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Spark;
+import static org.usfirst.frc.team6705.robot.Constants.*;
 
 public class Intake {
 
-	static Spark rollersLeft = new Spark(Constants.leftIntakeSpark);
-	static Spark rollersRight = new Spark(Constants.rightIntakeSpark);
+	static Spark rollersLeft = new Spark(leftIntakeSparkChannel);
+	static Spark rollersRight = new Spark(rightIntakeSparkChannel);
 	
-	static DoubleSolenoid leftSolenoid = new DoubleSolenoid(Constants.leftIntakeSolenoidForward, Constants.leftIntakeSolenoidReverse);
-	static DoubleSolenoid rightSolenoid = new DoubleSolenoid(Constants.rightIntakeSolenoidForward, Constants.rightIntakeSolenoidReverse);
+	static DoubleSolenoid leftSolenoid = new DoubleSolenoid(leftIntakeSolenoidForward, leftIntakeSolenoidReverse);
+	static DoubleSolenoid rightSolenoid = new DoubleSolenoid(rightIntakeSolenoidForward, rightIntakeSolenoidReverse);
 
 	
 	public static void intakeCube() {
 		
-		rollersLeft.set(Constants.rollersSpeed);
-		rollersRight.set(-Constants.rollersSpeed);
+		rollersLeft.set(rollersSpeed);
+		rollersRight.set(-rollersSpeed);
 		
 	}
 	
 	public static void outtakeCube() {
 		
-		rollersLeft.set(-Constants.rollersSpeed);
-		rollersRight.set(Constants.rollersSpeed);
+		rollersLeft.set(-rollersSpeed);
+		rollersRight.set(rollersSpeed);
 		
 	}
 	

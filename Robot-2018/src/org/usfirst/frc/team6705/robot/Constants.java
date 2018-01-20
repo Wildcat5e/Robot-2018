@@ -7,12 +7,12 @@ package org.usfirst.frc.team6705.robot;
 public class Constants {
 
 	//Motor Controllers
-	public static int frontLeftMotor = 0,
-			frontRightMotor = 1,
-			backLeftMotor = 2,
-			backRightMotor = 3,
-			leftIntakeSpark = 4,
-			rightIntakeSpark = 5;
+	public static int frontLeftMotorChannel = 0,
+			frontRightMotorChannel = 1,
+			backLeftMotorChannel = 2,
+			backRightMotorChannel = 3,
+			leftIntakeSparkChannel = 4,
+			rightIntakeSparkChannel = 5;
 	
 	//Solenoids
 	public static int leftIntakeSolenoidForward = 0,

@@ -27,10 +27,7 @@ public class Constants {
 	
 	
 	//Sensors
-	public static int driveEncoderLeftChannelA = 0,
-			driveEncoderLeftChannelB = 1,
-			driveEncoderRightChannelA = 2,
-			driveEncoderRightChannelB = 3;
+
 	
 	//Speed, time, and other constants
 	public static double timeToRoll = 1.5,

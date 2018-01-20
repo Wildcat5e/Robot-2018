@@ -19,9 +19,6 @@ public class DriveTrain {
 	
 	static ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 	
-	//Encoder driveTrainEncoderLeft = new Encoder(driveEncoderLeftChannelA, driveEncoderLeftChannelB, false, CounterBase.EncodingType.k4X);
-	//Encoder driveTrainEncoderRight = new Encoder(driveEncoderRightChannelA, driveEncoderRightChannelB, false, CounterBase.EncodingType.k4X);
-	
 	public static void setup() {
 		leftVictor.follow(leftTalon);
 		rightVictor.follow(rightTalon);
@@ -30,8 +27,6 @@ public class DriveTrain {
 		rightTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 		
 		gyro.reset();
-		//leftTalon.configMotionAcceleration(talonAcceleration);
-		//rightTalon.configMotionAcceleration(talonAcceleration);
 
 		
 	}

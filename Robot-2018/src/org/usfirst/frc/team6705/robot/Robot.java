@@ -112,8 +112,6 @@ public class Robot extends IterativeRobot {
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 		
 		timer.start();
-		//driveTrainEncoderLeft.reset();
-		//driveTrainEncoderRight.reset();
 	}
 
 	/**
@@ -121,8 +119,6 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
-		//double currentDistanceLeft = driveTrainEncoderLeft.getDistance();
-		//double currentDistanceRight = driveTrainEncoderRight.getDistance();
 		
 		switch (autoSelected) {
 			case switchAuto:
@@ -178,8 +174,8 @@ public class Robot extends IterativeRobot {
 		
 		double currentTime = timer.get();
 		
-		//robotDrive.tankDrive(driveStick.getRawAxis(driveStickLeftYAxis), driveStick.getRawAxis(driveStickRightYAxis), true);
-
+		DriveTrain.tankDrive(driveStick.getRawAxis(driveStickLeftYAxis), driveStick.getRawAxis(driveStickRightYAxis));
+		
 		if (driveStick.getBumper(GenericHID.Hand.kRight) && intakeOpen && !intakeRolling) {
 			//Pressed right bumper, close intake
 			bumperRight();

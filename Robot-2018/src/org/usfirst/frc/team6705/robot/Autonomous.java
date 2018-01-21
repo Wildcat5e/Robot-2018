@@ -51,7 +51,7 @@ public class Autonomous {
 				//Code for starting on left
 				break;
 			case middle:
-				//Code for starting in middle; most likely scenario
+				//Code for starting in middle
 				break;
 			case right:
 				//Code for starting on right
@@ -65,7 +65,7 @@ public class Autonomous {
 				//Code for starting on left
 				break;
 			case middle:
-				//Code for starting in middle; most likely scenario
+				//Code for starting in middle
 				break;
 			case right:
 				//Code for starting on right

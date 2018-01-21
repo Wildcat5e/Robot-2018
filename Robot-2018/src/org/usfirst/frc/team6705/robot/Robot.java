@@ -32,9 +32,9 @@ import static org.usfirst.frc.team6705.robot.Constants.*;
 public class Robot extends IterativeRobot {
 	private String gameData;
 	
-	private static final String switchAuto = "Place Power Cube on Switch";
-	private static final String scaleAuto = "Place Power Cube on Scale";
-	private static final String baselineAuto = "Cross Baseline Only";
+	private static final String switchAuto = "switch";
+	private static final String scaleAuto = "scale";
+	private static final String baselineAuto = "baseline";
 	private String autoSelected;
 	
 	private String startingPosition;
@@ -48,8 +48,7 @@ public class Robot extends IterativeRobot {
 	
 	Timer timer = new Timer();
 	
-	XboxController driveStick = new XboxController(1);
-	
+	XboxController driveStick = new XboxController(driveStickChannel);
 	
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -67,6 +66,7 @@ public class Robot extends IterativeRobot {
 		positionChooser.addObject("Right Starting Position", right);
 		SmartDashboard.putData("Starting position", positionChooser);
 		
+		DriveTrain.setup();
 	}
 
 	/**
@@ -154,7 +154,7 @@ public class Robot extends IterativeRobot {
 		
 		double currentTime = timer.get();
 		
-		//Joysticks - control tank drive
+		//Joystick - control tank drive
 		DriveTrain.tankDrive(driveStick.getY(GenericHID.Hand.kLeft), driveStick.getY(GenericHID.Hand.kRight));
 		
 		//Bumpers - control intake pneumatics and rollers
@@ -165,10 +165,12 @@ public class Robot extends IterativeRobot {
 		}
 		
 		//dpad - control only rollers
-		if (driveStick.getPOV(dPadChannel) > 315 || driveStick.getPOV(dPadChannel) < 45) {
+		if (driveStick.getPOV(dPadChannel) > 325 || driveStick.getPOV(dPadChannel) < 35) {
 			dPadUp(); //Handle dpad up press
-		} else if (driveStick.getPOV(dPadChannel) > 135 && driveStick.getPOV(dPadChannel) < 225) {
+		} else if (driveStick.getPOV(dPadChannel) > 145 && driveStick.getPOV(dPadChannel) < 215) {
 			dPadDown(); //Handle dpad down press
+		} else {
+			Intake.stopRollers();
 		}
 		
 		//Stop intaking if enough time has passed

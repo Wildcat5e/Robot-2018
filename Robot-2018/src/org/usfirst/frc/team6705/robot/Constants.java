@@ -21,7 +21,8 @@ public class Constants {
 			rightIntakeSolenoidReverse = 3;
 	
 	//Joysticks
-	public static int driveStickLeftYAxis = 1,
+	public static int driveStickChannel = 0,
+			driveStickLeftYAxis = 1,
 			driveStickRightYAxis = 5,
 			dPadChannel = 1;
 	
@@ -34,14 +35,14 @@ public class Constants {
 	//Sensors
 
 	
-	//Speed, time, and other constants
-	public static double timeToRoll = 1.5,
-		autoForwardSpeedRPM = 0.4,
-		wheelRadius = 2.0,
-		ticksPerRevolution = 256,
-		distancePerPulse = (wheelRadius * 2.0 * Math.PI)/ticksPerRevolution,
-		rollersSpeed = 1.0,
-		talonAcceleration = 100;
+	//Speed, time, measurement, and other constants
+	public static double timeToRoll = 1.5, //seconds
+		wheelRadius = 2.0, //inches
+		autoForwardSpeedFPS = 9, //feet per second
+		autoForwardSpeedRPM = (60 *autoForwardSpeedFPS * 12)/(wheelRadius * 2 * Math.PI), //rev per minute
+		ticksPerRevolution = 256, //encoder ticks
+		distancePerTick = (wheelRadius * 2.0 * Math.PI)/ticksPerRevolution, //inches per tick
+		rollersSpeed = 0.5; //From -1 to 1
 	
 	
 }

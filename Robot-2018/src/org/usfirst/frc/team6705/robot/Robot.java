@@ -165,7 +165,7 @@ public class Robot extends IterativeRobot {
 		}
 		
 		//dpad - control only rollers
-		if (driveStick.getPOV(dPadChannel) > 325 || driveStick.getPOV(dPadChannel) < 35) {
+		if (driveStick.getPOV(dPadChannel) > 325 || (driveStick.getPOV(dPadChannel) < 35 && driveStick.getPOV(dPadChannel) > 0)) {
 			dPadUp(); //Handle dpad up press
 		} else if (driveStick.getPOV(dPadChannel) > 145 && driveStick.getPOV(dPadChannel) < 215) {
 			dPadDown(); //Handle dpad down press

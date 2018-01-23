@@ -39,10 +39,17 @@ public class Constants {
 	public static double timeToRoll = 1.5, //seconds
 		wheelRadius = 2.0, //inches
 		autoForwardSpeedFPS = 9, //feet per second
-		autoForwardSpeedRPM = (60 *autoForwardSpeedFPS * 12)/(wheelRadius * 2 * Math.PI), //rev per minute
 		ticksPerRevolution = 256, //encoder ticks
 		distancePerTick = (wheelRadius * 2.0 * Math.PI)/ticksPerRevolution, //inches per tick
 		rollersSpeed = 0.5; //From -1 to 1
 	
+	public static double convertInchesToTicks(double inches) {
+		return (inches/(2 * Math.PI * wheelRadius)) * ticksPerRevolution;
+	}
+	
+	public static double convertFPSToTicksPer100MS(double FPS) {
+		double rpm = (60 * 12 * FPS)/(wheelRadius * 2 * Math.PI);
+		return (rpm * ticksPerRevolution) / 600.0; // Rev/Min * Ticks/Rev * Min/100ms -> Ticks/100ms
+	}
 	
 }

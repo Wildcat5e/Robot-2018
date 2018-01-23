@@ -25,7 +25,10 @@ public class DriveTrain {
 		leftTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 		rightTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 		
+		//TODO: Perform any other talon and victor config here
+		
 		gyro.reset();
+		resetEncoders();
 	}
 	
 	//Tank drive for teleop control
@@ -39,9 +42,9 @@ public class DriveTrain {
 		resetEncoders();
 		
 		//Convert argument from inches to encoder ticks
-		double targetEncoderTicks = (inches/(2 * Math.PI * wheelRadius)) * ticksPerRevolution;
+		double targetEncoderTicks = convertInchesToTicks(inches);
 		
-		double maxVelocity = (autoForwardSpeedRPM * ticksPerRevolution) / 600.0; // Rev/Min * Ticks/Rev * Min/100ms -> Ticks/100ms
+		double maxVelocity = convertFPSToTicksPer100MS(autoForwardSpeedFPS);
 		double ticksRemaining;
 		
 		do {

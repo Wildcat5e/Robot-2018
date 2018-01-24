@@ -15,59 +15,159 @@ public class Autonomous {
 	}
 	
 	static public void leftSwitchAuto(String startingPosition) {
-		switch (startingPosition) {
-			case left:
-				//Code for starting on left
-				break;
-			case middle:
-				//Code for starting in middle; most likely scenario
-				break;
-			case right:
-				//Code for starting on right
-				break;
+		if (operating) {
+			switch (startingPosition) {
+				case left:
+					//Code for starting on left
+					DriveTrain.moveByDistance(168);
+					DriveTrain.turnDegrees(-90);
+					//LIFT CUBE TO SWITCH HEIGHT
+					Intake.outtakeCube();
+					operating = false;
+					break;
+				case middle:
+					//Code for starting in middle; most likely scenario
+					DriveTrain.moveByDistance(48);
+					DriveTrain.turnDegrees(90);
+					DriveTrain.moveByDistance(48);
+					DriveTrain.turnDegrees(-90);
+					DriveTrain.moveByDistance(72);
+					//LIFT CUBE TO SWITCH HEIGHT
+					Intake.outtakeCube();
+					operating = false;
+					break;
+				case right:
+					//Code for starting on right
+					DriveTrain.moveByDistance(240);
+					DriveTrain.turnDegrees(90);
+					DriveTrain.moveByDistance(121);
+					DriveTrain.turnDegrees(90);
+					//LIFT CUBE TO SWITCH HEIGHT
+					Intake.outtakeCube();
+					operating = false;
+					break;
+			}
+		} else {
+			DriveTrain.stop();
 		}
 	}
 	
 	static public void rightSwitchAuto(String startingPosition) {
-		switch (startingPosition) {
-			case left:
-				//Code for starting on left
-				break;
-			case middle:
-				//Code for starting in middle; most likely scenario
-				break;
-			case right:
-				//Code for starting on right
-				break;
+		if (operating) {
+			switch (startingPosition) {
+				case left:
+					//Code for starting on left
+					DriveTrain.moveByDistance(240);
+					DriveTrain.turnDegrees(-90);
+					DriveTrain.moveByDistance(121);
+					DriveTrain.turnDegrees(-90);
+					//LIFT CUBE TO SWITCH HEIGHT
+					Intake.outtakeCube();
+					operating = false;
+					break;
+				case middle:
+					//Code for starting in middle; most likely scenario
+					DriveTrain.moveByDistance(48);
+					DriveTrain.turnDegrees(-90);
+					DriveTrain.moveByDistance(48);
+					DriveTrain.turnDegrees(90);
+					DriveTrain.moveByDistance(72);
+					//LIFT CUBE TO SWITCH HEIGHT
+					Intake.outtakeCube();
+					operating = false;
+					break;
+				case right:
+					//Code for starting on right
+					DriveTrain.moveByDistance(168);
+					DriveTrain.turnDegrees(90);
+					//LIFT CUBE TO SWITCH HEIGHT
+					Intake.outtakeCube();
+					operating = false;
+					break;
+			}
+		} else {
+			DriveTrain.stop();
 		}
 	}
 	
 	static public void leftScaleAuto(String startingPosition) {
-			switch (startingPosition) {
-			case left:
-				//Code for starting on left
-				break;
-			case middle:
-				//Code for starting in middle
-				break;
-			case right:
-				//Code for starting on right
-				break;
-			}
-	}
-
-	static public void rightScaleAuto(String startingPosition) {
+		if (operating) {	
 		switch (startingPosition) {
 			case left:
 				//Code for starting on left
+				DriveTrain.moveByDistance(324);
+				DriveTrain.turnDegrees(-90);
+				//LIFT CUBE TO SCALE HEIGHT
+				Intake.outtakeCube();
+				operating = false;
 				break;
 			case middle:
 				//Code for starting in middle
+				DriveTrain.moveByDistance(48);
+				DriveTrain.turnDegrees(90);
+				DriveTrain.moveByDistance(168);
+				DriveTrain.turnDegrees(-90);
+				DriveTrain.moveByDistance(276);
+				DriveTrain.turnDegrees(-90);
+				//LIFT CUBE TO SCALE HEIGHT
+				Intake.outtakeCube();
+				operating = false;
 				break;
 			case right:
 				//Code for starting on right
+				DriveTrain.moveByDistance(240);
+				DriveTrain.turnDegrees(90);
+				DriveTrain.moveByDistance(121);
+				DriveTrain.turnDegrees(-90);
+				DriveTrain.moveByDistance(42);
+				//LIFT CUBE TO SCALE HEIGHT
+				Intake.outtakeCube();
+				operating = false;
 				break;
-		}	
+			}
+		} else {
+			DriveTrain.stop();
+		}
+	}
+
+	static public void rightScaleAuto(String startingPosition) {
+		if (operating) {	
+			switch (startingPosition) {
+				case left:
+					//Code for starting on left
+					DriveTrain.moveByDistance(240);
+					DriveTrain.turnDegrees(-90);
+					DriveTrain.moveByDistance(121);
+					DriveTrain.turnDegrees(90);
+					DriveTrain.moveByDistance(42);
+					//LIFT CUBE TO SCALE HEIGHT
+					Intake.outtakeCube();
+					operating = false;
+					break;
+				case middle:
+					//Code for starting in middle
+					DriveTrain.moveByDistance(48);
+					DriveTrain.turnDegrees(-90);
+					DriveTrain.moveByDistance(168);
+					DriveTrain.turnDegrees(90);
+					DriveTrain.moveByDistance(276);
+					DriveTrain.turnDegrees(90);
+					//LIFT CUBE TO SCALE HEIGHT
+					Intake.outtakeCube();
+					operating = false;
+					break;
+				case right:
+					//Code for starting on right
+					DriveTrain.moveByDistance(324);
+					DriveTrain.turnDegrees(90);
+					//LIFT CUBE TO SCALE HEIGHT
+					Intake.outtakeCube();
+					operating = false;
+					break;
+				}
+			} else {
+				DriveTrain.stop();
+			}
 	}
 	
 	

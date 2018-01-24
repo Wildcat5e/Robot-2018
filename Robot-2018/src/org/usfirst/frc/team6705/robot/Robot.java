@@ -35,6 +35,7 @@ public class Robot extends IterativeRobot {
 	private static final String switchAuto = "switch";
 	private static final String scaleAuto = "scale";
 	private static final String baselineAuto = "baseline";
+	private static final String bestSimple = "bestSimple";
 	private String autoSelected;
 	
 	private String startingPosition;
@@ -58,6 +59,7 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		autoChooser.addDefault("Power Cube on Switch", switchAuto);
 		autoChooser.addObject("Power Cube on Scale", scaleAuto);
+		autoChooser.addObject("Best Simple Scoring Method", bestSimple);
 		autoChooser.addObject("Cross Baseline Only", baselineAuto);
 		SmartDashboard.putData("Auto choices", autoChooser);
 		
@@ -123,6 +125,35 @@ public class Robot extends IterativeRobot {
 			case baselineAuto:
 				//Drive forward to cross baseline
 				Autonomous.baselineAuto();
+				break;
+			case bestSimple:
+				switch(startingPosition) {
+				case left:
+					if(gameData.charAt(1) == 'L') {
+						Autonomous.leftScaleAuto(startingPosition);
+					} else if(gameData.charAt(0) == 'L'){
+						Autonomous.leftSwitchAuto(startingPosition);
+					} else {
+						Autonomous.baseLineAuto();
+					}
+					break;
+				case middle:
+					if(gameData.charAt(0) == 'L') {
+						Autonomous.leftSwitchAuto(startingPosition);
+					} else {
+						Autonomous.rightSwitchAuto(startingPosition);
+					}
+					break;
+				case right:
+					if(gameData.charAt(1) == 'R') {
+						Autonomous.rightScaleAuto(startingPosition);
+					} else if(gameData.charAt(0) == 'R') {
+						Autonomous.rightSwitchAuto(startingPosition);
+					} else {
+						Autonomous.baseLineAuto();
+					}
+					break;
+				}
 				break;
 			default:
 				// Put default auto code here

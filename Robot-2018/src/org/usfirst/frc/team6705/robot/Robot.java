@@ -134,7 +134,7 @@ public class Robot extends IterativeRobot {
 					} else if(gameData.charAt(0) == 'L'){
 						Autonomous.leftSwitchAuto(startingPosition);
 					} else {
-						Autonomous.baseLineAuto();
+						Autonomous.baselineAuto();
 					}
 					break;
 				case middle:
@@ -150,7 +150,7 @@ public class Robot extends IterativeRobot {
 					} else if(gameData.charAt(0) == 'R') {
 						Autonomous.rightSwitchAuto(startingPosition);
 					} else {
-						Autonomous.baseLineAuto();
+						Autonomous.baselineAuto();
 					}
 					break;
 				}

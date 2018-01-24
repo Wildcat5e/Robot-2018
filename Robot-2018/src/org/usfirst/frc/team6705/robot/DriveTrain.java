@@ -44,7 +44,7 @@ public class DriveTrain {
 		//Convert argument from inches to encoder ticks
 		double targetEncoderTicks = convertInchesToTicks(inches);
 		
-		double maxVelocity = convertFPSToTicksPer100MS(autoForwardSpeedFPS);
+		double maxVelocity = convertFPSToTicksPer100MS(velocityMedium);
 		double ticksRemaining;
 		
 		do {
@@ -71,7 +71,7 @@ public class DriveTrain {
 	public static void turnDegrees(double degrees) {
 		//Fill in method to turn by certain # of degrees using gyro and encoders
 		//Positive degrees -> counterclockwise; negative degrees -> clockwise
-		double maxVelocity = convertFPSToTicksPer100MS(autoForwardSpeedFPS);
+		double maxVelocity = convertFPSToTicksPer100MS(velocityTurning);
 		int turnMultiplier = (degrees < 0) ? -1 : 1;
 		boolean isDoneTurning = false;
 		double currentAngle;

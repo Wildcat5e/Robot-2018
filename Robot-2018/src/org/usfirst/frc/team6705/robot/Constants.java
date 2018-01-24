@@ -22,8 +22,6 @@ public class Constants {
 	
 	//Joysticks
 	public static int driveStickChannel = 0,
-			driveStickLeftYAxis = 1,
-			driveStickRightYAxis = 5,
 			dPadChannel = 1;
 	
 	
@@ -33,12 +31,16 @@ public class Constants {
 			right = "right";
 	
 	//Sensors
-
 	
-	//Speed, time, measurement, and other constants
+	//Driving Speeds in FPS
+	public static double velocityFast = 12,
+			velocityMedium = 9,
+			velocitySlow = 6,
+			velocityTurning = 5;
+	
+	//Time, distance, and other measurement
 	public static double timeToRoll = 1.5, //seconds
 		wheelRadius = 2.0, //inches
-		autoForwardSpeedFPS = 9, //feet per second
 		ticksPerRevolution = 256, //encoder ticks
 		distancePerTick = (wheelRadius * 2.0 * Math.PI)/ticksPerRevolution, //inches per tick
 		rollersSpeed = 0.5; //From -1 to 1

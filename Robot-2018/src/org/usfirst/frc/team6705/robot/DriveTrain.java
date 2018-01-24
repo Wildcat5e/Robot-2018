@@ -71,6 +71,19 @@ public class DriveTrain {
 	public static void turnDegrees(double degrees) {
 		//Fill in method to turn by certain # of degrees using gyro and encoders
 		//Positive degrees -> counterclockwise; negative degrees -> clockwise
+		double maxVelocity = convertFPSToTicksPer100MS(autoForwardSpeedFPS);
+		int turnMultiplier = (degrees < 0) ? -1 : 1;
+		boolean isDoneTurning = false;
+		double currentAngle;
+		gyro.reset();
+		do {
+			setVelocity(-1 * turnMultiplier * maxVelocity, turnMultiplier * maxVelocity);
+			currentAngle = Math.abs(gyro.getAngle());
+			if (currentAngle < Math.abs(degrees) + 2 && currentAngle > Math.abs(degrees) - 2) {
+				isDoneTurning = true;
+			}
+		} while (!isDoneTurning && DriverStation.getInstance().isAutonomous());
+		stop();
 	}
 	
 	public static void stop() {

@@ -5,6 +5,7 @@ import static org.usfirst.frc.team6705.robot.Constants.*;
 
 public class Autonomous {
 	static boolean operating = true;
+	
 	static public void baselineAuto() {
 		if (operating) {
 			DriveTrain.moveByDistance(132); //Move forward 11 feet = 132 inches

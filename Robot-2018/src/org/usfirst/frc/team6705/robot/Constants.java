@@ -12,7 +12,8 @@ public class Constants {
 			leftVictorChannel = 2,
 			rightVictorChannel = 3,
 			leftIntakeSparkChannel = 4,
-			rightIntakeSparkChannel = 5;
+			rightIntakeSparkChannel = 5,
+			elevatorSparkChannel = 6;
 	
 	//Solenoids
 	public static int leftIntakeSolenoidForward = 0,
@@ -31,6 +32,8 @@ public class Constants {
 			right = "right";
 	
 	//Sensors
+	public static int elevatorEncoderSourceA = 0,
+			elevatorEncoderSourceB = 1;
 	
 	//Driving Speeds in FPS
 	public static double velocityFast = 12,
@@ -43,7 +46,8 @@ public class Constants {
 		wheelRadius = 2.0, //inches
 		ticksPerRevolution = 256, //encoder ticks
 		distancePerTick = (wheelRadius * 2.0 * Math.PI)/ticksPerRevolution, //inches per tick
-		rollersSpeed = 0.5; //From -1 to 1
+		rollersSpeed = 0.5,
+		elevatorSpeed = 0.5; //From -1 to 1
 	
 	public static double convertInchesToTicks(double inches) {
 		return (inches/(2 * Math.PI * wheelRadius)) * ticksPerRevolution;

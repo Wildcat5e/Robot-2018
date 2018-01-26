@@ -160,6 +160,13 @@ public class Robot extends IterativeRobot {
 				break;
 		}
 	}
+	
+	@Override
+	public void teleopInit() {
+		
+		Intake.stopRollers();
+		
+	}
 
 	/**
 	 * This function is called periodically during operator control.

@@ -44,10 +44,15 @@ public class DriveTrain {
 		//Convert argument from inches to encoder ticks
 		double targetEncoderTicks = convertInchesToTicks(inches);
 		
+		int direction = 1;
+		if (inches < 0) {
+			direction = -1;
+		}
+		
 		double maxVelocity = convertFPSToTicksPer100MS(velocityMedium);
 		double ticksRemaining;
 		
-		do {
+		while (direction * leftTalon.getSelectedSensorPosition(0) < direction * targetEncoderTicks && DriverStation.getInstance().isAutonomous()) {
 			ticksRemaining = targetEncoderTicks - leftTalon.getSelectedSensorPosition(0);
 			double fractionRemaining = ticksRemaining/targetEncoderTicks;
 			double scaledFraction = fractionRemaining * 3; //Start slowing down 2/3 of the way there
@@ -56,8 +61,8 @@ public class DriveTrain {
 			}
 			
 			double velocity = scaledFraction * maxVelocity;
-			setVelocity(velocity, velocity);
-		} while (leftTalon.getSelectedSensorPosition(0) < targetEncoderTicks && DriverStation.getInstance().isAutonomous());
+			setVelocity(direction * velocity, direction * velocity);
+		} 
 		
 		stop(); //Stop driving when loop finishes
 	}
@@ -69,20 +74,21 @@ public class DriveTrain {
 	}
 	
 	public static void turnDegrees(double degrees) {
-		//Fill in method to turn by certain # of degrees using gyro and encoders
 		//Positive degrees -> counterclockwise; negative degrees -> clockwise
+		
 		double maxVelocity = convertFPSToTicksPer100MS(velocityTurning);
 		int turnMultiplier = (degrees < 0) ? -1 : 1;
 		boolean isDoneTurning = false;
 		double currentAngle;
 		gyro.reset();
-		do {
+		
+		while (!isDoneTurning && DriverStation.getInstance().isAutonomous()) {
 			setVelocity(-1 * turnMultiplier * maxVelocity, turnMultiplier * maxVelocity);
 			currentAngle = Math.abs(gyro.getAngle());
 			if (currentAngle < Math.abs(degrees) + 2 && currentAngle > Math.abs(degrees) - 2) {
 				isDoneTurning = true;
 			}
-		} while (!isDoneTurning && DriverStation.getInstance().isAutonomous());
+		}
 		stop();
 	}
 	

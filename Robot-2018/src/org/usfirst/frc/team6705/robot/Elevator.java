@@ -10,15 +10,54 @@ public class Elevator {
 	static Spark elevatorMotor = new Spark(elevatorSparkChannel);
 	static Encoder encoder = new Encoder(elevatorEncoderSourceA, elevatorEncoderSourceB, false, EncodingType.k4X);
 
-	public void liftElevator() {
+	public static void setup() {
+		encoder.reset();
+		encoder.setDistancePerPulse(verticalInchesPerTick);
+	}
+	
+	public static double getCurrentPosition() {
+		return encoder.getDistance() + elevatorHeightOffGround;
+	}
+	
+	public static void liftElevator() {
 		elevatorMotor.set(elevatorSpeed);
 	}
 	
-	public void lowerElevator() {
+	public static void lowerElevator() {
 		elevatorMotor.set(-elevatorSpeed);
 	}
 	
-	public void liftElevatorDistance(double inches) {
+	public static void stop() {
+		elevatorMotor.set(0);
+	}
+	
+	public static void moveElevatorToHeight(double inches) {
+		
+		double startingHeight = getCurrentPosition();
+		
+		if (inches >= startingHeight) {
+			while (getCurrentPosition() < inches) {
+				liftElevator();
+			}
+		} else {
+			while (getCurrentPosition() > inches) {
+				lowerElevator();
+			}
+		}
+		
+		stop();
+		
+	}
+	
+	public static void toFloor() {
+		moveElevatorToHeight(floorPosition);
+	}
+			
+	public static void toSwitch() {
+		moveElevatorToHeight(switchPosition);
+	}
+	
+	public static void toScale() {
 		
 	}
 	

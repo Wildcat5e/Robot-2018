@@ -15,12 +15,20 @@ public class Autonomous {
 		}
 	}
 	
+	/*
+	 * 	Note: Distance from alliance wall to front of switch = 140 in
+	 *        Distance from front of robot to front of switch = 107
+	 *        Distance from middle of robot to middle of switch = 151.5
+	 *        Distance from middle of robot to middle of scale = 307.5
+	 *        
+	 */
+	
 	static public void leftSwitchAuto(String startingPosition) {
 		if (operating) {
 			switch (startingPosition) {
 				case left:
 					//Code for starting on left
-					DriveTrain.moveByDistance(168);
+					DriveTrain.moveByDistance(151.5);
 					DriveTrain.turnDegrees(-90);
 					//LIFT CUBE TO SWITCH HEIGHT
 					Intake.outtakeCube();
@@ -28,9 +36,9 @@ public class Autonomous {
 					break;
 				case middle:
 					//Code for starting in middle; most likely scenario
-					DriveTrain.moveByDistance(48);
+					DriveTrain.moveByDistance(53);
 					DriveTrain.turnDegrees(90);
-					DriveTrain.moveByDistance(48);
+					DriveTrain.moveByDistance(54);
 					DriveTrain.turnDegrees(-90);
 					DriveTrain.moveByDistance(72);
 					//LIFT CUBE TO SWITCH HEIGHT
@@ -68,9 +76,9 @@ public class Autonomous {
 					break;
 				case middle:
 					//Code for starting in middle; most likely scenario
-					DriveTrain.moveByDistance(48);
+					DriveTrain.moveByDistance(53);
 					DriveTrain.turnDegrees(-90);
-					DriveTrain.moveByDistance(48);
+					DriveTrain.moveByDistance(54);
 					DriveTrain.turnDegrees(90);
 					DriveTrain.moveByDistance(72);
 					//LIFT CUBE TO SWITCH HEIGHT
@@ -79,7 +87,7 @@ public class Autonomous {
 					break;
 				case right:
 					//Code for starting on right
-					DriveTrain.moveByDistance(168);
+					DriveTrain.moveByDistance(151.5);
 					DriveTrain.turnDegrees(90);
 					//LIFT CUBE TO SWITCH HEIGHT
 					Intake.outtakeCube();

@@ -43,9 +43,14 @@ public class Constants {
 	
 	//Time, distance, and other measurement
 	public static double timeToRoll = 1.5, //seconds
-		wheelRadius = 2.0, //inches
+		wheelRadius = 3.0, //inches
 		ticksPerRevolution = 256, //encoder ticks
 		distancePerTick = (wheelRadius * 2.0 * Math.PI)/ticksPerRevolution, //inches per tick
+		verticalInchesPerTick = 0.1,
+		floorPosition = 0,
+		switchPosition = 20,
+		scalePosition = 80,
+		elevatorHeightOffGround = 5,
 		rollersSpeed = 0.5,
 		elevatorSpeed = 0.5; //From -1 to 1
 	

@@ -47,6 +47,11 @@ public class Robot extends IterativeRobot {
 	boolean intakeRolling = false;
 	double intakeStartTime = 0;
 	
+	boolean elevatorMovingFloor = true;
+	boolean elevatorMovingSwitch = true;
+	boolean elevatorMovingScale = true;
+
+	
 	Timer timer = new Timer();
 	
 	XboxController driveStick = new XboxController(driveStickChannel);
@@ -69,6 +74,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData("Starting position", positionChooser);
 		
 		DriveTrain.setup();
+		Elevator.setup();
 	}
 
 	/**
@@ -211,10 +217,48 @@ public class Robot extends IterativeRobot {
 			Intake.stopRollers();
 		}
 		
+		//Buttons - set elevator lift to certain height - floor, switch, or scale
+		if (driveStick.getAButton()) {
+			aButton();
+		} else if (driveStick.getBButton()) {
+			bButton();
+		} else if (driveStick.getYButton()) {
+			yButton();
+		} 
+		
+		//Triggers - lift or lower elevator
+		if (driveStick.getTriggerAxis(GenericHID.Hand.kLeft) > 0.5) {
+			leftTrigger();
+		} else if (driveStick.getTriggerAxis(GenericHID.Hand.kRight) > 0.5) {
+			rightTrigger();
+		}
+		
 		//Stop intaking if enough time has passed
 		if (intakeRolling && currentTime - intakeStartTime > timeToRoll) {
 			Intake.stopRollers();
 			intakeRolling = false;
+		}
+		
+		//Stop elevating if elevator has reached destination
+		if (elevatorMovingFloor && 
+				Elevator.getCurrentPosition() < floorPosition + 2 && 
+				Elevator.getCurrentPosition() > floorPosition - 2) {
+			Elevator.stop();
+			elevatorMovingFloor = false;
+		}
+		
+		if (elevatorMovingSwitch && 
+				Elevator.getCurrentPosition() < switchPosition + 2 && 
+				Elevator.getCurrentPosition() > switchPosition - 2) {
+			Elevator.stop();
+			elevatorMovingSwitch = false;
+		}
+		
+		if (elevatorMovingScale && 
+				Elevator.getCurrentPosition() < scalePosition + 2 && 
+				Elevator.getCurrentPosition() > scalePosition - 2) {
+			Elevator.stop();
+			elevatorMovingScale = false;
 		}
 		
 	}
@@ -247,5 +291,37 @@ public class Robot extends IterativeRobot {
 		Intake.intakeCube();
 	}
 	
+	public void aButton() {
+		elevatorMovingFloor = true;
+		if (Elevator.getCurrentPosition() > floorPosition) {
+			Elevator.lowerElevator();
+		}
+	}
+	
+	public void bButton() {
+		elevatorMovingSwitch = true;
+		if (Elevator.getCurrentPosition() > switchPosition) {
+			Elevator.lowerElevator();
+		} else {
+			Elevator.liftElevator();
+		}
+	}
+	
+	public void yButton() {
+		elevatorMovingScale = true;
+		if (Elevator.getCurrentPosition() > scalePosition) {
+			Elevator.lowerElevator();
+		} else {
+			Elevator.liftElevator();
+		}
+	}
+	
+	public void leftTrigger() {
+		Elevator.lowerElevator();
+	}
+	
+	public void rightTrigger() {
+		Elevator.liftElevator();
+	}
 }
 

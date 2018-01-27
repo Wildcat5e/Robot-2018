@@ -260,6 +260,9 @@ public class Robot extends IterativeRobot {
 			Elevator.stop();
 			elevatorMovingScale = false;
 		}
+		if (timer.get() >= 120 && driveStick.getStartButton()) {
+			startButton();
+		}
 		
 	}
 	
@@ -323,5 +326,10 @@ public class Robot extends IterativeRobot {
 	public void rightTrigger() {
 		Elevator.liftElevator();
 	}
+	// pressing the start button the robot deploys ramps (we win);
+	public void startButton() {
+		Ramps.deploy();
+	}
+	
 }
 

@@ -47,10 +47,10 @@ public class Constants {
 		ticksPerRevolution = 256, //encoder ticks
 		distancePerTick = (wheelRadius * 2.0 * Math.PI)/ticksPerRevolution, //inches per tick
 		verticalInchesPerTick = 0.1,
-		floorPosition = 0,
-		switchPosition = 20,
-		scalePosition = 80,
-		elevatorHeightOffGround = 5,
+		floorPosition = 7,
+		switchPosition = 25,
+		scalePosition = 82,
+		elevatorHeightOffGround = 7,
 		rollersSpeed = 0.5,
 		elevatorSpeed = 0.5; //From -1 to 1
 	

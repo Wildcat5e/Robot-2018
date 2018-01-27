@@ -58,7 +58,7 @@ public class Elevator {
 	}
 	
 	public static void toScale() {
-		
+		moveElevatorToHeight(scalePosition);
 	}
 	
 }

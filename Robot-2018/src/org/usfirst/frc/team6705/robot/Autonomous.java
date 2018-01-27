@@ -17,9 +17,9 @@ public class Autonomous {
 	
 	/*
 	 * 	Note: Distance from alliance wall to front of switch = 140 in
-	 *        Distance from front of robot to front of switch = 107
-	 *        Distance from middle of robot to middle of switch = 151.5
-	 *        Distance from middle of robot to middle of scale = 307.5
+	 *        Distance from front of robot to front of switch = 101 in
+	 *        Distance from middle of robot to middle of switch = 148.5
+	 *        Distance from middle of robot to middle of scale = 304.5
 	 *        
 	 */
 	
@@ -27,31 +27,28 @@ public class Autonomous {
 		if (operating) {
 			switch (startingPosition) {
 				case left:
-					//Code for starting on left
-					DriveTrain.moveByDistance(151.5);
+					Elevator.toSwitch();
+					DriveTrain.moveByDistance(148.5);
 					DriveTrain.turnDegrees(-90);
-					//LIFT CUBE TO SWITCH HEIGHT
 					Intake.outtakeCube();
 					operating = false;
 					break;
 				case middle:
-					//Code for starting in middle; most likely scenario
-					DriveTrain.moveByDistance(53);
+					Elevator.toSwitch();
+					DriveTrain.moveByDistance(50);
 					DriveTrain.turnDegrees(90);
 					DriveTrain.moveByDistance(54);
 					DriveTrain.turnDegrees(-90);
-					DriveTrain.moveByDistance(72);
-					//LIFT CUBE TO SWITCH HEIGHT
+					DriveTrain.moveByDistance(51);
 					Intake.outtakeCube();
 					operating = false;
 					break;
 				case right:
-					//Code for starting on right
+					Elevator.toSwitch();
 					DriveTrain.moveByDistance(240);
 					DriveTrain.turnDegrees(90);
 					DriveTrain.moveByDistance(121);
 					DriveTrain.turnDegrees(90);
-					//LIFT CUBE TO SWITCH HEIGHT
 					Intake.outtakeCube();
 					operating = false;
 					break;
@@ -65,31 +62,28 @@ public class Autonomous {
 		if (operating) {
 			switch (startingPosition) {
 				case left:
-					//Code for starting on left
+					Elevator.toSwitch();
 					DriveTrain.moveByDistance(240);
 					DriveTrain.turnDegrees(-90);
 					DriveTrain.moveByDistance(121);
 					DriveTrain.turnDegrees(-90);
-					//LIFT CUBE TO SWITCH HEIGHT
 					Intake.outtakeCube();
 					operating = false;
 					break;
 				case middle:
-					//Code for starting in middle; most likely scenario
-					DriveTrain.moveByDistance(53);
+					Elevator.toSwitch();
+					DriveTrain.moveByDistance(50);
 					DriveTrain.turnDegrees(-90);
 					DriveTrain.moveByDistance(54);
 					DriveTrain.turnDegrees(90);
-					DriveTrain.moveByDistance(72);
-					//LIFT CUBE TO SWITCH HEIGHT
+					DriveTrain.moveByDistance(51);
 					Intake.outtakeCube();
 					operating = false;
 					break;
 				case right:
-					//Code for starting on right
-					DriveTrain.moveByDistance(151.5);
+					Elevator.toSwitch();
+					DriveTrain.moveByDistance(148.5);
 					DriveTrain.turnDegrees(90);
-					//LIFT CUBE TO SWITCH HEIGHT
 					Intake.outtakeCube();
 					operating = false;
 					break;
@@ -103,33 +97,30 @@ public class Autonomous {
 		if (operating) {	
 		switch (startingPosition) {
 			case left:
-				//Code for starting on left
-				DriveTrain.moveByDistance(324);
+				DriveTrain.moveByDistance(304.5);
+				Elevator.toScale();
 				DriveTrain.turnDegrees(-90);
-				//LIFT CUBE TO SCALE HEIGHT
 				Intake.outtakeCube();
 				operating = false;
 				break;
 			case middle:
-				//Code for starting in middle
+				Elevator.toScale();
 				DriveTrain.moveByDistance(48);
 				DriveTrain.turnDegrees(90);
 				DriveTrain.moveByDistance(168);
 				DriveTrain.turnDegrees(-90);
 				DriveTrain.moveByDistance(276);
 				DriveTrain.turnDegrees(-90);
-				//LIFT CUBE TO SCALE HEIGHT
 				Intake.outtakeCube();
 				operating = false;
 				break;
 			case right:
-				//Code for starting on right
+				Elevator.toScale();
 				DriveTrain.moveByDistance(240);
 				DriveTrain.turnDegrees(90);
 				DriveTrain.moveByDistance(121);
 				DriveTrain.turnDegrees(-90);
 				DriveTrain.moveByDistance(42);
-				//LIFT CUBE TO SCALE HEIGHT
 				Intake.outtakeCube();
 				operating = false;
 				break;
@@ -143,33 +134,30 @@ public class Autonomous {
 		if (operating) {	
 			switch (startingPosition) {
 				case left:
-					//Code for starting on left
+					Elevator.toScale();
 					DriveTrain.moveByDistance(240);
 					DriveTrain.turnDegrees(-90);
 					DriveTrain.moveByDistance(121);
 					DriveTrain.turnDegrees(90);
 					DriveTrain.moveByDistance(42);
-					//LIFT CUBE TO SCALE HEIGHT
 					Intake.outtakeCube();
 					operating = false;
 					break;
 				case middle:
-					//Code for starting in middle
+					Elevator.toScale();
 					DriveTrain.moveByDistance(48);
 					DriveTrain.turnDegrees(-90);
 					DriveTrain.moveByDistance(168);
 					DriveTrain.turnDegrees(90);
 					DriveTrain.moveByDistance(276);
 					DriveTrain.turnDegrees(90);
-					//LIFT CUBE TO SCALE HEIGHT
 					Intake.outtakeCube();
 					operating = false;
 					break;
 				case right:
-					//Code for starting on right
-					DriveTrain.moveByDistance(324);
+					DriveTrain.moveByDistance(304.5);
+					Elevator.toScale();
 					DriveTrain.turnDegrees(90);
-					//LIFT CUBE TO SCALE HEIGHT
 					Intake.outtakeCube();
 					operating = false;
 					break;

@@ -3,20 +3,25 @@ import static org.usfirst.frc.team6705.robot.Constants.*;
 
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.Spark;
 
 public class Elevator {
 	
 	static Spark elevatorMotor = new Spark(elevatorSparkChannel);
 	static Encoder encoder = new Encoder(elevatorEncoderSourceA, elevatorEncoderSourceB, false, EncodingType.k4X);
+	
+	//static PIDController pid = new PIDController(kP, kI, kD, kF, encoder, elevatorMotor);
 
 	public static void setup() {
 		encoder.reset();
 		encoder.setDistancePerPulse(verticalInchesPerTick);
+		
+		//pid.enable();
 	}
 	
 	public static double getCurrentPosition() {
-		return encoder.getDistance() + elevatorHeightOffGround;
+		return encoder.getDistance() + floorPosition;
 	}
 	
 	public static void liftElevator() {

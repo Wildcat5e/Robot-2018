@@ -1,5 +1,6 @@
 package org.usfirst.frc.team6705.robot;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+
 import static org.usfirst.frc.team6705.robot.Constants.*;
 public class Ramps {
 

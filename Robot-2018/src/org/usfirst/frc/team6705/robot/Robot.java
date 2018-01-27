@@ -198,6 +198,8 @@ public class Robot extends IterativeRobot {
 		
 		double currentTime = timer.get();
 		
+		SmartDashboard.putNumber("Current Time", currentTime);
+		
 		//Joystick - control tank drive
 		DriveTrain.tankDrive(driveStick.getY(GenericHID.Hand.kLeft), driveStick.getY(GenericHID.Hand.kRight));
 		

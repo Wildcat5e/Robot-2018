@@ -262,6 +262,8 @@ public class Robot extends IterativeRobot {
 			Elevator.stop();
 			elevatorMovingScale = false;
 		}
+		
+		//Deploy ramps with start button
 		if (timer.get() >= 120 && driveStick.getStartButton()) {
 			startButton();
 		}

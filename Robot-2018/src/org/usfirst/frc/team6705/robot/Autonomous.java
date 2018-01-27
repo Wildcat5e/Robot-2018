@@ -20,6 +20,7 @@ public class Autonomous {
 	 *        Distance from front of robot to front of switch = 101 in
 	 *        Distance from middle of robot to middle of switch = 148.5
 	 *        Distance from middle of robot to middle of scale = 304.5
+	 *        Left & Ride - line up robot at corner diagonal of field
 	 *        
 	 */
 	
@@ -102,6 +103,7 @@ public class Autonomous {
 				DriveTrain.moveByDistance(304.5);
 				Elevator.toScale();
 				DriveTrain.turnDegrees(-90);
+				//Maybe drive a bit forward depending on dimensions
 				Intake.outtakeCube();
 				operating = false;
 				break;
@@ -160,6 +162,7 @@ public class Autonomous {
 					DriveTrain.moveByDistance(304.5);
 					Elevator.toScale();
 					DriveTrain.turnDegrees(90);
+					//Maybe drive forward a bit depending on dimensions
 					Intake.outtakeCube();
 					operating = false;
 					break;

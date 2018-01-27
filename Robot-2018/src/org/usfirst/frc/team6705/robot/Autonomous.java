@@ -27,9 +27,10 @@ public class Autonomous {
 		if (operating) {
 			switch (startingPosition) {
 				case left:
-					Elevator.toSwitch();
 					DriveTrain.moveByDistance(148.5);
 					DriveTrain.turnDegrees(-90);
+					Elevator.toSwitch();
+					DriveTrain.moveTillStall();
 					Intake.outtakeCube();
 					operating = false;
 					break;
@@ -81,9 +82,10 @@ public class Autonomous {
 					operating = false;
 					break;
 				case right:
-					Elevator.toSwitch();
 					DriveTrain.moveByDistance(148.5);
 					DriveTrain.turnDegrees(90);
+					Elevator.toSwitch();
+					DriveTrain.moveTillStall();
 					Intake.outtakeCube();
 					operating = false;
 					break;

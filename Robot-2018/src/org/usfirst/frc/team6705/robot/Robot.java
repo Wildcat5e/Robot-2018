@@ -220,11 +220,11 @@ public class Robot extends IterativeRobot {
 		}
 		
 		//Buttons - set elevator lift to certain height - floor, switch, or scale
-		if (driveStick.getAButton()) {
+		if (driveStick.getAButton() && Elevator.getCurrentPosition() > floorPosition) {
 			aButton();
 		} else if (driveStick.getBButton()) {
 			bButton();
-		} else if (driveStick.getYButton()) {
+		} else if (driveStick.getYButton() && Elevator.getCurrentPosition() < scalePosition) {
 			yButton();
 		} 
 		

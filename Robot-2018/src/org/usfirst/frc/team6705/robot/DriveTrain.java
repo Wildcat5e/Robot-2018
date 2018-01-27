@@ -102,5 +102,10 @@ public class DriveTrain {
 		rightTalon.setSelectedSensorPosition(0, 0, 0);
 	}
 	
+	public static void moveTillStall() {
+		while(leftTalon.getOutputCurrent() < 20) {	
+			setVelocity(velocityMedium, velocityMedium);
+		}
+	}
 	
 }

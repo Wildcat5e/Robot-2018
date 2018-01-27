@@ -19,7 +19,11 @@ public class Constants {
 	public static int leftIntakeSolenoidForward = 0,
 			leftIntakeSolenoidReverse = 1,
 			rightIntakeSolenoidForward = 2,
-			rightIntakeSolenoidReverse = 3;
+			rightIntakeSolenoidReverse = 3,
+			leftRampSolenoidOpen = 4,
+			leftRampSolenoidClosed = 5,
+			rightRampSolenoidOpen = 6,
+			rightRampSolenoidClosed = 7;
 	
 	//Joysticks
 	public static int driveStickChannel = 0,

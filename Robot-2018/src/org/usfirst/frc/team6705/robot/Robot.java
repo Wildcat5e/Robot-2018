@@ -75,6 +75,7 @@ public class Robot extends IterativeRobot {
 		
 		DriveTrain.setup();
 		Elevator.setup();
+		Intake.setup();
 	}
 
 	/**
@@ -220,11 +221,11 @@ public class Robot extends IterativeRobot {
 		}
 		
 		//Buttons - set elevator lift to certain height - floor, switch, or scale
-		if (driveStick.getAButton() && Elevator.getCurrentPosition() > floorPosition) {
+		if (driveStick.getAButton()) {
 			aButton();
 		} else if (driveStick.getBButton()) {
 			bButton();
-		} else if (driveStick.getYButton() && Elevator.getCurrentPosition() < scalePosition) {
+		} else if (driveStick.getYButton()) {
 			yButton();
 		} 
 		
@@ -243,22 +244,22 @@ public class Robot extends IterativeRobot {
 		
 		//Stop elevating if elevator has reached destination
 		if (elevatorMovingFloor && 
-				Elevator.getCurrentPosition() < floorPosition + 2 && 
-				Elevator.getCurrentPosition() > floorPosition - 2) {
+				Elevator.getCurrentPosition() < floorPosition + elevatorTolerance && 
+				Elevator.getCurrentPosition() > floorPosition - elevatorTolerance) {
 			Elevator.stop();
 			elevatorMovingFloor = false;
 		}
 		
 		if (elevatorMovingSwitch && 
-				Elevator.getCurrentPosition() < switchPosition + 2 && 
-				Elevator.getCurrentPosition() > switchPosition - 2) {
+				Elevator.getCurrentPosition() < switchPosition + elevatorTolerance && 
+				Elevator.getCurrentPosition() > switchPosition - elevatorTolerance) {
 			Elevator.stop();
 			elevatorMovingSwitch = false;
 		}
 		
 		if (elevatorMovingScale && 
-				Elevator.getCurrentPosition() < scalePosition + 2 && 
-				Elevator.getCurrentPosition() > scalePosition - 2) {
+				Elevator.getCurrentPosition() < scalePosition + elevatorTolerance && 
+				Elevator.getCurrentPosition() > scalePosition - elevatorTolerance) {
 			Elevator.stop();
 			elevatorMovingScale = false;
 		}

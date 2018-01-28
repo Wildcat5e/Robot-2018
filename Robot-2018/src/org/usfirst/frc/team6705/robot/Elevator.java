@@ -3,7 +3,7 @@ import static org.usfirst.frc.team6705.robot.Constants.*;
 
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.PIDController;
+//import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.Spark;
 
 public class Elevator {
@@ -16,12 +16,18 @@ public class Elevator {
 	public static void setup() {
 		encoder.reset();
 		encoder.setDistancePerPulse(verticalInchesPerTick);
+		elevatorMotor.setSafetyEnabled(false);
 		
 		//pid.enable();
 	}
 	
+	public static double convertTicksToVerticalInches(double ticks) {
+		return ticks * verticalInchesPerTick;
+		//Implement appropriate function to convert, taking into account the widening/thinning of axle as pulley rolls
+	}
+	
 	public static double getCurrentPosition() {
-		return encoder.getDistance() + floorPosition;
+		return convertTicksToVerticalInches(encoder.get()) + floorPosition;
 	}
 	
 	public static void liftElevator() {
@@ -32,6 +38,10 @@ public class Elevator {
 		elevatorMotor.set(-elevatorSpeed);
 	}
 	
+	public static void moveElevator(double speed) {
+		elevatorMotor.set(speed);
+	}
+	
 	public static void stop() {
 		elevatorMotor.set(0);
 	}
@@ -39,15 +49,26 @@ public class Elevator {
 	public static void moveElevatorToHeight(double inches) {
 		
 		double startingHeight = getCurrentPosition();
+		double inchesToMove = Math.abs(inches - startingHeight);
+		double maxVelocity = elevatorSpeed;
+		double inchesRemaining;
 		
-		if (inches >= startingHeight) {
-			while (getCurrentPosition() < inches) {
-				liftElevator();
+		int direction = 1;
+		if (inches < startingHeight) {
+			direction = -1;
+		}
+
+		while (getCurrentPosition() * direction < inches * direction) {
+			inchesRemaining = inchesToMove - (direction * (getCurrentPosition() - startingHeight));
+			double fractionRemaining = inchesRemaining/inchesToMove;
+			double scaledFraction = fractionRemaining * 3;
+			if (scaledFraction > 1) {
+				scaledFraction = 1;
+			} else if (scaledFraction < 0.05) {
+				scaledFraction = 0.05;
 			}
-		} else {
-			while (getCurrentPosition() > inches) {
-				lowerElevator();
-			}
+				
+			moveElevator(direction * scaledFraction * maxVelocity);
 		}
 		
 		stop();

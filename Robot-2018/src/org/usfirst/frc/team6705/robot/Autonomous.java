@@ -33,6 +33,8 @@ public class Autonomous {
 					Elevator.toSwitch();
 					DriveTrain.moveTillStall();
 					Intake.outtakeCube();
+					DriveTrain.wait(timeToRoll);
+					Intake.stopRollers();
 					operating = false;
 					break;
 				case middle:
@@ -43,6 +45,8 @@ public class Autonomous {
 					DriveTrain.turnDegrees(-90);
 					DriveTrain.moveByDistance(51);
 					Intake.outtakeCube();
+					DriveTrain.wait(timeToRoll);
+					Intake.stopRollers();
 					operating = false;
 					break;
 				case right:
@@ -52,6 +56,8 @@ public class Autonomous {
 					DriveTrain.moveByDistance(121);
 					DriveTrain.turnDegrees(90);
 					Intake.outtakeCube();
+					DriveTrain.wait(timeToRoll);
+					Intake.stopRollers();
 					operating = false;
 					break;
 			}
@@ -70,6 +76,8 @@ public class Autonomous {
 					DriveTrain.moveByDistance(121);
 					DriveTrain.turnDegrees(-90);
 					Intake.outtakeCube();
+					DriveTrain.wait(timeToRoll);
+					Intake.stopRollers();
 					operating = false;
 					break;
 				case middle:
@@ -80,6 +88,8 @@ public class Autonomous {
 					DriveTrain.turnDegrees(90);
 					DriveTrain.moveByDistance(51);
 					Intake.outtakeCube();
+					DriveTrain.wait(timeToRoll);
+					Intake.stopRollers();
 					operating = false;
 					break;
 				case right:
@@ -88,6 +98,8 @@ public class Autonomous {
 					Elevator.toSwitch();
 					DriveTrain.moveTillStall();
 					Intake.outtakeCube();
+					DriveTrain.wait(timeToRoll);
+					Intake.stopRollers();
 					operating = false;
 					break;
 			}
@@ -105,6 +117,8 @@ public class Autonomous {
 				DriveTrain.turnDegrees(-90);
 				//Maybe drive a bit forward depending on dimensions
 				Intake.outtakeCube();
+				DriveTrain.wait(timeToRoll);
+				Intake.stopRollers();
 				operating = false;
 				break;
 			case middle:
@@ -116,6 +130,8 @@ public class Autonomous {
 				DriveTrain.moveByDistance(276);
 				DriveTrain.turnDegrees(-90);
 				Intake.outtakeCube();
+				DriveTrain.wait(timeToRoll);
+				Intake.stopRollers();
 				operating = false;
 				break;
 			case right:
@@ -126,6 +142,8 @@ public class Autonomous {
 				DriveTrain.turnDegrees(-90);
 				DriveTrain.moveByDistance(42);
 				Intake.outtakeCube();
+				DriveTrain.wait(timeToRoll);
+				Intake.stopRollers();
 				operating = false;
 				break;
 			}
@@ -145,6 +163,8 @@ public class Autonomous {
 					DriveTrain.turnDegrees(90);
 					DriveTrain.moveByDistance(42);
 					Intake.outtakeCube();
+					DriveTrain.wait(timeToRoll);
+					Intake.stopRollers();
 					operating = false;
 					break;
 				case middle:
@@ -156,6 +176,8 @@ public class Autonomous {
 					DriveTrain.moveByDistance(276);
 					DriveTrain.turnDegrees(90);
 					Intake.outtakeCube();
+					DriveTrain.wait(timeToRoll);
+					Intake.stopRollers();
 					operating = false;
 					break;
 				case right:
@@ -164,6 +186,8 @@ public class Autonomous {
 					DriveTrain.turnDegrees(90);
 					//Maybe drive forward a bit depending on dimensions
 					Intake.outtakeCube();
+					DriveTrain.wait(timeToRoll);
+					Intake.stopRollers();
 					operating = false;
 					break;
 				}

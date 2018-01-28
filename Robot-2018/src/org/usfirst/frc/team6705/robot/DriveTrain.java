@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 
 import static org.usfirst.frc.team6705.robot.Constants.*;
@@ -21,6 +22,9 @@ public class DriveTrain {
 	public static void setup() {
 		leftVictor.follow(leftTalon);
 		rightVictor.follow(rightTalon);
+		
+		leftTalon.setSafetyEnabled(true);
+		rightTalon.setSafetyEnabled(false);
 		
 		leftTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 		rightTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
@@ -58,6 +62,8 @@ public class DriveTrain {
 			double scaledFraction = fractionRemaining * 3; //Start slowing down 2/3 of the way there
 			if (scaledFraction > 1) {
 				scaledFraction = 1;
+			} else if (scaledFraction < 0.05) {
+				scaledFraction = 0.05;
 			}
 			
 			double velocity = scaledFraction * maxVelocity;
@@ -85,7 +91,7 @@ public class DriveTrain {
 		while (!isDoneTurning && DriverStation.getInstance().isAutonomous()) {
 			setVelocity(-1 * turnMultiplier * maxVelocity, turnMultiplier * maxVelocity);
 			currentAngle = Math.abs(gyro.getAngle());
-			if (currentAngle < Math.abs(degrees) + 2 && currentAngle > Math.abs(degrees) - 2) {
+			if (currentAngle < Math.abs(degrees) + turningTolerance && currentAngle > Math.abs(degrees) - turningTolerance) {
 				isDoneTurning = true;
 			}
 		}
@@ -95,6 +101,14 @@ public class DriveTrain {
 	public static void stop() {
 		leftTalon.set(ControlMode.PercentOutput, 0);
 		rightTalon.set(ControlMode.PercentOutput, 0);
+	}
+	
+	public static void wait(double time) {
+		Timer timer = new Timer();
+		timer.start();
+		while (timer.get() < time) {
+			stop();
+		}
 	}
 	
 	public static void resetEncoders() {

@@ -51,9 +51,10 @@ public class Constants {
 		ticksPerRevolution = 256, //encoder ticks
 		distancePerTick = (wheelRadius * 2.0 * Math.PI)/ticksPerRevolution, //inches per tick
 		verticalInchesPerTick = 0.1,
-		rollersSpeed = 0.5,
-		elevatorSpeed = 0.5,
-		turningTolerance = 2; //From -1 to 1
+		rollersSpeed = 0.5,//[-1, 1]
+		elevatorSpeed = 0.5, //[-1, 1]
+		turningTolerance = 2, //Degrees
+		elevatorTolerance = 0.5; //Inches
 	
 	//Distances
 	public static double floorPosition = 7.0,
@@ -61,10 +62,10 @@ public class Constants {
 			scalePosition = 82.0;
 	
 	//PID
-	public static double kP = 0.1,
+	/*public static double kP = 0.1,
 			kI = 0.001,
 			kD = 0,
-			kF = 1;
+			kF = 1;*/
 	
 	public static double convertInchesToTicks(double inches) {
 		return (inches/(2 * Math.PI * wheelRadius)) * ticksPerRevolution;

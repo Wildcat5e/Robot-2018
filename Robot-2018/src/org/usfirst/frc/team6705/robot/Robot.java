@@ -47,6 +47,7 @@ public class Robot extends IterativeRobot {
 	boolean intakeRolling = false;
 	double intakeStartTime = 0;
 	
+	double distanceToLift = 0;
 	boolean elevatorMovingFloor = true;
 	boolean elevatorMovingSwitch = true;
 	boolean elevatorMovingScale = true;
@@ -206,16 +207,16 @@ public class Robot extends IterativeRobot {
 		
 		//Bumpers - control intake pneumatics and rollers
 		if (driveStick.getBumper(GenericHID.Hand.kRight) && intakeOpen && !intakeRolling) {
-			bumperRight(); //Handle right bumper press
+			bumperRight(); 
 		} else if (driveStick.getBumper(GenericHID.Hand.kLeft) && !intakeOpen && !intakeRolling) {
-			bumperLeft(); //Handle left bumper press
+			bumperLeft();
 		}
 		
 		//dpad - control only rollers
-		if (driveStick.getPOV(dPadChannel) > 325 || (driveStick.getPOV(dPadChannel) < 35 && driveStick.getPOV(dPadChannel) > 0)) {
-			dPadUp(); //Handle dpad up press
+		if (driveStick.getPOV(dPadChannel) > 325 || (driveStick.getPOV(dPadChannel) < 35 && driveStick.getPOV(dPadChannel) >= 0)) {
+			dPadUp(); 
 		} else if (driveStick.getPOV(dPadChannel) > 145 && driveStick.getPOV(dPadChannel) < 215) {
-			dPadDown(); //Handle dpad down press
+			dPadDown(); 
 		} else {
 			Intake.stopRollers();
 		}
@@ -230,11 +231,26 @@ public class Robot extends IterativeRobot {
 		} 
 		
 		//Triggers - lift or lower elevator
-		if (driveStick.getTriggerAxis(GenericHID.Hand.kLeft) > 0.5) {
-			leftTrigger();
-		} else if (driveStick.getTriggerAxis(GenericHID.Hand.kRight) > 0.5) {
-			rightTrigger();
+		if (driveStick.getTriggerAxis(GenericHID.Hand.kLeft) >= 0.05) {
+			leftTrigger(driveStick.getTriggerAxis(GenericHID.Hand.kLeft));
+			elevatorMovingFloor = false;
+			elevatorMovingSwitch = false;
+			elevatorMovingScale = false;
+		} else if (driveStick.getTriggerAxis(GenericHID.Hand.kRight) >= 0.05) {
+			rightTrigger(driveStick.getTriggerAxis(GenericHID.Hand.kLeft));
+			elevatorMovingFloor = false;
+			elevatorMovingSwitch = false;
+			elevatorMovingScale = false;
+		} else if (!elevatorMovingFloor && !elevatorMovingSwitch && !elevatorMovingScale) {
+			Elevator.stop();
 		}
+		
+		//Start button - deploy ramps at end of game
+		if (timer.get() >= 120 && driveStick.getStartButton()) {
+			startButton();
+		}
+		
+		//*********************************************************************//
 		
 		//Stop intaking if enough time has passed
 		if (intakeRolling && currentTime - intakeStartTime > timeToRoll) {
@@ -242,31 +258,76 @@ public class Robot extends IterativeRobot {
 			intakeRolling = false;
 		}
 		
-		//Stop elevating if elevator has reached destination
-		if (elevatorMovingFloor && 
-				Elevator.getCurrentPosition() < floorPosition + elevatorTolerance && 
-				Elevator.getCurrentPosition() > floorPosition - elevatorTolerance) {
-			Elevator.stop();
-			elevatorMovingFloor = false;
+		//Check Elevator Moving Status
+		if (elevatorMovingFloor) {
+			
+			double currentHeight = Elevator.getCurrentPosition();
+			if (currentHeight < floorHeight + elevatorTolerance && 
+					currentHeight > floorHeight - elevatorTolerance) { //Within desired range, stop elevating
+				Elevator.stop();
+				elevatorMovingFloor = false;
+			} else {
+				double distanceRemaining = Math.abs(currentHeight - floorHeight);
+				double fractionRemaining = distanceRemaining/distanceToLift;
+				double scaledFraction = fractionRemaining * 3;
+				if (scaledFraction > 1) {
+					scaledFraction = 1;
+				} else if (scaledFraction < 0.05) {
+					scaledFraction = 0.05;
+				}
+				
+				Elevator.moveElevator(-scaledFraction);
+			}
 		}
 		
-		if (elevatorMovingSwitch && 
-				Elevator.getCurrentPosition() < switchPosition + elevatorTolerance && 
-				Elevator.getCurrentPosition() > switchPosition - elevatorTolerance) {
-			Elevator.stop();
-			elevatorMovingSwitch = false;
+		if (elevatorMovingSwitch) {
+			double currentHeight = Elevator.getCurrentPosition();
+			
+			if (currentHeight < switchHeight + elevatorTolerance && 
+					currentHeight > switchHeight - elevatorTolerance) { //Within desired range, stop elevating
+				Elevator.stop();
+				elevatorMovingSwitch = false;
+			} else {
+				int direction = 1;
+				if (currentHeight > switchHeight) {
+					direction = -1;
+				}
+				double distanceRemaining = Math.abs(currentHeight - switchHeight);
+				double fractionRemaining = distanceRemaining/distanceToLift;
+				double scaledFraction = fractionRemaining * 3;
+				if (scaledFraction > 1) {
+					scaledFraction = 1;
+				} else if (scaledFraction < 0.05) {
+					scaledFraction = 0.05;
+				}
+				
+				Elevator.moveElevator(direction * scaledFraction);
+			}
 		}
 		
-		if (elevatorMovingScale && 
-				Elevator.getCurrentPosition() < scalePosition + elevatorTolerance && 
-				Elevator.getCurrentPosition() > scalePosition - elevatorTolerance) {
-			Elevator.stop();
-			elevatorMovingScale = false;
-		}
-		
-		//Deploy ramps with start button
-		if (timer.get() >= 120 && driveStick.getStartButton()) {
-			startButton();
+		if (elevatorMovingScale) {
+			double currentHeight = Elevator.getCurrentPosition();
+			
+			if (currentHeight < scaleHeight + elevatorTolerance && 
+					currentHeight > scaleHeight - elevatorTolerance) { //Within desired range, stop elevating
+				Elevator.stop();
+				elevatorMovingScale = false;
+			} else {
+				int direction = 1;
+				if (currentHeight > scaleHeight) {
+					direction = -1;
+				}
+				double distanceRemaining = Math.abs(currentHeight - scaleHeight);
+				double fractionRemaining = distanceRemaining/distanceToLift;
+				double scaledFraction = fractionRemaining * 3;
+				if (scaledFraction > 1) {
+					scaledFraction = 1;
+				} else if (scaledFraction < 0.05) {
+					scaledFraction = 0.05;
+				}
+				
+				Elevator.moveElevator(direction * scaledFraction);
+			}
 		}
 		
 	}
@@ -301,37 +362,54 @@ public class Robot extends IterativeRobot {
 	
 	public void aButton() {
 		elevatorMovingFloor = true;
-		if (Elevator.getCurrentPosition() > floorPosition) {
+		elevatorMovingSwitch = false;
+		elevatorMovingScale = false;
+		
+		distanceToLift = Math.abs(Elevator.getCurrentPosition() - floorHeight);
+		/*
+		if (Elevator.getCurrentPosition() > floorHeight) {
 			Elevator.lowerElevator();
-		}
+		}*/
 	}
 	
 	public void bButton() {
 		elevatorMovingSwitch = true;
-		if (Elevator.getCurrentPosition() > switchPosition) {
+		elevatorMovingFloor = false;
+		elevatorMovingScale = false;
+		
+		distanceToLift = Math.abs(Elevator.getCurrentPosition() - switchHeight);
+
+		/*
+		if (Elevator.getCurrentPosition() > switchHeight) {
 			Elevator.lowerElevator();
 		} else {
 			Elevator.liftElevator();
-		}
+		}*/
 	}
 	
 	public void yButton() {
 		elevatorMovingScale = true;
-		if (Elevator.getCurrentPosition() > scalePosition) {
+		elevatorMovingFloor = false;
+		elevatorMovingSwitch = false;
+		
+		distanceToLift = Math.abs(Elevator.getCurrentPosition() - scaleHeight);
+
+		/*
+		if (Elevator.getCurrentPosition() > scaleHeight) {
 			Elevator.lowerElevator();
 		} else {
 			Elevator.liftElevator();
-		}
+		}*/
 	}
 	
-	public void leftTrigger() {
-		Elevator.lowerElevator();
+	public void leftTrigger(double speed) {
+		Elevator.moveElevator(-speed);
 	}
 	
-	public void rightTrigger() {
-		Elevator.liftElevator();
+	public void rightTrigger(double speed) {
+		Elevator.moveElevator(speed);
 	}
-	// pressing the start button the robot deploys ramps (we win);
+	
 	public void startButton() {
 		Ramps.deploy();
 	}

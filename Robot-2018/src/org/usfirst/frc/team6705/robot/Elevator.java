@@ -27,19 +27,15 @@ public class Elevator {
 	}
 	
 	public static double getCurrentPosition() {
-		return convertTicksToVerticalInches(encoder.get()) + floorPosition;
-	}
-	
-	public static void liftElevator() {
-		elevatorMotor.set(elevatorSpeed);
-	}
-	
-	public static void lowerElevator() {
-		elevatorMotor.set(-elevatorSpeed);
+		return convertTicksToVerticalInches(encoder.get()) + floorHeight;
 	}
 	
 	public static void moveElevator(double speed) {
-		elevatorMotor.set(speed);
+		if ((speed > 0 && getCurrentPosition() < maximumHeight) || (speed < 0 && getCurrentPosition() > floorHeight)) {
+			elevatorMotor.set(speed * elevatorSpeedMax);
+		} else {
+			stop();
+		}
 	}
 	
 	public static void stop() {
@@ -50,7 +46,6 @@ public class Elevator {
 		
 		double startingHeight = getCurrentPosition();
 		double inchesToMove = Math.abs(inches - startingHeight);
-		double maxVelocity = elevatorSpeed;
 		double inchesRemaining;
 		
 		int direction = 1;
@@ -68,7 +63,7 @@ public class Elevator {
 				scaledFraction = 0.05;
 			}
 				
-			moveElevator(direction * scaledFraction * maxVelocity);
+			moveElevator(direction * scaledFraction);
 		}
 		
 		stop();
@@ -76,15 +71,15 @@ public class Elevator {
 	}
 	
 	public static void toFloor() {
-		moveElevatorToHeight(floorPosition);
+		moveElevatorToHeight(floorHeight);
 	}
 			
 	public static void toSwitch() {
-		moveElevatorToHeight(switchPosition);
+		moveElevatorToHeight(switchHeight);
 	}
 	
 	public static void toScale() {
-		moveElevatorToHeight(scalePosition);
+		moveElevatorToHeight(scaleHeight);
 	}
 	
 }

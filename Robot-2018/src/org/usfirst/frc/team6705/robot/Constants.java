@@ -7,7 +7,7 @@ package org.usfirst.frc.team6705.robot;
 public class Constants {
 
 	//Motor Controllers
-	public static int leftTalonChannel = 15,
+	public static final int leftTalonChannel = 15,
 			rightTalonChannel = 1,
 			leftVictorChannel = 2,
 			rightVictorChannel = 3,
@@ -16,7 +16,7 @@ public class Constants {
 			elevatorSparkChannel = 6;
 	
 	//Solenoids
-	public static int leftIntakeSolenoidForward = 0,
+	public static final int leftIntakeSolenoidForward = 0,
 			leftIntakeSolenoidReverse = 1,
 			rightIntakeSolenoidForward = 2,
 			rightIntakeSolenoidReverse = 3,
@@ -26,7 +26,7 @@ public class Constants {
 			rightRampSolenoidClosed = 7;
 	
 	//Joysticks
-	public static int driveStickChannel = 0,
+	public static final int driveStickChannel = 0,
 			dPadChannel = 1;
 	
 	
@@ -36,30 +36,32 @@ public class Constants {
 			right = "right";
 	
 	//Sensors
-	public static int elevatorEncoderSourceA = 0,
+	public static final int elevatorEncoderSourceA = 0,
 			elevatorEncoderSourceB = 1;
 	
 	//Driving Speeds in FPS
-	public static double velocityFast = 12,
+	public static final double velocityFast = 12,
 			velocityMedium = 9,
 			velocitySlow = 6,
 			velocityTurning = 5;
 	
-	//Time, distance, and other measurement
-	public static double timeToRoll = 1.5, //seconds
+	//Rollers and drive train
+	public static final double timeToRoll = 1.5, //seconds
 		wheelRadius = 3.0, //inches
 		ticksPerRevolution = 256, //encoder ticks
 		distancePerTick = (wheelRadius * 2.0 * Math.PI)/ticksPerRevolution, //inches per tick
-		verticalInchesPerTick = 0.1,
 		rollersSpeed = 0.5,//[-1, 1]
-		elevatorSpeed = 0.5, //[-1, 1]
-		turningTolerance = 2, //Degrees
-		elevatorTolerance = 0.5; //Inches
+		turningTolerance = 2; //Degrees
+		
 	
-	//Distances
-	public static double floorPosition = 7.0,
-			switchPosition = 25.0,
-			scalePosition = 82.0;
+	//Elevator Constants
+	public static final double elevatorSpeedMax = 0.7,
+			verticalInchesPerTick = 0.1,
+			elevatorTolerance = 0.5, //Inches
+			maximumHeight = 90,
+			floorHeight = 7.0,
+			switchHeight = 25.0,
+			scaleHeight = 82.0;
 	
 	//PID
 	/*public static double kP = 0.1,

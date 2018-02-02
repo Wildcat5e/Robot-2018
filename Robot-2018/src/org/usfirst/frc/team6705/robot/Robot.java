@@ -219,7 +219,7 @@ public class Robot extends IterativeRobot {
 		} else if (driveStick.getPOV(dPadChannel) > 145 && driveStick.getPOV(dPadChannel) < 215) {
 			intakeState = IntakeState.MANUAL;
 			rollOut(); 
-		} else {
+		} else if (intakeState == IntakeState.MANUAL) {
 			Intake.stopRollers();
 		}
 		

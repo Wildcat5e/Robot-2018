@@ -11,6 +11,7 @@
 
 package org.usfirst.frc.team6705.robot;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -46,10 +47,8 @@ public class Robot extends IterativeRobot {
 	private SendableChooser<String> autoChooser = new SendableChooser<>();
 	private SendableChooser<String> positionChooser = new SendableChooser<>();
 	
-	boolean intakeOpen = true; 
+	boolean intakeOpen = false; 
 	IntakeState intakeState = IntakeState.MANUAL;
-	
-	boolean intakeRolling = false;
 	double intakeStartTime = 0;
 	
 	double distanceToLift = 0;
@@ -169,6 +168,12 @@ public class Robot extends IterativeRobot {
 		
 		Intake.stopRollers();
 		
+		if (Intake.leftSolenoid.get() == DoubleSolenoid.Value.kForward) {
+			intakeOpen = true;
+		} else if (Intake.leftSolenoid.get() == DoubleSolenoid.Value.kReverse) {
+			intakeOpen = false;
+		}
+		
 	}
 
 	/**
@@ -201,9 +206,9 @@ public class Robot extends IterativeRobot {
 		DriveTrain.tankDrive(driveStick.getY(GenericHID.Hand.kLeft), driveStick.getY(GenericHID.Hand.kRight));
 		
 		//Bumpers - control intake pneumatics and rollers
-		if (driveStick.getBumper(GenericHID.Hand.kRight) && intakeOpen && !intakeRolling) {
+		if (driveStick.getBumper(GenericHID.Hand.kRight) && !intakeOpen) {
 			dropCube(); 
-		} else if (driveStick.getBumper(GenericHID.Hand.kLeft) && !intakeOpen && !intakeRolling) {
+		} else if (driveStick.getBumper(GenericHID.Hand.kLeft) && intakeOpen) {
 			pickUpCube();
 		}
 		
@@ -311,6 +316,7 @@ public class Robot extends IterativeRobot {
 		intakeStartTime = timer.get();
 		intakeState = IntakeState.INTAKING;
 		Intake.close();
+		intakeOpen = false;
 	}
 	
 	//Right Bumper
@@ -318,6 +324,7 @@ public class Robot extends IterativeRobot {
 		intakeStartTime = timer.get();
 		intakeState = IntakeState.OUTTAKING;
 		Intake.open();
+		intakeOpen = true;
 	}
 	
 	//Dpad up

@@ -20,6 +20,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import static org.usfirst.frc.team6705.robot.Constants.*;
 
+import org.usfirst.frc.team6705.robot.Elevator.ElevatorState;
+import org.usfirst.frc.team6705.robot.Intake.IntakeState;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -44,14 +47,13 @@ public class Robot extends IterativeRobot {
 	private SendableChooser<String> positionChooser = new SendableChooser<>();
 	
 	boolean intakeOpen = true; 
+	IntakeState intakeState = IntakeState.MANUAL;
+	
 	boolean intakeRolling = false;
 	double intakeStartTime = 0;
 	
 	double distanceToLift = 0;
-	boolean elevatorMovingFloor = true;
-	boolean elevatorMovingSwitch = true;
-	boolean elevatorMovingScale = true;
-
+	ElevatorState elevatorState = ElevatorState.MANUAL;
 	
 	Timer timer = new Timer();
 	
@@ -94,8 +96,6 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 		autoSelected = autoChooser.getSelected();
 		startingPosition = positionChooser.getSelected();
-		// autoSelected = SmartDashboard.getString("Auto Selector",
-		// defaultAuto);
 		System.out.println("Auto selected: " + autoSelected);
 		
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
@@ -113,25 +113,20 @@ public class Robot extends IterativeRobot {
 			case switchAuto:
 				
 				if(gameData.charAt(0) == 'L') {
-					//Put left switch auto code here
 					Autonomous.leftSwitchAuto(startingPosition);
 				} else {
-					//Put right switch auto code here
 					Autonomous.rightSwitchAuto(startingPosition);
 				}
 				break;
 			case scaleAuto:
 				
 				if(gameData.charAt(1) == 'L') {
-					//Put left scale auto code here
 					Autonomous.leftScaleAuto(startingPosition);
 				} else {
-					//Put right scale auto code here
 					Autonomous.rightScaleAuto(startingPosition);
 				}
 				break;
 			case baselineAuto:
-				//Drive forward to cross baseline
 				Autonomous.baselineAuto();
 				break;
 			case bestSimple:
@@ -207,210 +202,164 @@ public class Robot extends IterativeRobot {
 		
 		//Bumpers - control intake pneumatics and rollers
 		if (driveStick.getBumper(GenericHID.Hand.kRight) && intakeOpen && !intakeRolling) {
-			bumperRight(); 
+			dropCube(); 
 		} else if (driveStick.getBumper(GenericHID.Hand.kLeft) && !intakeOpen && !intakeRolling) {
-			bumperLeft();
+			pickUpCube();
 		}
 		
-		//dpad - control only rollers
+		//Dpad - control only rollers
 		if (driveStick.getPOV(dPadChannel) > 325 || (driveStick.getPOV(dPadChannel) < 35 && driveStick.getPOV(dPadChannel) >= 0)) {
-			dPadUp(); 
+			intakeState = IntakeState.MANUAL;
+			rollIn(); 
 		} else if (driveStick.getPOV(dPadChannel) > 145 && driveStick.getPOV(dPadChannel) < 215) {
-			dPadDown(); 
+			intakeState = IntakeState.MANUAL;
+			rollOut(); 
 		} else {
 			Intake.stopRollers();
 		}
 		
 		//Buttons - set elevator lift to certain height - floor, switch, or scale
 		if (driveStick.getAButton()) {
-			aButton();
+			moveToFloor();
 		} else if (driveStick.getBButton()) {
-			bButton();
+			moveToSwitch();
 		} else if (driveStick.getYButton()) {
-			yButton();
+			moveToScale();
 		} 
 		
 		//Triggers - lift or lower elevator
 		if (driveStick.getTriggerAxis(GenericHID.Hand.kLeft) >= 0.05) {
-			leftTrigger(driveStick.getTriggerAxis(GenericHID.Hand.kLeft));
-			elevatorMovingFloor = false;
-			elevatorMovingSwitch = false;
-			elevatorMovingScale = false;
+			moveElevatorDown(driveStick.getTriggerAxis(GenericHID.Hand.kLeft));
+			elevatorState = ElevatorState.MANUAL;
 		} else if (driveStick.getTriggerAxis(GenericHID.Hand.kRight) >= 0.05) {
-			rightTrigger(driveStick.getTriggerAxis(GenericHID.Hand.kLeft));
-			elevatorMovingFloor = false;
-			elevatorMovingSwitch = false;
-			elevatorMovingScale = false;
-		} else if (!elevatorMovingFloor && !elevatorMovingSwitch && !elevatorMovingScale) {
+			moveElevatorUp(driveStick.getTriggerAxis(GenericHID.Hand.kLeft));
+			elevatorState = ElevatorState.MANUAL;
+		} else if (elevatorState == ElevatorState.MANUAL) {
 			Elevator.stop();
 		}
 		
 		//Start button - deploy ramps at end of game
 		if (timer.get() >= 120 && driveStick.getStartButton()) {
-			startButton();
+			deployRamps();
 		}
 		
 		//*********************************************************************//
 		
-		//Stop intaking if enough time has passed
-		if (intakeRolling && currentTime - intakeStartTime > timeToRoll) {
-			Intake.stopRollers();
-			intakeRolling = false;
+		//Check Intake State
+		if (intakeState == IntakeState.INTAKING) {
+			if (currentTime - intakeStartTime >= timeToRoll) {
+				//Stop based on time, or maybe a limit switch if implement
+				Intake.stopRollers();
+				intakeState = IntakeState.MANUAL;
+			} else {
+				Intake.intake();
+			}
 		}
 		
-		//Check Elevator Moving Status
-		if (elevatorMovingFloor) {
+		if (intakeState == IntakeState.OUTTAKING) {
+			if (currentTime - intakeStartTime >= timeToRoll) {
+				Intake.stopRollers();
+				intakeState = IntakeState.MANUAL;
+			} else {
+				Intake.outtake();
+			}
+		}
+		
+		//*********************************************************************//
+		
+		//Check Elevator State
+		if (elevatorState == ElevatorState.FLOOR) {
 			
 			double currentHeight = Elevator.getCurrentPosition();
 			if (currentHeight < floorHeight + elevatorTolerance && 
 					currentHeight > floorHeight - elevatorTolerance) { //Within desired range, stop elevating
 				Elevator.stop();
-				elevatorMovingFloor = false;
+				elevatorState = ElevatorState.MANUAL;
 			} else {
-				double distanceRemaining = Math.abs(currentHeight - floorHeight);
-				double fractionRemaining = distanceRemaining/distanceToLift;
-				double scaledFraction = fractionRemaining * 3;
-				if (scaledFraction > 1) {
-					scaledFraction = 1;
-				} else if (scaledFraction < 0.05) {
-					scaledFraction = 0.05;
-				}
-				
-				Elevator.moveElevator(-scaledFraction);
+				Elevator.moveToHeight(floorHeight, currentHeight, distanceToLift);
 			}
 		}
 		
-		if (elevatorMovingSwitch) {
+		if (elevatorState == ElevatorState.SWITCH) {
 			double currentHeight = Elevator.getCurrentPosition();
 			
 			if (currentHeight < switchHeight + elevatorTolerance && 
 					currentHeight > switchHeight - elevatorTolerance) { //Within desired range, stop elevating
 				Elevator.stop();
-				elevatorMovingSwitch = false;
+				elevatorState = ElevatorState.MANUAL;
 			} else {
-				int direction = 1;
-				if (currentHeight > switchHeight) {
-					direction = -1;
-				}
-				double distanceRemaining = Math.abs(currentHeight - switchHeight);
-				double fractionRemaining = distanceRemaining/distanceToLift;
-				double scaledFraction = fractionRemaining * 3;
-				if (scaledFraction > 1) {
-					scaledFraction = 1;
-				} else if (scaledFraction < 0.05) {
-					scaledFraction = 0.05;
-				}
-				
-				Elevator.moveElevator(direction * scaledFraction);
+				Elevator.moveToHeight(switchHeight, currentHeight, distanceToLift);
 			}
 		}
 		
-		if (elevatorMovingScale) {
+		if (elevatorState == ElevatorState.SCALE) {
 			double currentHeight = Elevator.getCurrentPosition();
 			
 			if (currentHeight < scaleHeight + elevatorTolerance && 
 					currentHeight > scaleHeight - elevatorTolerance) { //Within desired range, stop elevating
 				Elevator.stop();
-				elevatorMovingScale = false;
+				elevatorState = ElevatorState.MANUAL;
 			} else {
-				int direction = 1;
-				if (currentHeight > scaleHeight) {
-					direction = -1;
-				}
-				double distanceRemaining = Math.abs(currentHeight - scaleHeight);
-				double fractionRemaining = distanceRemaining/distanceToLift;
-				double scaledFraction = fractionRemaining * 3;
-				if (scaledFraction > 1) {
-					scaledFraction = 1;
-				} else if (scaledFraction < 0.05) {
-					scaledFraction = 0.05;
-				}
-				
-				Elevator.moveElevator(direction * scaledFraction);
+				Elevator.moveToHeight(scaleHeight, currentHeight, distanceToLift);
 			}
 		}
 		
 	}
 	
-	//Called when driver presses right bumper
-	public void bumperRight() {
+	//Left Bumper
+	public void pickUpCube() {
 		intakeStartTime = timer.get();
+		intakeState = IntakeState.INTAKING;
 		Intake.close();
-		intakeOpen = false;
-		Intake.intakeCube();
-		intakeRolling = true;
 	}
 	
-	//Called when driver presses left bumper
-	public void bumperLeft() {
+	//Right Bumper
+	public void dropCube() {
 		intakeStartTime = timer.get();
+		intakeState = IntakeState.OUTTAKING;
 		Intake.open();
-		intakeOpen = true;
-		Intake.outtakeCube();
-		intakeRolling = true;
 	}
 	
-	//Called when driver presses dpad in general up direction
-	public void dPadUp() {
-		Intake.outtakeCube();
+	//Dpad up
+	public void rollOut() {
+		Intake.outtake();
 	}
 	
-	//Called when driver presses dpad in general down direction
-	public void dPadDown() {
-		Intake.intakeCube();
+	//Dpad down
+	public void rollIn() {
+		Intake.intake();
 	}
 	
-	public void aButton() {
-		elevatorMovingFloor = true;
-		elevatorMovingSwitch = false;
-		elevatorMovingScale = false;
-		
+	//A Button
+	public void moveToFloor() {
+		elevatorState = ElevatorState.FLOOR;
 		distanceToLift = Math.abs(Elevator.getCurrentPosition() - floorHeight);
-		/*
-		if (Elevator.getCurrentPosition() > floorHeight) {
-			Elevator.lowerElevator();
-		}*/
 	}
 	
-	public void bButton() {
-		elevatorMovingSwitch = true;
-		elevatorMovingFloor = false;
-		elevatorMovingScale = false;
-		
+	//B Button
+	public void moveToSwitch() {
+		elevatorState = ElevatorState.SWITCH;
 		distanceToLift = Math.abs(Elevator.getCurrentPosition() - switchHeight);
-
-		/*
-		if (Elevator.getCurrentPosition() > switchHeight) {
-			Elevator.lowerElevator();
-		} else {
-			Elevator.liftElevator();
-		}*/
 	}
 	
-	public void yButton() {
-		elevatorMovingScale = true;
-		elevatorMovingFloor = false;
-		elevatorMovingSwitch = false;
-		
+	//Y Button
+	public void moveToScale() {
+		elevatorState = ElevatorState.SCALE;
 		distanceToLift = Math.abs(Elevator.getCurrentPosition() - scaleHeight);
-
-		/*
-		if (Elevator.getCurrentPosition() > scaleHeight) {
-			Elevator.lowerElevator();
-		} else {
-			Elevator.liftElevator();
-		}*/
 	}
 	
-	public void leftTrigger(double speed) {
-		Elevator.moveElevator(-speed);
+	//Left Trigger
+	public void moveElevatorDown(double speed) {
+		Elevator.set(-speed);
 	}
 	
-	public void rightTrigger(double speed) {
-		Elevator.moveElevator(speed);
+	//Right Trigger
+	public void moveElevatorUp(double speed) {
+		Elevator.set(speed);
 	}
 	
-	public void startButton() {
+	//Start Button
+	public void deployRamps() {
 		Ramps.deploy();
 	}
 	

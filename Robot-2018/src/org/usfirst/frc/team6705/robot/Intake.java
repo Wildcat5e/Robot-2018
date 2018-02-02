@@ -17,14 +17,14 @@ public class Intake {
 		rollersRight.setSafetyEnabled(false);
 	}
 	
-	public static void intakeCube() {
+	public static void intake() {
 		
 		rollersLeft.set(rollersSpeed);
 		rollersRight.set(-rollersSpeed);
 		
 	}
 	
-	public static void outtakeCube() {
+	public static void outtake() {
 		
 		rollersLeft.set(-rollersSpeed);
 		rollersRight.set(rollersSpeed);
@@ -48,6 +48,10 @@ public class Intake {
 		leftSolenoid.set(DoubleSolenoid.Value.kReverse);
 		rightSolenoid.set(DoubleSolenoid.Value.kReverse);
 		
+	}
+	
+	public static enum IntakeState {
+		MANUAL, INTAKING, OUTTAKING;
 	}
 	
 	

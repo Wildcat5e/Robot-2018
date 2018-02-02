@@ -32,7 +32,7 @@ public class Autonomous {
 					DriveTrain.turnDegrees(-90);
 					Elevator.toSwitch();
 					DriveTrain.moveTillStall();
-					Intake.outtakeCube();
+					Intake.outtake();
 					DriveTrain.wait(timeToRoll);
 					Intake.stopRollers();
 					operating = false;
@@ -44,7 +44,7 @@ public class Autonomous {
 					DriveTrain.moveByDistance(54);
 					DriveTrain.turnDegrees(-90);
 					DriveTrain.moveByDistance(51);
-					Intake.outtakeCube();
+					Intake.outtake();
 					DriveTrain.wait(timeToRoll);
 					Intake.stopRollers();
 					operating = false;
@@ -55,7 +55,7 @@ public class Autonomous {
 					DriveTrain.turnDegrees(90);
 					DriveTrain.moveByDistance(121);
 					DriveTrain.turnDegrees(90);
-					Intake.outtakeCube();
+					Intake.outtake();
 					DriveTrain.wait(timeToRoll);
 					Intake.stopRollers();
 					operating = false;
@@ -75,7 +75,7 @@ public class Autonomous {
 					DriveTrain.turnDegrees(-90);
 					DriveTrain.moveByDistance(121);
 					DriveTrain.turnDegrees(-90);
-					Intake.outtakeCube();
+					Intake.outtake();
 					DriveTrain.wait(timeToRoll);
 					Intake.stopRollers();
 					operating = false;
@@ -87,7 +87,7 @@ public class Autonomous {
 					DriveTrain.moveByDistance(54);
 					DriveTrain.turnDegrees(90);
 					DriveTrain.moveByDistance(51);
-					Intake.outtakeCube();
+					Intake.outtake();
 					DriveTrain.wait(timeToRoll);
 					Intake.stopRollers();
 					operating = false;
@@ -97,7 +97,7 @@ public class Autonomous {
 					DriveTrain.turnDegrees(90);
 					Elevator.toSwitch();
 					DriveTrain.moveTillStall();
-					Intake.outtakeCube();
+					Intake.outtake();
 					DriveTrain.wait(timeToRoll);
 					Intake.stopRollers();
 					operating = false;
@@ -116,7 +116,7 @@ public class Autonomous {
 				Elevator.toScale();
 				DriveTrain.turnDegrees(-90);
 				//Maybe drive a bit forward depending on dimensions
-				Intake.outtakeCube();
+				Intake.outtake();
 				DriveTrain.wait(timeToRoll);
 				Intake.stopRollers();
 				operating = false;
@@ -129,7 +129,7 @@ public class Autonomous {
 				DriveTrain.turnDegrees(-90);
 				DriveTrain.moveByDistance(276);
 				DriveTrain.turnDegrees(-90);
-				Intake.outtakeCube();
+				Intake.outtake();
 				DriveTrain.wait(timeToRoll);
 				Intake.stopRollers();
 				operating = false;
@@ -141,7 +141,7 @@ public class Autonomous {
 				DriveTrain.moveByDistance(121);
 				DriveTrain.turnDegrees(-90);
 				DriveTrain.moveByDistance(42);
-				Intake.outtakeCube();
+				Intake.outtake();
 				DriveTrain.wait(timeToRoll);
 				Intake.stopRollers();
 				operating = false;
@@ -162,7 +162,7 @@ public class Autonomous {
 					DriveTrain.moveByDistance(121);
 					DriveTrain.turnDegrees(90);
 					DriveTrain.moveByDistance(42);
-					Intake.outtakeCube();
+					Intake.outtake();
 					DriveTrain.wait(timeToRoll);
 					Intake.stopRollers();
 					operating = false;
@@ -175,7 +175,7 @@ public class Autonomous {
 					DriveTrain.turnDegrees(90);
 					DriveTrain.moveByDistance(276);
 					DriveTrain.turnDegrees(90);
-					Intake.outtakeCube();
+					Intake.outtake();
 					DriveTrain.wait(timeToRoll);
 					Intake.stopRollers();
 					operating = false;
@@ -185,7 +185,7 @@ public class Autonomous {
 					Elevator.toScale();
 					DriveTrain.turnDegrees(90);
 					//Maybe drive forward a bit depending on dimensions
-					Intake.outtakeCube();
+					Intake.outtake();
 					DriveTrain.wait(timeToRoll);
 					Intake.stopRollers();
 					operating = false;

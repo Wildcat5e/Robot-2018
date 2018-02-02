@@ -3,6 +3,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
@@ -25,6 +26,9 @@ public class DriveTrain {
 		
 		leftTalon.setSafetyEnabled(true);
 		rightTalon.setSafetyEnabled(false);
+		
+		leftTalon.setNeutralMode(NeutralMode.Brake);
+		rightTalon.setNeutralMode(NeutralMode.Brake);
 		
 		leftTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 		rightTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);

@@ -16,7 +16,7 @@ public class Elevator {
 	public static void setup() {
 		encoder.reset();
 		encoder.setDistancePerPulse(verticalInchesPerTick);
-		elevatorMotor.setSafetyEnabled(false);
+		elevatorMotor.setSafetyEnabled(true);
 		
 		//pid.enable();
 	}
@@ -30,7 +30,7 @@ public class Elevator {
 		return convertTicksToVerticalInches(encoder.get()) + floorHeight;
 	}
 	
-	public static void moveElevator(double speed) {
+	public static void set(double speed) {
 		if ((speed > 0 && getCurrentPosition() < maximumHeight) || (speed < 0 && getCurrentPosition() > floorHeight)) {
 			elevatorMotor.set(speed * elevatorSpeedMax);
 		} else {
@@ -42,7 +42,7 @@ public class Elevator {
 		elevatorMotor.set(0);
 	}
 	
-	public static void moveElevatorToHeight(double inches) {
+	public static void moveToHeight(double inches) {
 		
 		double startingHeight = getCurrentPosition();
 		double inchesToMove = Math.abs(inches - startingHeight);
@@ -63,23 +63,45 @@ public class Elevator {
 				scaledFraction = 0.05;
 			}
 				
-			moveElevator(direction * scaledFraction);
+			set(direction * scaledFraction);
 		}
 		
 		stop();
 		
 	}
 	
+	public static void moveToHeight(double targetHeight, double currentHeight, double distanceToLift) {
+		int direction = 1;
+		if (currentHeight > targetHeight) {
+			direction = -1;
+		}
+		double distanceRemaining = Math.abs(currentHeight - targetHeight);
+		double fractionRemaining = distanceRemaining/distanceToLift;
+		double scaledFraction = fractionRemaining * 3;
+		if (scaledFraction > 1) {
+			scaledFraction = 1;
+		} else if (scaledFraction < 0.05) {
+			scaledFraction = 0.05;
+		}
+		
+		Elevator.set(direction * scaledFraction);
+	}
+	
 	public static void toFloor() {
-		moveElevatorToHeight(floorHeight);
+		moveToHeight(floorHeight);
 	}
 			
 	public static void toSwitch() {
-		moveElevatorToHeight(switchHeight);
+		moveToHeight(switchHeight);
 	}
 	
 	public static void toScale() {
-		moveElevatorToHeight(scaleHeight);
+		moveToHeight(scaleHeight);
+	}
+	
+	public static enum ElevatorState {
+		MANUAL, FLOOR, SWITCH, SCALE;
 	}
 	
 }
+

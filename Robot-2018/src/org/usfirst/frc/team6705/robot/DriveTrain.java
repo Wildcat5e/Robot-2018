@@ -43,8 +43,9 @@ public class DriveTrain {
 		leftTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 		rightTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 		
-		leftTalon.setSensorPhase(true);
-		rightTalon.setSensorPhase(true);
+		leftTalon.setSensorPhase(false);
+		rightTalon.setSensorPhase(false);
+		
 		
 		//TODO: Perform any other talon and victor config here
 		

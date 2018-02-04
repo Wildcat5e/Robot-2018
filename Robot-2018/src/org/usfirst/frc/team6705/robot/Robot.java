@@ -95,15 +95,17 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 		autoSelected = autoChooser.getSelected();
 		startingPosition = positionChooser.getSelected();
+		
 		System.out.println("Auto selected: " + autoSelected);
 		SmartDashboard.putString("Auto Selected", autoSelected);
+		
+		gameData = "LLL";
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 
 		timer.start();
 		
 		switch (autoSelected) {
 		case switchAuto:
-			
 			if(gameData.charAt(0) == 'L') {
 				Autonomous.leftSwitchAuto(startingPosition);
 			} else {
@@ -111,7 +113,6 @@ public class Robot extends IterativeRobot {
 			}
 			break;
 		case scaleAuto:
-			
 			if(gameData.charAt(1) == 'L') {
 				Autonomous.leftScaleAuto(startingPosition);
 			} else {

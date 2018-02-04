@@ -48,7 +48,7 @@ public class Constants {
 	//Rollers and drive train
 	public static final double timeToRoll = 1.5, //seconds
 		wheelRadius = 3.0, //inches
-		ticksPerRevolution = 256, //encoder ticks
+		ticksPerRevolution = 256 * 4, //encoder ticks
 		distancePerTick = (wheelRadius * 2.0 * Math.PI)/ticksPerRevolution, //inches per tick
 		rollersSpeed = 0.5,//[-1, 1]
 		turningTolerance = 2, //Degrees

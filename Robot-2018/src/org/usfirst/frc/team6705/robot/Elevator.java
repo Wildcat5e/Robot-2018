@@ -16,7 +16,7 @@ public class Elevator {
 	public static void setup() {
 		encoder.reset();
 		encoder.setDistancePerPulse(verticalInchesPerTick);
-		elevatorMotor.setSafetyEnabled(true);
+		//elevatorMotor.setSafetyEnabled(true);
 		
 		//pid.enable();
 	}

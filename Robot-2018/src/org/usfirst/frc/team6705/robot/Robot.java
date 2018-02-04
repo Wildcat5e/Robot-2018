@@ -96,7 +96,7 @@ public class Robot extends IterativeRobot {
 		autoSelected = autoChooser.getSelected();
 		startingPosition = positionChooser.getSelected();
 		System.out.println("Auto selected: " + autoSelected);
-		
+		SmartDashboard.putString("Auto Selected", autoSelected);
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 
 		timer.start();

@@ -37,8 +37,14 @@ public class DriveTrain {
 		leftVictor.setInverted(true);
 		rightVictor.setInverted(false);
 		
+		leftTalon.configOpenloopRamp(rampRate, 0);
+		rightTalon.configOpenloopRamp(rampRate, 0);
+		
 		leftTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 		rightTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
+		
+		leftTalon.setSensorPhase(true);
+		rightTalon.setSensorPhase(true);
 		
 		//TODO: Perform any other talon and victor config here
 		

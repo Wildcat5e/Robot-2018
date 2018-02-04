@@ -2,17 +2,20 @@ package org.usfirst.frc.team6705.robot;
 
 import static org.usfirst.frc.team6705.robot.Constants.*;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 
 public class Autonomous {
 	static boolean operating = true;
 	
 	static public void baselineAuto() {
-		if (operating) {
+		//if (operating) {
+			SmartDashboard.putString("Process", "Baseline Auto Running");
 			DriveTrain.moveByDistance(132); //Move forward 11 feet = 132 inches
-			operating = false; //Change operating to false; now done with auto routine
-		} else {
+			//operating = false; //Change operating to false; now done with auto routine
+		//} else {
 			DriveTrain.stop(); //Stop moving
-		}
+		//}
 	}
 	
 	/*

@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import static org.usfirst.frc.team6705.robot.Constants.*;
@@ -70,8 +71,8 @@ public class Robot extends IterativeRobot {
 		autoChooser.addObject("Cross Baseline Only", baselineAuto);
 		SmartDashboard.putData("Auto choices", autoChooser);
 		
+		positionChooser.addDefault("Middle Starting Position", middle);
 		positionChooser.addObject("Left Starting Position", left);
-		positionChooser.addObject("Middle Starting Position", middle);
 		positionChooser.addObject("Right Starting Position", right);
 		SmartDashboard.putData("Starting position", positionChooser);
 		
@@ -98,7 +99,7 @@ public class Robot extends IterativeRobot {
 		System.out.println("Auto selected: " + autoSelected);
 		
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
-		
+
 		timer.start();
 	}
 
@@ -192,6 +193,7 @@ public class Robot extends IterativeRobot {
 	public void testPeriodic() {
 		
 		operatorControl();
+		updateSmartDashboard();
 		
 	}
 	
@@ -199,7 +201,6 @@ public class Robot extends IterativeRobot {
 	public void operatorControl() {
 		
 		double currentTime = timer.get();
-		
 		SmartDashboard.putNumber("Current Time", currentTime);
 		
 		//Joystick - control tank drive

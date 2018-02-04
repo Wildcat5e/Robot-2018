@@ -29,6 +29,12 @@ public class DriveTrain {
 		
 		leftTalon.setNeutralMode(NeutralMode.Brake);
 		rightTalon.setNeutralMode(NeutralMode.Brake);
+		leftVictor.setNeutralMode(NeutralMode.Brake);
+		rightVictor.setNeutralMode(NeutralMode.Brake);
+		
+		leftTalon.setInverted(true);
+		rightTalon.setInverted(false);
+		
 		
 		leftTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 		rightTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
@@ -41,8 +47,18 @@ public class DriveTrain {
 	
 	//Tank drive for teleop control
 	public static void tankDrive(double leftSpeed, double rightSpeed) {
-		leftTalon.set(ControlMode.PercentOutput, leftSpeed);
-		rightTalon.set(ControlMode.PercentOutput, rightSpeed);
+		leftSpeed = applyDeadband(leftSpeed);
+		rightSpeed = applyDeadband(rightSpeed);
+		
+		leftTalon.set(ControlMode.PercentOutput, Math.copySign(leftSpeed * leftSpeed, leftSpeed));
+		rightTalon.set(ControlMode.PercentOutput, Math.copySign(rightSpeed * rightSpeed, rightSpeed));
+	}
+	
+	public static double applyDeadband(double speed) {
+		if ((speed < deadband && speed > 0) || (speed > -deadband && speed < 0)) {
+			speed = 0;
+		}
+		return speed;
 	}
 
 	public static void moveByDistance(double inches) {

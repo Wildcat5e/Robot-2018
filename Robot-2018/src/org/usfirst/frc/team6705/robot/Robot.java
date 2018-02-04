@@ -372,7 +372,7 @@ public class Robot extends IterativeRobot {
 	
 	public void updateSmartDashboard() {
 		SmartDashboard.putNumber("Encoder Count Left", DriveTrain.leftTalon.getSelectedSensorPosition(0));
-		SmartDashboard.putNumber("Encoder Count Left", DriveTrain.rightTalon.getSelectedSensorPosition(0));
+		SmartDashboard.putNumber("Encoder Count Right", DriveTrain.rightTalon.getSelectedSensorPosition(0));
 	}
 	
 }

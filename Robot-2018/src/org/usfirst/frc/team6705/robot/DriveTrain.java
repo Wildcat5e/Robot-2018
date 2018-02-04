@@ -34,6 +34,8 @@ public class DriveTrain {
 		
 		leftTalon.setInverted(true);
 		rightTalon.setInverted(false);
+		leftVictor.setInverted(true);
+		rightVictor.setInverted(false);
 		
 		leftTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 		rightTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);

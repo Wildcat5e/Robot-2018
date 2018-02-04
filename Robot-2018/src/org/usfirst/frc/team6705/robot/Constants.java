@@ -27,7 +27,7 @@ public class Constants {
 	
 	//Joysticks
 	public static final int driveStickChannel = 0,
-			dPadChannel = 1;
+			dPadChannel = 0;
 	
 	
 	//Auto Starting Positions

@@ -192,12 +192,12 @@ public class Robot extends IterativeRobot {
 	public void testPeriodic() {
 		
 		operatorControl();
-		updateSmartDashboard();
 		
 	}
 	
 	//operatorControl() is called periodically in both teleop and test periodic
 	public void operatorControl() {
+		updateSmartDashboard();
 		
 		double currentTime = timer.get();
 		SmartDashboard.putNumber("Current Time", currentTime);

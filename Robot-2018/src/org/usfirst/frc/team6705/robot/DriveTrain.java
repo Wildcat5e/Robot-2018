@@ -24,8 +24,8 @@ public class DriveTrain {
 		leftVictor.follow(leftTalon);
 		rightVictor.follow(rightTalon);
 		
-		leftTalon.setSafetyEnabled(true);
-		rightTalon.setSafetyEnabled(true);
+		//leftTalon.setSafetyEnabled(true);
+		//rightTalon.setSafetyEnabled(true);
 		
 		leftTalon.setNeutralMode(NeutralMode.Brake);
 		rightTalon.setNeutralMode(NeutralMode.Brake);

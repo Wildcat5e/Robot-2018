@@ -25,7 +25,7 @@ public class DriveTrain {
 		rightVictor.follow(rightTalon);
 		
 		leftTalon.setSafetyEnabled(true);
-		rightTalon.setSafetyEnabled(false);
+		rightTalon.setSafetyEnabled(true);
 		
 		leftTalon.setNeutralMode(NeutralMode.Brake);
 		rightTalon.setNeutralMode(NeutralMode.Brake);
@@ -34,7 +34,6 @@ public class DriveTrain {
 		
 		leftTalon.setInverted(true);
 		rightTalon.setInverted(false);
-		
 		
 		leftTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 		rightTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);

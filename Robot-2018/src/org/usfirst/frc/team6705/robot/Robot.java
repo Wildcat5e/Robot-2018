@@ -106,59 +106,6 @@ public class Robot extends IterativeRobot {
 		timer.start();
 		
 		auto = new Autonomous();
-		
-		/*
-		switch (autoSelected) {
-		case switchAuto:
-			if(gameData.charAt(0) == 'L') {
-				auto.leftSwitchAuto(startingPosition);
-			} else {
-				Autonomous.rightSwitchAuto(startingPosition);
-			}
-			break;
-		case scaleAuto:
-			if(gameData.charAt(1) == 'L') {
-				Autonomous.leftScaleAuto(startingPosition);
-			} else {
-				Autonomous.rightScaleAuto(startingPosition);
-			}
-			break;
-		case baselineAuto:
-			Autonomous.baselineAuto();
-			break;
-		case bestSimple:
-			switch(startingPosition) {
-			case left:
-				if(gameData.charAt(1) == 'L') {
-					Autonomous.leftScaleAuto(startingPosition);
-				} else if(gameData.charAt(0) == 'L'){
-					Autonomous.leftSwitchAuto(startingPosition);
-				} else {
-					Autonomous.baselineAuto();
-				}
-				break;
-			case middle:
-				if(gameData.charAt(0) == 'L') {
-					Autonomous.leftSwitchAuto(startingPosition);
-				} else {
-					Autonomous.rightSwitchAuto(startingPosition);
-				}
-				break;
-			case right:
-				if(gameData.charAt(1) == 'R') {
-					Autonomous.rightScaleAuto(startingPosition);
-				} else if(gameData.charAt(0) == 'R') {
-					Autonomous.rightSwitchAuto(startingPosition);
-				} else {
-					Autonomous.baselineAuto();
-				}
-				break;
-			}
-			break;
-		default:
-			// Put default auto code here
-			break;
-	}*/
 	}
 
 	/**

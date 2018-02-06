@@ -46,14 +46,16 @@ public class Constants {
 			velocityTurning = 5;
 	
 	//Rollers and drive train
-	public static final double timeToRoll = 1.5, //seconds
+	public static final double timeToRollIn = 1.5, //seconds
+		timeToRollOut = 1.5, //seconds
 		wheelRadius = 3.0, //inches
 		ticksPerRevolution = 256 * 4, //encoder ticks
 		distancePerTick = (wheelRadius * 2.0 * Math.PI)/ticksPerRevolution, //inches per tick
 		rollersSpeed = 0.5,//[-1, 1]
 		turningTolerance = 2, //Degrees
 		deadband = 0.02, //-1 to 1
-		rampRate = 1; //Seconds to ramp from 0 to full
+		rampRate = 1, //Seconds to ramp from 0 to full
+		stallCurrent = 20; //Amps
 		
 	
 	//Elevator Constants

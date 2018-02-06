@@ -47,6 +47,8 @@ public class Robot extends IterativeRobot {
 	private SendableChooser<String> autoChooser = new SendableChooser<>();
 	private SendableChooser<String> positionChooser = new SendableChooser<>();
 	
+	private Autonomous auto;
+	
 	boolean intakeOpen = false; 
 	IntakeState intakeState = IntakeState.MANUAL;
 	double intakeStartTime = 0;
@@ -54,7 +56,7 @@ public class Robot extends IterativeRobot {
 	double distanceToLift = 0;
 	ElevatorState elevatorState = ElevatorState.MANUAL;
 	
-	Timer timer = new Timer();
+	public static Timer timer = new Timer();
 	
 	XboxController driveStick = new XboxController(driveStickChannel);
 	
@@ -96,18 +98,20 @@ public class Robot extends IterativeRobot {
 		autoSelected = autoChooser.getSelected();
 		startingPosition = positionChooser.getSelected();
 		
-		System.out.println("Auto selected: " + autoSelected);
-		SmartDashboard.putString("Auto Selected", autoSelected);
+		SmartDashboard.putNumber("Auto State", 0);
 		
 		gameData = "LLL";
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 
 		timer.start();
 		
+		auto = new Autonomous();
+		
+		/*
 		switch (autoSelected) {
 		case switchAuto:
 			if(gameData.charAt(0) == 'L') {
-				Autonomous.leftSwitchAuto(startingPosition);
+				auto.leftSwitchAuto(startingPosition);
 			} else {
 				Autonomous.rightSwitchAuto(startingPosition);
 			}
@@ -154,7 +158,7 @@ public class Robot extends IterativeRobot {
 		default:
 			// Put default auto code here
 			break;
-	}
+	}*/
 	}
 
 	/**
@@ -164,14 +168,69 @@ public class Robot extends IterativeRobot {
 	public void autonomousPeriodic() {
 		
 		updateSmartDashboard();
+		
+		switch (autoSelected) {
+		case switchAuto:
+			if (gameData.charAt(0) == 'L') {
+				auto.switchAuto(startingPosition, 1); //Note: side 1 means left, side -1 means right
+			} else {
+				auto.switchAuto(startingPosition, -1);
+			}
+			break;
+			
+		case baselineAuto:
+			auto.baselineAuto();
+			break;
+			
+		case scaleAuto:
+			if (gameData.charAt(1) == 'L') {
+				auto.switchAuto(startingPosition, 1);
+			} else {
+				auto.switchAuto(startingPosition, -1);
+			}
+			break;
+			
+		case bestSimple:
+			switch(startingPosition) {
+			case left:
+				if(gameData.charAt(1) == 'L') {
+					auto.scaleAuto(startingPosition, 1);
+				} else if(gameData.charAt(0) == 'L'){
+					auto.switchAuto(startingPosition, 1);
+				} else {
+					auto.baselineAuto();
+				}
+				break;
+			case middle:
+				if(gameData.charAt(0) == 'L') {
+					auto.switchAuto(startingPosition, 1);
+				} else {
+					auto.switchAuto(startingPosition, -1);
+				}
+				break;
+			case right:
+				if(gameData.charAt(1) == 'R') {
+					auto.scaleAuto(startingPosition, -1);
+				} else if(gameData.charAt(0) == 'R') {
+					auto.switchAuto(startingPosition, -1);
+				} else {
+					auto.baselineAuto();
+				}
+				break;
+			}
+			break;
+		}
 
 	}
 	
 	@Override
 	public void teleopInit() {
 		
+		DriveTrain.stop();
 		Intake.stopRollers();
+		Elevator.stop();
 		
+		//If the intake is open due to whatever happened in auto, set intakeOpen to true
 		if (Intake.leftSolenoid.get() == DoubleSolenoid.Value.kForward) {
 			intakeOpen = true;
 		} else if (Intake.leftSolenoid.get() == DoubleSolenoid.Value.kReverse) {
@@ -256,7 +315,7 @@ public class Robot extends IterativeRobot {
 		
 		//Check Intake State
 		if (intakeState == IntakeState.INTAKING) {
-			if (currentTime - intakeStartTime >= timeToRoll) {
+			if (currentTime - intakeStartTime >= timeToRollIn) {
 				//Stop based on time, or maybe a limit switch if implement
 				Intake.stopRollers();
 				intakeState = IntakeState.MANUAL;
@@ -266,7 +325,7 @@ public class Robot extends IterativeRobot {
 		}
 		
 		if (intakeState == IntakeState.OUTTAKING) {
-			if (currentTime - intakeStartTime >= timeToRoll) {
+			if (currentTime - intakeStartTime >= timeToRollOut) {
 				Intake.stopRollers();
 				intakeState = IntakeState.MANUAL;
 			} else {

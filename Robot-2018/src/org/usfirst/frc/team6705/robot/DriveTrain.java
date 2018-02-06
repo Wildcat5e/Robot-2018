@@ -5,8 +5,6 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 
 import static org.usfirst.frc.team6705.robot.Constants.*;
@@ -69,61 +67,65 @@ public class DriveTrain {
 		return speed;
 	}
 
-	public static void moveByDistance(double inches) {
-		//Reset encoders
-		resetEncoders();
+	//Autonomous move method
+	public static boolean moveByDistance(double inches, double velocity) {
 		
-		//Convert argument from inches to encoder ticks
 		double targetEncoderTicks = convertInchesToTicks(inches);
+		double ticksSoFar = leftTalon.getSelectedSensorPosition(0);
+		double maxVelocity = convertFPSToTicksPer100MS(velocity);
+		
+		if (ticksSoFar >= targetEncoderTicks) {
+			resetEncoders();
+			return true;
+		}
 		
 		int direction = 1;
 		if (inches < 0) {
 			direction = -1;
 		}
 		
-		double maxVelocity = convertFPSToTicksPer100MS(velocityMedium);
-		double ticksRemaining;
-		
-		while (direction * leftTalon.getSelectedSensorPosition(0) < direction * targetEncoderTicks && DriverStation.getInstance().isAutonomous()) {
-			ticksRemaining = targetEncoderTicks - leftTalon.getSelectedSensorPosition(0);
-			double fractionRemaining = ticksRemaining/targetEncoderTicks;
-			double scaledFraction = fractionRemaining * 3; //Start slowing down 2/3 of the way there
-			if (scaledFraction > 1) {
-				scaledFraction = 1;
-			} else if (scaledFraction < 0.05) {
-				scaledFraction = 0.05;
-			}
+		double ticksRemaining = convertInchesToTicks(targetEncoderTicks - ticksSoFar);
+		double fractionRemaining = ticksRemaining/targetEncoderTicks;
+		double scaledFraction = fractionRemaining * 3; //Start slowing down 2/3 of the way there
+		if (scaledFraction > 1) {
+			scaledFraction = 1;
+		} else if (scaledFraction < 0.05) {
+			scaledFraction = 0.05;
+		}
 			
-			double velocity = scaledFraction * maxVelocity;
-			setVelocity(direction * velocity, direction * velocity);
-		} 
-		
-		stop(); //Stop driving when loop finishes
+		double speed = scaledFraction * maxVelocity;
+		setVelocity(direction * speed, direction * speed);
+		return false;
 	}
+	
+	//Move until runs into switch
+	public static boolean moveTillStall() {
+		if (leftTalon.getOutputCurrent() < stallCurrent) {
+			return true;
+		}
+		setVelocity(velocityMedium, velocityMedium);
+		return false;
+	}
+	
+	//Autonomous turn method
+	public static boolean turnDegrees(double degrees) {
+		//Positive degrees -> counterclockwise; negative degrees -> clockwise
+		double maxVelocity = convertFPSToTicksPer100MS(velocityTurning);
+		int turnMultiplier = (degrees < 0) ? -1 : 1;
+		double currentAngle = gyro.getAngle();
+		if (currentAngle < Math.abs(degrees) + turningTolerance && currentAngle > Math.abs(degrees) - turningTolerance) {
+			gyro.reset();
+			return true;
+		}
 		
+		setVelocity(-1 * turnMultiplier * maxVelocity, turnMultiplier * maxVelocity);
+		return false;
+	}
+	
 	
 	public static void setVelocity(double left, double right) {
 		leftTalon.set(ControlMode.Velocity, left);
 		rightTalon.set(ControlMode.Velocity, right);
-	}
-	
-	public static void turnDegrees(double degrees) {
-		//Positive degrees -> counterclockwise; negative degrees -> clockwise
-		
-		double maxVelocity = convertFPSToTicksPer100MS(velocityTurning);
-		int turnMultiplier = (degrees < 0) ? -1 : 1;
-		boolean isDoneTurning = false;
-		double currentAngle;
-		gyro.reset();
-		
-		while (!isDoneTurning && DriverStation.getInstance().isAutonomous()) {
-			setVelocity(-1 * turnMultiplier * maxVelocity, turnMultiplier * maxVelocity);
-			currentAngle = Math.abs(gyro.getAngle());
-			if (currentAngle < Math.abs(degrees) + turningTolerance && currentAngle > Math.abs(degrees) - turningTolerance) {
-				isDoneTurning = true;
-			}
-		}
-		stop();
 	}
 	
 	public static void stop() {
@@ -131,23 +133,17 @@ public class DriveTrain {
 		rightTalon.set(ControlMode.PercentOutput, 0);
 	}
 	
-	public static void wait(double time) {
-		Timer timer = new Timer();
-		timer.start();
-		while (timer.get() < time) {
-			stop();
+	/*
+	public static boolean wait(double time) {
+		if (Robot.timer.get() >= time) {
+			return true;
 		}
-	}
+		return false;
+	}*/
 	
 	public static void resetEncoders() {
 		leftTalon.setSelectedSensorPosition(0, 0, 0);
 		rightTalon.setSelectedSensorPosition(0, 0, 0);
-	}
-	
-	public static void moveTillStall() {
-		while(leftTalon.getOutputCurrent() < 20) {	
-			setVelocity(velocityMedium, velocityMedium);
-		}
 	}
 	
 }

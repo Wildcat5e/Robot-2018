@@ -13,22 +13,26 @@ public class Intake {
 	static DoubleSolenoid rightSolenoid = new DoubleSolenoid(rightIntakeSolenoidForward, rightIntakeSolenoidReverse);
 
 	public static void setup() {
-		rollersLeft.setSafetyEnabled(false);
-		rollersRight.setSafetyEnabled(false);
+		//rollersLeft.setSafetyEnabled(false);
+		//rollersRight.setSafetyEnabled(false);
 	}
 	
 	public static void intake() {
-		
 		rollersLeft.set(rollersSpeed);
 		rollersRight.set(-rollersSpeed);
-		
 	}
 	
 	public static void outtake() {
-		
 		rollersLeft.set(-rollersSpeed);
 		rollersRight.set(rollersSpeed);
-		
+	}
+	
+	public static boolean outtakeForTime(double time, double startTime) {
+		if (Robot.timer.get() - startTime >= time) {
+			return true;
+		}
+		outtake();
+		return false;
 	}
 	
 	public static void stopRollers() {

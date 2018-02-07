@@ -37,6 +37,10 @@ public class Autonomous {
 		return current++;
 	}
 	
+	public void basicAuto() {
+		DriveTrain.setVelocity(convertVelocity(4), convertVelocity(4));
+	}
+	
 	//***************************************************************************//
 
 	public void testAuto() {

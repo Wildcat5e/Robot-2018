@@ -77,7 +77,7 @@ public class Constants {
 		return (inches/(2 * Math.PI * wheelRadius)) * ticksPerRevolution;
 	}
 	
-	public static double convertFPSToTicksPer100MS(double FPS) {
+	public static double convertVelocity(double FPS) {
 		double rpm = (60 * 12 * FPS)/(wheelRadius * 2 * Math.PI);
 		return (rpm * ticksPerRevolution) / 600.0; // Rev/Min * Ticks/Rev * Min/100ms -> Ticks/100ms
 	}

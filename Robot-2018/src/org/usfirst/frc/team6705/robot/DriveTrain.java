@@ -76,7 +76,7 @@ public class DriveTrain {
 		System.out.print("Move By Distance");
 		double targetEncoderTicks = convertInchesToTicks(inches);
 		double ticksSoFar = leftTalon.getSelectedSensorPosition(0);
-		double maxVelocity = convertFPSToTicksPer100MS(velocity);
+		double maxVelocity = convertVelocity(velocity);
 		
 		if (ticksSoFar >= targetEncoderTicks) {
 			resetEncoders();
@@ -108,7 +108,7 @@ public class DriveTrain {
 			return true;
 		}
 		
-		double velocity = convertFPSToTicksPer100MS(velocityMedium);
+		double velocity = convertVelocity(velocityMedium);
 		setVelocity(velocity, velocity);
 		return false;
 	}
@@ -116,7 +116,7 @@ public class DriveTrain {
 	//Autonomous turn method
 	public static boolean turnDegrees(double degrees) {
 		//Positive degrees -> counterclockwise; negative degrees -> clockwise
-		double maxVelocity = convertFPSToTicksPer100MS(velocityTurning);
+		double maxVelocity = convertVelocity(velocityTurning);
 		int turnMultiplier = (degrees < 0) ? -1 : 1;
 		double currentAngle = gyro.getAngle();
 		if (currentAngle < degrees + turningTolerance && currentAngle > degrees - turningTolerance) {

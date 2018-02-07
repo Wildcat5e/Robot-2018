@@ -52,10 +52,10 @@ public class Constants {
 		ticksPerRevolution = 256 * 4, //encoder ticks
 		distancePerTick = (wheelRadius * 2.0 * Math.PI)/ticksPerRevolution, //inches per tick
 		rollersSpeed = 0.5,//[-1, 1]
-		turningTolerance = 2, //Degrees
+		turningTolerance = 1, //Degrees
 		deadband = 0.02, //-1 to 1
 		rampRate = 1, //Seconds to ramp from 0 to full
-		stallCurrent = 20; //Amps
+		stallCurrent = 30; //Amps
 		
 	
 	//Elevator Constants

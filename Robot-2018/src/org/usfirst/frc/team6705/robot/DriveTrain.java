@@ -37,6 +37,8 @@ public class DriveTrain {
 		
 		leftTalon.configOpenloopRamp(rampRate, 0);
 		rightTalon.configOpenloopRamp(rampRate, 0);
+		leftTalon.configClosedloopRamp(rampRate, 0);
+		rightTalon.configClosedloopRamp(rampRate, 0);
 		
 		leftTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 		rightTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
@@ -100,10 +102,12 @@ public class DriveTrain {
 	
 	//Move until runs into switch
 	public static boolean moveTillStall() {
-		if (leftTalon.getOutputCurrent() < stallCurrent) {
+		if (leftTalon.getOutputCurrent() > stallCurrent) {
 			return true;
 		}
-		setVelocity(velocityMedium, velocityMedium);
+		
+		double velocity = convertFPSToTicksPer100MS(velocityMedium);
+		setVelocity(velocity, velocity);
 		return false;
 	}
 	
@@ -113,7 +117,7 @@ public class DriveTrain {
 		double maxVelocity = convertFPSToTicksPer100MS(velocityTurning);
 		int turnMultiplier = (degrees < 0) ? -1 : 1;
 		double currentAngle = gyro.getAngle();
-		if (currentAngle < Math.abs(degrees) + turningTolerance && currentAngle > Math.abs(degrees) - turningTolerance) {
+		if (currentAngle < degrees + turningTolerance && currentAngle > degrees - turningTolerance) {
 			gyro.reset();
 			return true;
 		}

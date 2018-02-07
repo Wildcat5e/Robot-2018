@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import static org.usfirst.frc.team6705.robot.Constants.*;
 
@@ -43,8 +44,8 @@ public class DriveTrain {
 		leftTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 		rightTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 		
-		leftTalon.setSensorPhase(false);
-		rightTalon.setSensorPhase(false);
+		leftTalon.setSensorPhase(true);
+		rightTalon.setSensorPhase(true);
 		
 		
 		//TODO: Perform any other talon and victor config here
@@ -71,7 +72,7 @@ public class DriveTrain {
 
 	//Autonomous move method
 	public static boolean moveByDistance(double inches, double velocity) {
-		
+		SmartDashboard.putNumber("Auto State", 1.2);
 		double targetEncoderTicks = convertInchesToTicks(inches);
 		double ticksSoFar = leftTalon.getSelectedSensorPosition(0);
 		double maxVelocity = convertFPSToTicksPer100MS(velocity);

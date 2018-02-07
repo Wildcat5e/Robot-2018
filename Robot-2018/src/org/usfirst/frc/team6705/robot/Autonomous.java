@@ -75,6 +75,7 @@ public class Autonomous {
 			state = nextState(state);
 			break;
 		case 1:
+			SmartDashboard.putNumber("Auto State", 1.1);
 			if (DriveTrain.moveByDistance(132, velocityFast)) {
 				state = nextState(state);
 			}

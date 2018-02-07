@@ -38,18 +38,50 @@ public class Autonomous {
 	}
 	
 	//***************************************************************************//
+
+	public void testAuto() {
+		switch (state) {
+		case 0:
+			setupAuto();
+			state = nextState(state);
+			break;
+		case 1:
+			if (DriveTrain.moveByDistance(12, velocitySlow)) {
+				state = nextState(state);
+			}
+			break;
+		case 2:
+			if (DriveTrain.turnDegrees(90)) {
+				state = nextState(state);
+			}
+			break;
+		case 3:
+			if (DriveTrain.moveByDistance(12, velocitySlow)) {
+				state = nextState(state);
+			}
+			break;
+		case 4:
+			endAuto();
+			break;
+		}
+	}
+	
+	//***************************************************************************//
 	
 	public void baselineAuto() {
 		switch (state) {
 		case 0:
 			setupAuto();
 			state = nextState(state);
+			break;
 		case 1:
 			if (DriveTrain.moveByDistance(132, velocityFast)) {
 				state = nextState(state);
 			}
+			break;
 		case 2:
 			endAuto();
+			break;
 		}
 	}
 	
@@ -143,6 +175,7 @@ public class Autonomous {
 		} else {
 			//Stupid, never going to do left switch if starting on the right & vice versa
 			SmartDashboard.putNumber("Auto State", -1);
+			baselineAuto();
 		}
 	}
 	

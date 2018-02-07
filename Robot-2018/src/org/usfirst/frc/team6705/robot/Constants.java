@@ -49,7 +49,7 @@ public class Constants {
 	public static final double timeToRollIn = 1.5, //seconds
 		timeToRollOut = 1.5, //seconds
 		wheelRadius = 3.0, //inches
-		ticksPerRevolution = 256 * 4, //encoder ticks
+		ticksPerRevolution = 12,//256 * 4, //encoder ticks
 		distancePerTick = (wheelRadius * 2.0 * Math.PI)/ticksPerRevolution, //inches per tick
 		rollersSpeed = 0.5,//[-1, 1]
 		turningTolerance = 1, //Degrees

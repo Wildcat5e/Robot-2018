@@ -40,6 +40,7 @@ public class Robot extends IterativeRobot {
 	private static final String scaleAuto = "scale";
 	private static final String baselineAuto = "baseline";
 	private static final String bestSimple = "bestSimple";
+	private static final String test = "test";
 	private String autoSelected;
 	
 	private String startingPosition;
@@ -70,10 +71,11 @@ public class Robot extends IterativeRobot {
 		autoChooser.addObject("Power Cube on Scale", scaleAuto);
 		autoChooser.addObject("Best Simple Scoring Method", bestSimple);
 		autoChooser.addObject("Cross Baseline Only", baselineAuto);
+		autoChooser.addObject("Test Auto - Drive, Turn, Drive", test);
 		SmartDashboard.putData("Auto choices", autoChooser);
 		
-		positionChooser.addDefault("Middle Starting Position", middle);
-		positionChooser.addObject("Left Starting Position", left);
+		positionChooser.addDefault("Left Starting Position", left);
+		positionChooser.addObject("Middle Starting Position", middle);
 		positionChooser.addObject("Right Starting Position", right);
 		SmartDashboard.putData("Starting position", positionChooser);
 		
@@ -165,6 +167,9 @@ public class Robot extends IterativeRobot {
 				}
 				break;
 			}
+			break;
+		case test:
+			auto.testAuto();
 			break;
 		}
 
@@ -383,6 +388,8 @@ public class Robot extends IterativeRobot {
 	public void updateSmartDashboard() {
 		SmartDashboard.putNumber("Encoder Count Left", DriveTrain.leftTalon.getSelectedSensorPosition(0));
 		SmartDashboard.putNumber("Encoder Count Right", DriveTrain.rightTalon.getSelectedSensorPosition(0));
+		
+		SmartDashboard.putNumber("Left Talon Current", DriveTrain.leftTalon.getOutputCurrent());
 	}
 	
 }

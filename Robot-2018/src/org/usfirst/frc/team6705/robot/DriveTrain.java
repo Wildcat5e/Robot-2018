@@ -73,6 +73,7 @@ public class DriveTrain {
 	//Autonomous move method
 	public static boolean moveByDistance(double inches, double velocity) {
 		SmartDashboard.putNumber("Auto State", 1.2);
+		System.out.print("Move By Distance");
 		double targetEncoderTicks = convertInchesToTicks(inches);
 		double ticksSoFar = leftTalon.getSelectedSensorPosition(0);
 		double maxVelocity = convertFPSToTicksPer100MS(velocity);

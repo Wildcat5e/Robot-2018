@@ -69,8 +69,10 @@ public class Autonomous {
 	//***************************************************************************//
 	
 	public void baselineAuto() {
+		SmartDashboard.putNumber("Actual Auto State", state);
 		switch (state) {
 		case 0:
+			System.out.print("Baseline State 0");
 			setupAuto();
 			state = nextState(state);
 			break;

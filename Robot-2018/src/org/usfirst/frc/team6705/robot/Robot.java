@@ -99,6 +99,8 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 		autoSelected = autoChooser.getSelected();
 		startingPosition = positionChooser.getSelected();
+		System.out.print("Autonomous Init");
+		System.out.print(autoSelected);
 		
 		SmartDashboard.putNumber("Auto State", 0);
 		
@@ -115,7 +117,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
-		
+		System.out.print("Auto Periodic");
 		updateSmartDashboard();
 		
 		switch (autoSelected) {
@@ -128,6 +130,7 @@ public class Robot extends IterativeRobot {
 			break;
 			
 		case baselineAuto:
+			System.out.print("Baseline Auto Periodic");
 			auto.baselineAuto();
 			break;
 			

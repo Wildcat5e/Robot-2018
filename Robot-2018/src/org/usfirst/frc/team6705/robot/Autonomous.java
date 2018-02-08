@@ -19,6 +19,7 @@ public class Autonomous {
 	 */
 	
 	private void setupAuto() {
+//		System.out.println("Setting up auto");
 		DriveTrain.resetEncoders();
 		DriveTrain.gyro.reset();
 	}
@@ -34,33 +35,38 @@ public class Autonomous {
 		DriveTrain.gyro.reset();
 		previousTime = Robot.timer.get();
 		SmartDashboard.putNumber("Auto State", current + 1);
-		return current++;
+		DriveTrain.stop();
+		return current + 1;
 	}
 	
 	public void basicAuto() {
-		DriveTrain.setVelocity(convertVelocity(4), convertVelocity(4));
+		System.out.println("Running basic auto");
+		DriveTrain.setVelocity(6000, 6000);
 	}
 	
 	//***************************************************************************//
 
 	public void testAuto() {
+		System.out.println("Reached Test Auto");
 		switch (state) {
 		case 0:
+			System.out.println("Attempting stage 0");
 			setupAuto();
 			state = nextState(state);
 			break;
 		case 1:
+			System.out.println("Attempting to move in stage 1");
 			if (DriveTrain.moveByDistance(12, velocitySlow)) {
 				state = nextState(state);
 			}
 			break;
 		case 2:
-			if (DriveTrain.turnDegrees(90)) {
+			if (DriveTrain.turnDegrees(-90)) {
 				state = nextState(state);
 			}
 			break;
 		case 3:
-			if (DriveTrain.moveByDistance(12, velocitySlow)) {
+			if (DriveTrain.moveByDistance(7, velocitySlow)) {
 				state = nextState(state);
 			}
 			break;
@@ -81,7 +87,6 @@ public class Autonomous {
 			state = nextState(state);
 			break;
 		case 1:
-			SmartDashboard.putNumber("Auto State", 1.1);
 			if (DriveTrain.moveByDistance(132, velocityFast)) {
 				state = nextState(state);
 			}

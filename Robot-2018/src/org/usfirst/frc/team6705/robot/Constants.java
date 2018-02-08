@@ -40,19 +40,19 @@ public class Constants {
 			elevatorEncoderSourceB = 1;
 	
 	//Driving Speeds in FPS
-	public static final double velocityFast = 12,
-			velocityMedium = 9,
-			velocitySlow = 6,
-			velocityTurning = 5;
+	public static final double velocityFast = 9,
+			velocityMedium = 6,
+			velocitySlow = 3,
+			velocityTurning = 2;
 	
 	//Rollers and drive train
 	public static final double timeToRollIn = 1.5, //seconds
 		timeToRollOut = 1.5, //seconds
 		wheelRadius = 3.0, //inches
-		ticksPerRevolution = 12,//256 * 4, //encoder ticks
+		ticksPerRevolution = 2048 * 4, //encoder ticks
 		distancePerTick = (wheelRadius * 2.0 * Math.PI)/ticksPerRevolution, //inches per tick
 		rollersSpeed = 0.5,//[-1, 1]
-		turningTolerance = 1, //Degrees
+		turningTolerance = 2.5, //Degrees
 		deadband = 0.02, //-1 to 1
 		rampRate = 1, //Seconds to ramp from 0 to full
 		stallCurrent = 30; //Amps
@@ -68,10 +68,10 @@ public class Constants {
 			scaleHeight = 82.0;
 	
 	//PID
-	/*public static double kP = 0.1,
-			kI = 0.001,
+	public static double kP = 0,
+			kI = 0,
 			kD = 0,
-			kF = 1;*/
+			kF = 1023.0/5458;
 	
 	public static double convertInchesToTicks(double inches) {
 		return (inches/(2 * Math.PI * wheelRadius)) * ticksPerRevolution;

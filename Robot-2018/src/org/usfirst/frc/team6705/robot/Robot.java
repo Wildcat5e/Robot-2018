@@ -110,7 +110,7 @@ public class Robot extends IterativeRobot {
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 
 		timer.start();
-		
+		DriveTrain.gyro.calibrate();
 		auto = new Autonomous();
 	}
 
@@ -119,7 +119,6 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
-		System.out.print("Auto Periodic");
 		updateSmartDashboard();
 		
 		switch (autoSelected) {
@@ -174,6 +173,7 @@ public class Robot extends IterativeRobot {
 			}
 			break;
 		case test:
+			System.out.println("Running test auto");
 			auto.testAuto();
 			break;
 		case basic:
@@ -228,6 +228,12 @@ public class Robot extends IterativeRobot {
 		
 		//Joystick - control tank drive
 		DriveTrain.tankDrive(driveStick.getY(GenericHID.Hand.kLeft), driveStick.getY(GenericHID.Hand.kRight));
+		
+		//Back button - reset encoders
+		if (driveStick.getBackButton()) {
+			DriveTrain.resetEncoders();
+			DriveTrain.gyro.reset();
+		}
 		
 		//Bumpers - control intake pneumatics and rollers
 		if (driveStick.getBumper(GenericHID.Hand.kRight) && !intakeOpen) {
@@ -397,7 +403,7 @@ public class Robot extends IterativeRobot {
 	public void updateSmartDashboard() {
 		SmartDashboard.putNumber("Encoder Count Left", DriveTrain.leftTalon.getSelectedSensorPosition(0));
 		SmartDashboard.putNumber("Encoder Count Right", DriveTrain.rightTalon.getSelectedSensorPosition(0));
-		
+		SmartDashboard.putNumber("Gyro Value", DriveTrain.getGyro());
 		SmartDashboard.putNumber("Left Talon Current", DriveTrain.leftTalon.getOutputCurrent());
 	}
 	

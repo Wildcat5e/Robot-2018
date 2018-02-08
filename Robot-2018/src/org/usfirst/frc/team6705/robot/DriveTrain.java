@@ -147,6 +147,8 @@ public class DriveTrain {
 	
 	public static void setVelocity(double left, double right) {
 		System.out.println("Setting velocities L: " + left + " R: " + right);
+		System.out.println("Error L: " + leftTalon.getClosedLoopError(0) + "R: " + rightTalon.getClosedLoopError(0));
+		System.out.println("Actual speed L: " + leftTalon.getSelectedSensorVelocity(0) + "R: " + rightTalon.getSelectedSensorVelocity(0));
 		leftTalon.set(ControlMode.Velocity, left);
 		rightTalon.set(ControlMode.Velocity, right);
 	}

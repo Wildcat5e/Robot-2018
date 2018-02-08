@@ -28,6 +28,7 @@ public class Autonomous {
 		DriveTrain.stop();
 		Intake.stopRollers();
 		Elevator.stop();
+		System.out.println("Finished auto routine!");
 	}
 	
 	private int nextState(int current) {
@@ -39,6 +40,8 @@ public class Autonomous {
 		return current + 1;
 	}
 	
+	//***************************************************************************//
+	
 	public void basicAuto() {
 		System.out.println("Running basic auto");
 		DriveTrain.setVelocity(6000, 6000);
@@ -47,15 +50,12 @@ public class Autonomous {
 	//***************************************************************************//
 
 	public void testAuto() {
-		System.out.println("Reached Test Auto");
 		switch (state) {
 		case 0:
-			System.out.println("Attempting stage 0");
 			setupAuto();
 			state = nextState(state);
 			break;
 		case 1:
-			System.out.println("Attempting to move in stage 1");
 			if (DriveTrain.moveByDistance(12, velocitySlow)) {
 				state = nextState(state);
 			}
@@ -66,7 +66,7 @@ public class Autonomous {
 			}
 			break;
 		case 3:
-			if (DriveTrain.moveByDistance(7, velocitySlow)) {
+			if (DriveTrain.moveByDistance(10, velocitySlow)) {
 				state = nextState(state);
 			}
 			break;
@@ -79,10 +79,8 @@ public class Autonomous {
 	//***************************************************************************//
 	
 	public void baselineAuto() {
-		SmartDashboard.putNumber("Actual Auto State", state);
 		switch (state) {
 		case 0:
-			System.out.print("Baseline State 0");
 			setupAuto();
 			state = nextState(state);
 			break;

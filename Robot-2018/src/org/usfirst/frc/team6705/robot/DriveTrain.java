@@ -88,11 +88,8 @@ public class DriveTrain {
 			resetEncoders();
 			return true;
 		}
-		System.out.println("Didn't return true");
-		int direction = 1;
-		if (inches > 0) {
-			direction = -1;
-		}
+		
+		int direction = (inches > 0) ? -1 : 1;
 		
 		double ticksRemaining = targetEncoderTicks - ticksSoFar;
 		double fractionRemaining = ticksRemaining/targetEncoderTicks;
@@ -103,9 +100,8 @@ public class DriveTrain {
 			scaledFraction = 0.05;
 		}
 		System.out.println("Scaled Fraction " + scaledFraction);	
-		double speed = scaledFraction * maxVelocity;
-		System.out.println("Attempting to move at speed: " + speed);
-		setVelocity(direction * speed, direction * speed);
+		double scaledSpeed = scaledFraction * maxVelocity;
+		setVelocity(direction * scaledSpeed, direction * scaledSpeed);
 		return false;
 	}
 	
@@ -127,19 +123,30 @@ public class DriveTrain {
 		double maxVelocity = convertVelocity(velocityTurning);
 		int turnMultiplier = (degrees < 0) ? 1 : -1;
 		double currentAngle = getGyro();
+		
 		if (currentAngle < degrees + turningTolerance && currentAngle > degrees - turningTolerance) {
 			System.out.println("Attempting to stop at gyro: " + getGyro());
 			gyro.reset();
 			return true;
 		}
 		
-		setVelocity(-1 * turnMultiplier * maxVelocity, turnMultiplier * maxVelocity);
+		double degreesRemaining = Math.abs(degrees) - Math.abs(currentAngle);
+		double fractionRemaining = Math.abs(degreesRemaining/degrees);
+		double scaledFraction = fractionRemaining * 2; //Decelerate halfway through the turn
+		if (scaledFraction > 1) {
+			scaledFraction = 1;
+		} else if (scaledFraction < 0.05) {
+			scaledFraction = 0.05;
+		}
+		
+		double scaledSpeed = maxVelocity * scaledFraction;
+		setVelocity(-1 * turnMultiplier * scaledSpeed, turnMultiplier * scaledSpeed);
 		return false;
 	}
 	
 	
 	public static void setVelocity(double left, double right) {
-		System.out.println("Setting velocities " + left + " " + right);
+		System.out.println("Setting velocities L: " + left + " R: " + right);
 		leftTalon.set(ControlMode.Velocity, left);
 		rightTalon.set(ControlMode.Velocity, right);
 	}

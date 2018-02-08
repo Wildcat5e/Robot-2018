@@ -229,7 +229,7 @@ public class Robot extends IterativeRobot {
 		//Joystick - control tank drive
 		DriveTrain.tankDrive(driveStick.getY(GenericHID.Hand.kLeft), driveStick.getY(GenericHID.Hand.kRight));
 		
-		//Back button - reset encoders
+		//Back button - reset encoders and gyro
 		if (driveStick.getBackButton()) {
 			DriveTrain.resetEncoders();
 			DriveTrain.gyro.reset();

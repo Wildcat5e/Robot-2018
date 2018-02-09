@@ -60,7 +60,7 @@ public class Constants {
 				velocityFast = 9,
 				velocityMedium = 6,
 				velocitySlow = 3,
-				velocityTurning = 2;
+				velocityTurning = 2.5;
 	
 	//Elevator Constants
 	public static final double elevatorSpeedMax = 0.7,

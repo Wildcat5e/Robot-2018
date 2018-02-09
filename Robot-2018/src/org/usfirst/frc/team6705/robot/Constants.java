@@ -39,24 +39,28 @@ public class Constants {
 	public static final int elevatorEncoderSourceA = 0,
 			elevatorEncoderSourceB = 1;
 	
-	//Driving Speeds in FPS
-	public static final double velocityFast = 9,
-			velocityMedium = 6,
-			velocitySlow = 3,
-			velocityTurning = 2;
-	
-	//Rollers and drive train
+	//Rollers
 	public static final double timeToRollIn = 1.5, //seconds
-		timeToRollOut = 1.5, //seconds
-		wheelRadius = 3.0, //inches
-		ticksPerRevolution = 2048 * 4, //encoder ticks
-		distancePerTick = (wheelRadius * 2.0 * Math.PI)/ticksPerRevolution, //inches per tick
-		rollersSpeed = 0.5,//[-1, 1]
-		turningTolerance = 2.5, //Degrees
-		deadband = 0.02, //-1 to 1
-		rampRate = 1, //Seconds to ramp from 0 to full
-		stallCurrent = 30; //Amps
+		timeToRollOut = 1.5; //seconds
 		
+	
+	//Drive Train
+	public static final double wheelRadius = 3.0, //inches
+			ticksPerRevolution = 2048 * 4, //encoder ticks, multiplied by 4 because quadrature encoders do 4 pulses per count
+			distancePerTick = (wheelRadius * 2.0 * Math.PI)/ticksPerRevolution, //inches per tick
+			rollersSpeed = 0.5,//[-1, 1]
+			turningTolerance = 2.5, //Degrees
+			deadband = 0.02, //-1 to 1
+			rampRate = 1, //Seconds to ramp from 0 to full
+			stallCurrent = 30, //Amps
+			maxTicksPer100ms = 5458; //This is the max speed in native units per 100 ms of the motors (percent output 100%)
+	
+	//Driving Speeds in Feet Per Second (FPS)
+		public static final double velocityMax = getFPS(maxTicksPer100ms),
+				velocityFast = 9,
+				velocityMedium = 6,
+				velocitySlow = 3,
+				velocityTurning = 2;
 	
 	//Elevator Constants
 	public static final double elevatorSpeedMax = 0.7,
@@ -67,11 +71,11 @@ public class Constants {
 			switchHeight = 25.0,
 			scaleHeight = 82.0;
 	
-	//PID
+	//PID for DriveTrain
 	public static double kP = 0,
 			kI = 0,
 			kD = 0,
-			kF = 1023.0/5458;
+			kF = 1023.0/maxTicksPer100ms;
 	
 	public static double convertInchesToTicks(double inches) {
 		return (inches/(2 * Math.PI * wheelRadius)) * ticksPerRevolution;
@@ -80,6 +84,10 @@ public class Constants {
 	public static double convertVelocity(double FPS) {
 		double rpm = (60 * 12 * FPS)/(wheelRadius * 2 * Math.PI);
 		return (rpm * ticksPerRevolution) / 600.0; // Rev/Min * Ticks/Rev * Min/100ms -> Ticks/100ms
+	}
+	
+	public static double getFPS(double ticksPer100ms) {
+		return (ticksPer100ms * 2 * wheelRadius * Math.PI * 600)/(60 * 12 * ticksPerRevolution);
 	}
 	
 }

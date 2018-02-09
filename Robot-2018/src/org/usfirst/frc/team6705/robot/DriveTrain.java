@@ -143,7 +143,7 @@ public class DriveTrain {
 		double scaledFraction = fractionRemaining * 2; //Uncomment the * 2 to decelerate halfway through the turn
 		if (scaledFraction > 1) {
 			scaledFraction = 1;
-		} else if (scaledFraction < 0.1) {
+		} else if (scaledFraction < 0.3) {
 			scaledFraction = 0.05;
 		}
 		System.out.println("Scaled Fraction: " + scaledFraction);

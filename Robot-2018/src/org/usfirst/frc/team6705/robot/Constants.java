@@ -45,7 +45,7 @@ public class Constants {
 		
 	
 	//Drive Train
-	public static final double wheelRadius = 3.0, //inches
+	public static final double wheelRadius = 2.937, //inches
 			ticksPerRevolution = 2048 * 4, //encoder ticks, multiplied by 4 because quadrature encoders do 4 pulses per count
 			distancePerTick = (wheelRadius * 2.0 * Math.PI)/ticksPerRevolution, //inches per tick
 			rollersSpeed = 0.5,//[-1, 1]

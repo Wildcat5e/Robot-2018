@@ -25,6 +25,8 @@ import static org.usfirst.frc.team6705.robot.Constants.*;
 import org.usfirst.frc.team6705.robot.Elevator.ElevatorState;
 import org.usfirst.frc.team6705.robot.Intake.IntakeState;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -63,6 +65,11 @@ public class Robot extends IterativeRobot {
 	
 	XboxController driveStick = new XboxController(driveStickChannel);
 	
+	StringBuilder sbL = new StringBuilder();
+	StringBuilder sbR  = new StringBuilder();
+	
+	int loops = 0;
+	
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
@@ -100,8 +107,8 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		//autoSelected = autoChooser.getSelected();
-		autoSelected = test;
+		autoSelected = autoChooser.getSelected();
+		//autoSelected = test;
 		startingPosition = positionChooser.getSelected();
 		System.out.print("Autonomous Init");
 		System.out.print(autoSelected);
@@ -229,6 +236,50 @@ public class Robot extends IterativeRobot {
 		double currentTime = timer.get();
 		SmartDashboard.putNumber("Current Time", currentTime);
 		
+		double leftYStick = driveStick.getY(GenericHID.Hand.kLeft);
+		
+		double motorOutputLeft = DriveTrain.leftTalon.getMotorOutputPercent();
+		double motorOutputRight = DriveTrain.rightTalon.getMotorOutputPercent();
+		
+		sbL.append("LOut:");
+		sbR.append("ROut:");
+		sbL.append(motorOutputLeft);
+		sbR.append(motorOutputRight);
+		
+		sbL.append("LSpd:");
+		sbR.append("RSpd");
+		sbL.append(DriveTrain.leftTalon.getSelectedSensorVelocity(0));
+		sbR.append(DriveTrain.rightTalon.getSelectedSensorPosition(0));
+		
+		if (driveStick.getAButton()) {
+			double targetVelocity  = leftYStick * 350 * 8192 / 600;
+			DriveTrain.leftTalon.set(ControlMode.Velocity, targetVelocity);
+			DriveTrain.rightTalon.set(ControlMode.Velocity, targetVelocity);
+			
+			sbL.append("LErr:");
+			sbR.append("RErr:");
+			sbL.append(DriveTrain.leftTalon.getClosedLoopError(0));
+			sbR.append(DriveTrain.rightTalon.getClosedLoopError(0));
+			
+			sbL.append("LTarg:");
+			sbR.append("RTarg:");
+			sbL.append(targetVelocity);
+			sbR.append(targetVelocity);
+		} else  {
+			DriveTrain.leftTalon.set(ControlMode.PercentOutput, leftYStick);
+			DriveTrain.rightTalon.set(ControlMode.PercentOutput, leftYStick);
+		}
+		
+		if (++loops >= 10) {
+			loops = 0;
+			System.out.println(sbL.toString());
+		}
+		
+		sbL.setLength(0);
+		sbR.setLength(0);
+		
+		
+		/*
 		//Joystick - control tank drive
 		DriveTrain.tankDrive(driveStick.getY(GenericHID.Hand.kLeft), driveStick.getY(GenericHID.Hand.kRight));
 		
@@ -279,7 +330,7 @@ public class Robot extends IterativeRobot {
 		//Start button - deploy ramps at end of game
 		if (timer.get() >= 120 && driveStick.getStartButton()) {
 			deployRamps();
-		}
+		}*/
 		
 		//*********************************************************************//
 		

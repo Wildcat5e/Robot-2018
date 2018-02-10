@@ -54,7 +54,8 @@ public class Constants {
 			rampRate = 1, //Seconds to ramp from 0 to full
 			stallCurrent = 30, //Amps
 			maxTicksPer100ms = 6000,//This is the max speed in native units per 100 ms of the motors (percent output 100%)
-			maxError = 773;
+			maxError = 773,
+			minimumSpeed = 1000;//ticks per 100 ms
 	
 	//Driving Speeds in Feet Per Second (FPS)
 		public static final double velocityMax = getFPS(maxTicksPer100ms),

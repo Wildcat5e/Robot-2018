@@ -110,11 +110,14 @@ public class DriveTrain {
 		double scaledFraction = fractionRemaining * 3; //Start slowing down 2/3 of the way there
 		if (scaledFraction > 1) {
 			scaledFraction = 1;
-		} else if (scaledFraction < 0.4) {
+		} /*else if (scaledFraction < 0.4) {
 			scaledFraction = 0.4;
-		}
+		}*/
 		System.out.println("Scaled Fraction " + scaledFraction);	
 		double scaledSpeed = scaledFraction * maxVelocity;
+		if (scaledSpeed < minimumSpeed) {
+			scaledSpeed = minimumSpeed;
+		}
 		setVelocity(direction * scaledSpeed, direction * scaledSpeed);
 		return false;
 	}

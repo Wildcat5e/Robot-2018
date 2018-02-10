@@ -100,7 +100,8 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		autoSelected = autoChooser.getSelected();
+		//autoSelected = autoChooser.getSelected();
+		autoSelected = test;
 		startingPosition = positionChooser.getSelected();
 		System.out.print("Autonomous Init");
 		System.out.print(autoSelected);

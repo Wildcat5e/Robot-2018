@@ -56,17 +56,17 @@ public class Autonomous {
 			state = nextState(state);
 			break;
 		case 1:
-			if (DriveTrain.moveByDistance(12, velocitySlow)) {
+			if (DriveTrain.moveByDistance(132, velocitySlow)) {
 				state = nextState(state);
 			}
 			break;
 		case 2:
-			if (DriveTrain.turnDegrees(-90)) {
+			if (DriveTrain.turnDegrees(90)) {
 				state = nextState(state);
 			}
 			break;
 		case 3:
-			if (DriveTrain.moveByDistance(10, velocitySlow)) {
+			if (DriveTrain.moveByDistance(48, velocitySlow)) {
 				state = nextState(state);
 			}
 			break;

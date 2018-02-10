@@ -66,6 +66,8 @@ public class DriveTrain {
 		leftSpeed = applyDeadband(leftSpeed);
 		rightSpeed = applyDeadband(rightSpeed);
 		
+		System.out.println("Left Speed: " + leftSpeed + " Right Speed: " + rightSpeed);
+
 		double leftTarget = Math.copySign(leftSpeed * leftSpeed, leftSpeed) * maxTicksPer100ms;
 		double rightTarget = Math.copySign(rightSpeed * rightSpeed, rightSpeed) * maxTicksPer100ms;
 		
@@ -81,13 +83,17 @@ public class DriveTrain {
 	public static double applyDeadband(double speed) {
 		if ((speed < deadband && speed > 0) || (speed > -deadband && speed < 0)) {
 			speed = 0;
+		} else if (speed > 0.93) {
+			speed = 1;
+		} else if (speed < -0.93) {
+			speed = -1;
 		}
 		return speed;
 	}
 
 	//Autonomous move method
 	public static boolean moveByDistance(double inches, double velocity) {
-		System.out.print("Move By Distance");
+		System.out.print("Move By Distance ");
 		double targetEncoderTicks = Math.abs(convertInchesToTicks(inches));
 		double ticksSoFar = Math.abs(leftTalon.getSelectedSensorPosition(0));
 		double maxVelocity = convertVelocity(velocity);
@@ -104,8 +110,8 @@ public class DriveTrain {
 		double scaledFraction = fractionRemaining * 3; //Start slowing down 2/3 of the way there
 		if (scaledFraction > 1) {
 			scaledFraction = 1;
-		} else if (scaledFraction < 0.05) {
-			scaledFraction = 0.05;
+		} else if (scaledFraction < 0.4) {
+			scaledFraction = 0.4;
 		}
 		System.out.println("Scaled Fraction " + scaledFraction);	
 		double scaledSpeed = scaledFraction * maxVelocity;
@@ -140,11 +146,11 @@ public class DriveTrain {
 		
 		double degreesRemaining = Math.abs(degrees) - Math.abs(currentAngle);
 		double fractionRemaining = Math.abs(degreesRemaining/degrees);
-		double scaledFraction = fractionRemaining * 2; //Uncomment the * 2 to decelerate halfway through the turn
+		double scaledFraction = fractionRemaining * 1.75; //Uncomment the * 2 to decelerate halfway through the turn
 		if (scaledFraction > 1) {
 			scaledFraction = 1;
-		} else if (scaledFraction < 0.3) {
-			scaledFraction = 0.05;
+		} else if (scaledFraction < 0.35) {
+			scaledFraction = 0.35;
 		}
 		System.out.println("Scaled Fraction: " + scaledFraction);
 		double scaledSpeed = maxVelocity * scaledFraction;
@@ -154,11 +160,14 @@ public class DriveTrain {
 	
 	
 	public static void setVelocity(double left, double right) {
-		System.out.println("Setting velocities L: " + left + " R: " + right);
-		System.out.println("Actual speed L: " + leftTalon.getSelectedSensorVelocity(0) + "R: " + rightTalon.getSelectedSensorVelocity(0));
-		System.out.println("Error L: " + leftTalon.getClosedLoopError(0) + "R: " + rightTalon.getClosedLoopError(0));
+		
 		leftTalon.set(ControlMode.Velocity, left);
 		rightTalon.set(ControlMode.Velocity, right);
+		
+		System.out.println("Setting velocities L: " + left + " R: " + right);
+		System.out.println("Actual speed L: " + leftTalon.getSelectedSensorVelocity(0) + " R: " + rightTalon.getSelectedSensorVelocity(0));
+		System.out.println("Error L: " + (Math.abs(leftTalon.getSelectedSensorVelocity(0)) - Math.abs(left)) + " R: " + (Math.abs(rightTalon.getSelectedSensorVelocity(0)) - Math.abs(right)));
+		System.out.println("L-R Difference: " + (leftTalon.getSelectedSensorVelocity(0) - rightTalon.getSelectedSensorVelocity(0)));
 	}
 	
 	public static void stop() {

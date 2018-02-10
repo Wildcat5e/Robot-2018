@@ -92,6 +92,9 @@ public class Robot extends IterativeRobot {
 		DriveTrain.setup();
 		Elevator.setup();
 		Intake.setup();
+		
+		DriveTrain.gyro.calibrate();
+
 	}
 
 	/**
@@ -120,7 +123,6 @@ public class Robot extends IterativeRobot {
 
 		timer.start();
 		//DriveTrain.gyro.setPIDSourceType(PIDSourceType.kDisplacement);//Remove this line if it causes issues
-		DriveTrain.gyro.calibrate();
 		auto = new Autonomous();
 	}
 
@@ -235,8 +237,11 @@ public class Robot extends IterativeRobot {
 		
 		double currentTime = timer.get();
 		SmartDashboard.putNumber("Current Time", currentTime);
-		
+		/*
 		double leftYStick = driveStick.getY(GenericHID.Hand.kLeft);
+		if (leftYStick < -0.93)  {
+			leftYStick = -1.0;
+		}
 		
 		double motorOutputLeft = DriveTrain.leftTalon.getMotorOutputPercent();
 		double motorOutputRight = DriveTrain.rightTalon.getMotorOutputPercent();
@@ -249,7 +254,7 @@ public class Robot extends IterativeRobot {
 		sbL.append("LSpd:");
 		sbR.append("RSpd");
 		sbL.append(DriveTrain.leftTalon.getSelectedSensorVelocity(0));
-		sbR.append(DriveTrain.rightTalon.getSelectedSensorPosition(0));
+		sbR.append(DriveTrain.rightTalon.getSelectedSensorVelocity(0));
 		
 		if (driveStick.getAButton()) {
 			double targetVelocity  = leftYStick * 350 * 8192 / 600;
@@ -273,15 +278,17 @@ public class Robot extends IterativeRobot {
 		if (++loops >= 10) {
 			loops = 0;
 			System.out.println(sbL.toString());
+			System.out.println(sbR.toString());
 		}
 		
 		sbL.setLength(0);
 		sbR.setLength(0);
+		*/
 		
 		
-		/*
 		//Joystick - control tank drive
 		DriveTrain.tankDrive(driveStick.getY(GenericHID.Hand.kLeft), driveStick.getY(GenericHID.Hand.kRight));
+		//DriveTrain.tankDrive(0.8, 0.8);
 		
 		//Back button - reset encoders and gyro
 		if (driveStick.getBackButton()) {
@@ -330,7 +337,7 @@ public class Robot extends IterativeRobot {
 		//Start button - deploy ramps at end of game
 		if (timer.get() >= 120 && driveStick.getStartButton()) {
 			deployRamps();
-		}*/
+		}
 		
 		//*********************************************************************//
 		
@@ -457,6 +464,8 @@ public class Robot extends IterativeRobot {
 	public void updateSmartDashboard() {
 		SmartDashboard.putNumber("Encoder Count Left", DriveTrain.leftTalon.getSelectedSensorPosition(0));
 		SmartDashboard.putNumber("Encoder Count Right", DriveTrain.rightTalon.getSelectedSensorPosition(0));
+		SmartDashboard.putNumber("Motor Speed Left", DriveTrain.leftTalon.getSelectedSensorVelocity(0));
+		SmartDashboard.putNumber("Motor Speed Right", DriveTrain.rightTalon.getSelectedSensorVelocity(0));
 		SmartDashboard.putNumber("Gyro Value", DriveTrain.getGyro());
 		SmartDashboard.putNumber("Left Talon Current", DriveTrain.leftTalon.getOutputCurrent());
 	}

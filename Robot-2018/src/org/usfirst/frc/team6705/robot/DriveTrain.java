@@ -47,11 +47,11 @@ public class DriveTrain {
 		leftTalon.setSensorPhase(true);
 		rightTalon.setSensorPhase(true);
 		
-		leftTalon.config_kP(0, kP, 0);
+		leftTalon.config_kP(0, kP_L, 0);
 		leftTalon.config_kI(0, kI, 0);
 		leftTalon.config_kD(0, kD, 0);
 		leftTalon.config_kF(0, kF, 0);
-		rightTalon.config_kP(0, kP, 0);
+		rightTalon.config_kP(0, kP_R, 0);
 		rightTalon.config_kI(0, kI, 0);
 		rightTalon.config_kD(0, kD, 0);
 		rightTalon.config_kF(0, kF, 0);
@@ -83,9 +83,9 @@ public class DriveTrain {
 	public static double applyDeadband(double speed) {
 		if ((speed < deadband && speed > 0) || (speed > -deadband && speed < 0)) {
 			speed = 0;
-		} else if (speed > 0.93) {
+		} else if (speed > 0.92) {
 			speed = 1;
-		} else if (speed < -0.93) {
+		} else if (speed < -0.92) {
 			speed = -1;
 		}
 		return speed;
@@ -163,6 +163,9 @@ public class DriveTrain {
 	
 	
 	public static void setVelocity(double left, double right) {
+		//leftTalon.config_kF(0,  1023  * left/maxTicksPer100ms, 0);
+		//rightTalon.config_kF(0, 1023 * right/maxTicksPer100ms, 0);
+		
 		
 		leftTalon.set(ControlMode.Velocity, left);
 		rightTalon.set(ControlMode.Velocity, right);
@@ -170,7 +173,9 @@ public class DriveTrain {
 		System.out.println("Setting velocities L: " + left + " R: " + right);
 		System.out.println("Actual speed L: " + leftTalon.getSelectedSensorVelocity(0) + " R: " + rightTalon.getSelectedSensorVelocity(0));
 		System.out.println("Error L: " + (Math.abs(leftTalon.getSelectedSensorVelocity(0)) - Math.abs(left)) + " R: " + (Math.abs(rightTalon.getSelectedSensorVelocity(0)) - Math.abs(right)));
-		System.out.println("L-R Difference: " + (leftTalon.getSelectedSensorVelocity(0) - rightTalon.getSelectedSensorVelocity(0)));
+		//System.out.println("kF Left: " + (1023  * left/maxTicksPer100ms));
+		//System.out.println("kF Right: " + (1023  * right/maxTicksPer100ms));
+		//System.out.println("L-R Difference: " + (leftTalon.getSelectedSensorVelocity(0) - rightTalon.getSelectedSensorVelocity(0)));
 	}
 	
 	public static void stop() {

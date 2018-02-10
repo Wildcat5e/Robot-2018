@@ -51,11 +51,11 @@ public class Constants {
 			rollersSpeed = 0.5,//[-1, 1]
 			turningTolerance = 2.5, //Degrees
 			deadband = 0.04, //-1 to 1
-			rampRate = 1, //Seconds to ramp from 0 to full
+			rampRate = 0.5, //Seconds to ramp from 0 to full
 			stallCurrent = 30, //Amps
-			maxTicksPer100ms = 6000,//This is the max speed in native units per 100 ms of the motors (percent output 100%)
-			maxError = 773,
-			minimumSpeed = 1000;//ticks per 100 ms
+			maxTicksPer100ms = 5600,//This is the max speed in native units per 100 ms of the motors (percent output 100%)
+			maxError = 400,
+			minimumSpeed = 750;//ticks per 100 ms
 	
 	//Driving Speeds in Feet Per Second (FPS)
 		public static final double velocityMax = getFPS(maxTicksPer100ms),
@@ -74,10 +74,11 @@ public class Constants {
 			scaleHeight = 82.0;
 	
 	//PID for DriveTrain
-	public static double kP = 0,//(1023 * 0.1)/maxError,
+	public static double kP_R = 0.0004,//-(1023 * 0.1)/maxError,
+			kP_L  = 0.0031,//(1023 * 0.05)/maxError,
 			kD = 0,//kP * 10,//1023.0/maxError,
 			kI = 0,//1.023/maxError,
-			kF = 1023.0/maxTicksPer100ms;
+			kF = 0.935  * 1023.0/maxTicksPer100ms;
 	
 	public static double convertInchesToTicks(double inches) {
 		return (inches/(2 * Math.PI * wheelRadius)) * ticksPerRevolution;

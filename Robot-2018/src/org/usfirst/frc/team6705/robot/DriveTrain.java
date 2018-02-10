@@ -110,15 +110,23 @@ public class DriveTrain {
 		double scaledFraction = fractionRemaining * 3; //Start slowing down 2/3 of the way there
 		if (scaledFraction > 1) {
 			scaledFraction = 1;
-		} /*else if (scaledFraction < 0.4) {
-			scaledFraction = 0.4;
-		}*/
-		System.out.println("Scaled Fraction " + scaledFraction);	
-		double scaledSpeed = scaledFraction * maxVelocity;
-		if (scaledSpeed < minimumSpeed) {
-			scaledSpeed = minimumSpeed;
 		}
-		setVelocity(direction * scaledSpeed, direction * scaledSpeed);
+		
+		double heading = (Math.abs(getGyro())  > 0) ? getGyro() : 0;
+		double velocityLeft = maxVelocity + (angleP * heading * -direction);
+		System.out.println("Heading: " + heading);
+		
+		double scaledSpeedR = scaledFraction * maxVelocity;
+		double scaledSpeedL = scaledFraction * velocityLeft;
+		
+		if (scaledSpeedR < minimumSpeed) {
+			scaledSpeedR = minimumSpeed;
+		}
+		if (scaledSpeedL < minimumSpeed + (angleP * heading * -direction)) {
+			scaledSpeedL = minimumSpeed  + (angleP * heading * -direction);
+		}
+		
+		setVelocity(direction * scaledSpeedL, direction * scaledSpeedR);
 		return false;
 	}
 	
@@ -149,14 +157,16 @@ public class DriveTrain {
 		
 		double degreesRemaining = Math.abs(degrees) - Math.abs(currentAngle);
 		double fractionRemaining = Math.abs(degreesRemaining/degrees);
-		double scaledFraction = fractionRemaining * 1.75; //Uncomment the * 2 to decelerate halfway through the turn
+		double scaledFraction = fractionRemaining * 1.5; //Uncomment the * 2 to decelerate halfway through the turn
 		if (scaledFraction > 1) {
 			scaledFraction = 1;
-		} else if (scaledFraction < 0.35) {
-			scaledFraction = 0.35;
-		}
+		} 
+		
 		System.out.println("Scaled Fraction: " + scaledFraction);
 		double scaledSpeed = maxVelocity * scaledFraction;
+		if (scaledSpeed < minimumTurningSpeed) {
+			scaledSpeed = minimumTurningSpeed;
+		}
 		setVelocity(-1 * turnMultiplier * scaledSpeed, turnMultiplier * scaledSpeed);
 		return false;
 	}

@@ -55,7 +55,9 @@ public class Constants {
 			stallCurrent = 30, //Amps
 			maxTicksPer100ms = 5600,//This is the max speed in native units per 100 ms of the motors (percent output 100%)
 			maxError = 400,
-			minimumSpeed = 750;//ticks per 100 ms
+			minimumSpeed = 900,//ticks per 100 ms
+			minimumTurningSpeed = 950,
+			angleP = 70;
 	
 	//Driving Speeds in Feet Per Second (FPS)
 		public static final double velocityMax = getFPS(maxTicksPer100ms),
@@ -75,7 +77,7 @@ public class Constants {
 	
 	//PID for DriveTrain
 	public static double kP_R = 0.0004,//-(1023 * 0.1)/maxError,
-			kP_L  = 0.0031,//(1023 * 0.05)/maxError,
+			kP_L  = 0.0035,//(1023 * 0.05)/maxError,
 			kD = 0,//kP * 10,//1023.0/maxError,
 			kI = 0,//1.023/maxError,
 			kF = 0.935  * 1023.0/maxTicksPer100ms;

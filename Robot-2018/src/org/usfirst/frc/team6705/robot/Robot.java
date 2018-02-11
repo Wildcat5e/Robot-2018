@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -25,7 +24,7 @@ import static org.usfirst.frc.team6705.robot.Constants.*;
 import org.usfirst.frc.team6705.robot.Elevator.ElevatorState;
 import org.usfirst.frc.team6705.robot.Intake.IntakeState;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
+//import com.ctre.phoenix.motorcontrol.ControlMode;
 
 
 /**
@@ -52,7 +51,7 @@ public class Robot extends IterativeRobot {
 	private SendableChooser<String> autoChooser = new SendableChooser<>();
 	private SendableChooser<String> positionChooser = new SendableChooser<>();
 	
-	private Autonomous auto;
+	private Autonomous auto = new Autonomous();
 	
 	boolean intakeOpen = false; 
 	IntakeState intakeState = IntakeState.MANUAL;
@@ -96,6 +95,11 @@ public class Robot extends IterativeRobot {
 		DriveTrain.gyro.calibrate();
 
 	}
+	
+	@Override
+	public void disabledInit() {
+		auto.resetAuto();
+	}
 
 	/**
 	 * This autonomous (along with the chooser code above) shows how to select
@@ -123,7 +127,6 @@ public class Robot extends IterativeRobot {
 
 		timer.start();
 		//DriveTrain.gyro.setPIDSourceType(PIDSourceType.kDisplacement);//Remove this line if it causes issues
-		auto = new Autonomous();
 	}
 
 	/**
@@ -202,6 +205,9 @@ public class Robot extends IterativeRobot {
 		DriveTrain.stop();
 		Intake.stopRollers();
 		Elevator.stop();
+		
+		DriveTrain.leftTalon.configClosedloopRamp(rampRateTeleop, 0);
+		DriveTrain.rightTalon.configClosedloopRamp(rampRateTeleop, 0);
 		
 		//If the intake is open due to whatever happened in auto, set intakeOpen to true
 		if (Intake.leftSolenoid.get() == DoubleSolenoid.Value.kForward) {
@@ -328,7 +334,7 @@ public class Robot extends IterativeRobot {
 			moveElevatorDown(driveStick.getTriggerAxis(GenericHID.Hand.kLeft));
 			elevatorState = ElevatorState.MANUAL;
 		} else if (driveStick.getTriggerAxis(GenericHID.Hand.kRight) >= 0.05) {
-			moveElevatorUp(driveStick.getTriggerAxis(GenericHID.Hand.kLeft));
+			moveElevatorUp(driveStick.getTriggerAxis(GenericHID.Hand.kRight));
 			elevatorState = ElevatorState.MANUAL;
 		} else if (elevatorState == ElevatorState.MANUAL) {
 			Elevator.stop();

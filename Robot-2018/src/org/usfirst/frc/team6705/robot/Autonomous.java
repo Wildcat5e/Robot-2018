@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class Autonomous {
-	private static int state = 0;
+	public int state = 0;
 	private static double previousTime = 0;
 	/*
 	 * 	Note: Distance from alliance wall to front of switch = 140 in
@@ -19,7 +19,6 @@ public class Autonomous {
 	 */
 	
 	private void setupAuto() {
-//		System.out.println("Setting up auto");
 		DriveTrain.resetEncoders();
 		DriveTrain.gyro.reset();
 	}
@@ -29,6 +28,11 @@ public class Autonomous {
 		Intake.stopRollers();
 		Elevator.stop();
 		System.out.println("Finished auto routine!");
+	}
+	
+	public void resetAuto() {
+		state = 0;
+		previousTime = 0;
 	}
 	
 	private int nextState(int current) {
@@ -100,7 +104,7 @@ public class Autonomous {
 			state = nextState(state);
 			break;
 		case 1:
-			if (DriveTrain.moveByDistance(132, velocityFast)) {
+			if (DriveTrain.moveByDistance(132, velocityMedium)) {
 				state = nextState(state);
 			}
 			break;
@@ -159,7 +163,7 @@ public class Autonomous {
 				state = nextState(state);
 				break;
 			case 1: //Move forward halfway
-				if (DriveTrain.moveByDistance(50, velocityMedium)) {
+				if (DriveTrain.moveByDistance(50, velocitySlow)) {
 					state = nextState(state);
 				}
 				break;
@@ -169,7 +173,7 @@ public class Autonomous {
 				}
 				break;
 			case 3: //Move across field in correct direction
-				if (DriveTrain.moveByDistance(horizDistance, velocityMedium)) {
+				if (DriveTrain.moveByDistance(horizDistance, velocitySlow)) {
 					state = nextState(state);
 				}
 				break;
@@ -184,7 +188,7 @@ public class Autonomous {
 				}
 				break;
 			case 6: //Move forward rest of distance
-				if (DriveTrain.moveByDistance(51, velocityMedium)) {
+				if (DriveTrain.moveByDistance(51, velocitySlow)) {
 					state = nextState(state);
 				}
 				break;

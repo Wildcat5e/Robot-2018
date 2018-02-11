@@ -6,7 +6,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import static org.usfirst.frc.team6705.robot.Constants.*;
 
@@ -36,10 +36,10 @@ public class DriveTrain {
 		leftVictor.setInverted(true);
 		rightVictor.setInverted(false);
 		
-		leftTalon.configOpenloopRamp(rampRate, 0);
-		rightTalon.configOpenloopRamp(rampRate, 0);
-		leftTalon.configClosedloopRamp(rampRate, 0);
-		rightTalon.configClosedloopRamp(rampRate, 0);
+		leftTalon.configOpenloopRamp(rampRateTeleop, 0);
+		rightTalon.configOpenloopRamp(rampRateTeleop, 0);
+		leftTalon.configClosedloopRamp(rampRateAuto, 0);
+		rightTalon.configClosedloopRamp(rampRateAuto, 0);
 		
 		leftTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 		rightTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
@@ -136,7 +136,7 @@ public class DriveTrain {
 			return true;
 		}
 		
-		double velocity = convertVelocity(velocityMedium);
+		double velocity = convertVelocity(velocitySlow);
 		setVelocity(velocity, velocity);
 		return false;
 	}

@@ -32,7 +32,8 @@ public class Elevator {
 	
 	public static void set(double speed) {
 		if ((speed > 0 && getCurrentPosition() < maximumHeight) || (speed < 0 && getCurrentPosition() > floorHeight)) {
-			elevatorMotor.set(speed * elevatorSpeedMax);
+			double maxSpeed = (speed < 0) ? elevatorMaxSpeedDown : elevatorMaxSpeedUp;
+			elevatorMotor.set(speed * maxSpeed);
 		} else {
 			stop();
 		}
@@ -71,17 +72,17 @@ public class Elevator {
 	}
 	
 	public static void moveToHeight(double targetHeight, double currentHeight, double distanceToLift) {
-		int direction = 1;
-		if (currentHeight > targetHeight) {
-			direction = -1;
-		}
+		int direction = (currentHeight > targetHeight) ? -1 : 1;
+
 		double distanceRemaining = Math.abs(currentHeight - targetHeight);
 		double fractionRemaining = distanceRemaining/distanceToLift;
 		double scaledFraction = fractionRemaining * 3;
 		if (scaledFraction > 1) {
 			scaledFraction = 1;
-		} else if (scaledFraction < 0.05) {
-			scaledFraction = 0.05;
+		} else if (scaledFraction < elevatorMinimumSpeedUp && direction == 1) {
+			scaledFraction = elevatorMinimumSpeedUp;
+		} else if (scaledFraction < elevatorMinimumSpeedUp && direction == -1) {
+			scaledFraction = elevatorMinimumSpeedUp;
 		}
 		
 		Elevator.set(direction * scaledFraction);

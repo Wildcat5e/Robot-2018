@@ -51,7 +51,8 @@ public class Constants {
 			rollersSpeed = 0.5,//[-1, 1]
 			turningTolerance = 2.5, //Degrees
 			deadband = 0.04, //-1 to 1
-			rampRate = 0.5, //Seconds to ramp from 0 to full
+			rampRateAuto = 1, //Seconds to ramp from 0 to full
+			rampRateTeleop = 0.25,
 			stallCurrent = 30, //Amps
 			maxTicksPer100ms = 5600,//This is the max speed in native units per 100 ms of the motors (percent output 100%)
 			maxError = 400,
@@ -67,7 +68,10 @@ public class Constants {
 				velocityTurning = 3;
 	
 	//Elevator Constants
-	public static final double elevatorSpeedMax = 0.7,
+	public static final double elevatorMaxSpeedUp = 1,
+			elevatorMaxSpeedDown = 0.8,
+			elevatorMinimumSpeedUp = 0.2,
+			elevatorMinimumSpeedDown = 0.05,
 			verticalInchesPerTick = 0.1,
 			elevatorTolerance = 0.5, //Inches
 			maximumHeight = 90,

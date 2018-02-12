@@ -94,6 +94,23 @@ public class Autonomous {
 			break;
 		}
 	}
+	//****************************************************************************//
+	public void testStallAuto() {
+        switch (state) {
+        case 0:
+            setupAuto();
+            state = nextState(state);
+            break;
+        case 1:
+            if (DriveTrain.moveTillStall()) {
+                state = nextState(state);
+            }
+            break;
+        case 2:
+            endAuto();
+            break;
+        }
+    }
 	
 	//***************************************************************************//
 	

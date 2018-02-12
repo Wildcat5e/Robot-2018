@@ -44,6 +44,7 @@ public class Robot extends IterativeRobot {
 	private static final String bestSimple = "bestSimple";
 	private static final String test = "test";
 	private static final String basic = "basic";
+	private static final String stall = "stall";
 	private String autoSelected;
 	
 	private String startingPosition;
@@ -81,6 +82,7 @@ public class Robot extends IterativeRobot {
 		autoChooser.addObject("Cross Baseline Only", baselineAuto);
 		autoChooser.addObject("Test Auto - Drive, Turn, Drive", test);
 		autoChooser.addObject("Super Basic Test Auto", basic);
+		autoChooser.addObject("Stalling Test Auto", stall);
 		SmartDashboard.putData("Auto choices", autoChooser);
 		
 		positionChooser.addDefault("Left Starting Position", left);
@@ -194,6 +196,9 @@ public class Robot extends IterativeRobot {
 		case basic:
 			auto.basicAuto();
 			break;
+		case stall:
+		    auto.testStallAuto();
+		    break;
 		}
 		
 
@@ -474,6 +479,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Motor Speed Right", DriveTrain.rightTalon.getSelectedSensorVelocity(0));
 		SmartDashboard.putNumber("Gyro Value", DriveTrain.getGyro());
 		SmartDashboard.putNumber("Left Talon Current", DriveTrain.leftTalon.getOutputCurrent());
+		SmartDashboard.putNumber("Right Talon Current", DriveTrain.rightTalon.getOutputCurrent());
 	}
 	
 }

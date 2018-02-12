@@ -132,7 +132,7 @@ public class DriveTrain {
 	
 	//Move until runs into switch
 	public static boolean moveTillStall() {
-		if (leftTalon.getOutputCurrent() > stallCurrent) {
+		if (leftTalon.getOutputCurrent() > stallCurrent || rightTalon.getOutputCurrent() > stallCurrent) {
 			return true;
 		}
 		

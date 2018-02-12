@@ -60,36 +60,41 @@ public class Autonomous {
 			state = nextState(state);
 			break;
 		case 1:
-			if (DriveTrain.moveByDistance(83, velocitySlow)) {
+			if (DriveTrain.moveByDistance(60, velocitySlow)) {
 				state = nextState(state);
 			}
 			break;
 		case 2:
-			if (DriveTrain.turnDegrees(-90)) {
-				state = nextState(state);
-			}
-			break;
-		case 3:
-			if (DriveTrain.moveByDistance(40, velocitySlow)) {
-				state = nextState(state);
-			}
-			break;
-		case 4:
-			if (DriveTrain.moveByDistance(-40, velocitySlow)) {
-				state = nextState(state);
-			}
-			break;
-		case 5:
 			if (DriveTrain.turnDegrees(90)) {
 				state = nextState(state);
 			}
 			break;
+		case 3:
+			if (DriveTrain.moveByDistance(60, velocitySlow)) {
+				state = nextState(state);
+			}
+			break;
+		case 4:
+			if (DriveTrain.turnDegrees(90)) {
+				state = nextState(state);
+			}
+			break;
+		case 5:
+			if (DriveTrain.moveByDistance(60, velocitySlow)) {
+				state = nextState(state);
+			}
+			break;
 		case 6:
-			if (DriveTrain.moveByDistance(-83, velocitySlow))  {
+			if(DriveTrain.turnDegrees(90)) {
 				state = nextState(state);
 			}
 			break;
 		case 7:
+			if (DriveTrain.moveByDistance(60, velocitySlow)) {
+				state = nextState(state);
+			}
+			break;     
+		case 8:
 			endAuto();
 			break;
 		}
@@ -107,6 +112,7 @@ public class Autonomous {
             }
             break;
         case 2:
+        	System.out.println("finished auto");
             endAuto();
             break;
         }

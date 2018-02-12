@@ -53,7 +53,7 @@ public class Constants {
 			deadband = 0.04, //-1 to 1
 			rampRateAuto = 1, //Seconds to ramp from 0 to full
 			rampRateTeleop = 0.25,
-			stallCurrent = 30, //Amps
+			stallCurrent = 4, //Amps
 			maxTicksPer100ms = 5600,//This is the max speed in native units per 100 ms of the motors (percent output 100%)
 			maxError = 400,
 			minimumSpeed = 900,//ticks per 100 ms

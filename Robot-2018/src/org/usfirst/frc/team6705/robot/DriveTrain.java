@@ -137,7 +137,7 @@ public class DriveTrain {
 		}
 		
 		double velocity = convertVelocity(velocitySlow);
-		setVelocity(velocity, velocity);
+		setVelocity(-velocity, -velocity);
 		return false;
 	}
 	

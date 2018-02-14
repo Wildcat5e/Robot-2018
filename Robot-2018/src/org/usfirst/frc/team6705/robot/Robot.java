@@ -11,6 +11,7 @@
 
 package org.usfirst.frc.team6705.robot;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -64,7 +65,7 @@ public class Robot extends IterativeRobot {
 	public static Timer timer = new Timer();
 	
 	XboxController driveStick = new XboxController(driveStickChannel);
-	
+	Compressor compressor = new Compressor();
 	StringBuilder sbL = new StringBuilder();
 	StringBuilder sbR  = new StringBuilder();
 	
@@ -93,7 +94,8 @@ public class Robot extends IterativeRobot {
 		DriveTrain.setup();
 		Elevator.setup();
 		Intake.setup();
-		
+		compressor.setClosedLoopControl(true);
+		compressor.start();
 		DriveTrain.gyro.calibrate();
 
 	}

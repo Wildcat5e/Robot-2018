@@ -48,12 +48,6 @@ public class Autonomous {
 	
 	public void basicAuto() {
 		System.out.println("Running basic auto");
-		DriveTrain.setVelocity(6000, 6000);
-	}
-	
-	//***************************************************************************//
-
-	public void testAuto() {
 		switch (state) {
 		case 0:
 			setupAuto();
@@ -65,12 +59,31 @@ public class Autonomous {
 			}
 			break;
 		case 2:
+			endAuto();
+			break;
+		}
+	}
+	
+	//***************************************************************************//
+
+	public void testAuto() {
+		switch (state) {
+		case 0:
+			setupAuto();
+			state = nextState(state);
+			break;
+		case 1:
+			if (DriveTrain.moveByDistance(120, velocityMedium)) {
+				state = nextState(state);
+			}
+			break;
+		case 2:
 			if (DriveTrain.turnDegrees(90)) {
 				state = nextState(state);
 			}
 			break;
 		case 3:
-			if (DriveTrain.moveByDistance(60, velocitySlow)) {
+			if (DriveTrain.moveByDistance(120, velocityMedium)) {
 				state = nextState(state);
 			}
 			break;
@@ -80,7 +93,7 @@ public class Autonomous {
 			}
 			break;
 		case 5:
-			if (DriveTrain.moveByDistance(60, velocitySlow)) {
+			if (DriveTrain.moveByDistance(120, velocityMedium)) {
 				state = nextState(state);
 			}
 			break;
@@ -90,7 +103,7 @@ public class Autonomous {
 			}
 			break;
 		case 7:
-			if (DriveTrain.moveByDistance(60, velocitySlow)) {
+			if (DriveTrain.moveByDistance(120, velocityMedium)) {
 				state = nextState(state);
 			}
 			break;     

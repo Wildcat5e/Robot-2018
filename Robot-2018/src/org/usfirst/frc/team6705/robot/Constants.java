@@ -46,14 +46,14 @@ public class Constants {
 	
 	//Drive Train
 	public static final double wheelRadius = 2.937, //inches
-			ticksPerRevolution = 2048 * 4, //encoder ticks, multiplied by 4 because quadrature encoders do 4 pulses per count
+			ticksPerRevolution = 256 * 4, //encoder ticks, multiplied by 4 because quadrature encoders do 4 pulses per count
 			distancePerTick = (wheelRadius * 2.0 * Math.PI)/ticksPerRevolution, //inches per tick
 			rollersSpeed = 0.5,//[-1, 1]
 			turningTolerance = 2.5, //Degrees
 			deadband = 0.04, //-1 to 1
 			rampRateAuto = 1, //Seconds to ramp from 0 to full
 			rampRateTeleop = 0.25,
-			stallCurrent = 4, //Amps
+			stallCurrent = 60, // TODO  This number needs to be defined in testing (estimate);
 			maxTicksPer100ms = 5600,//This is the max speed in native units per 100 ms of the motors (percent output 100%)
 			maxError = 400,
 			minimumSpeed = 900,//ticks per 100 ms

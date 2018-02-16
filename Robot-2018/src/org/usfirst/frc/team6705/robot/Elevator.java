@@ -81,19 +81,16 @@ public class Elevator {
 			scaledFraction = 1;
 		} else if (scaledFraction < elevatorMinimumSpeedUp && direction == 1) {
 			scaledFraction = elevatorMinimumSpeedUp;
-		} else if (scaledFraction < elevatorMinimumSpeedUp && direction == -1) {
-			scaledFraction = elevatorMinimumSpeedUp;
+		} else if (scaledFraction < elevatorMinimumSpeedDown && direction == -1) {
+			scaledFraction = elevatorMinimumSpeedDown;
 		}
 		
 		Elevator.set(direction * scaledFraction);
 	}
 	
 	public static boolean moveToHeightAuto(double targetHeight, double totalDistanceToLift) {
-		int direction = 1;
 		double currentHeight = getCurrentPosition();
-		if (currentHeight > targetHeight) {
-			direction = -1;
-		}
+		int direction = (currentHeight > targetHeight) ? -1 : 1;
 		
 		double distanceRemaining = currentHeight - targetHeight;
 		if (distanceRemaining <= 0) {
@@ -101,12 +98,14 @@ public class Elevator {
 		}
 		
 		double distanceRemainingAbs = Math.abs(distanceRemaining);
-		double fractionRemaining = distanceRemainingAbs/totalDistanceToLift;
+		double fractionRemaining = Math.abs(distanceRemainingAbs/totalDistanceToLift);
 		double scaledFraction = fractionRemaining * 3;
 		if (scaledFraction > 1) {
 			scaledFraction = 1;
-		} else if (scaledFraction < 0.05) {
-			scaledFraction = 0.05;
+		} else if (scaledFraction < elevatorMinimumSpeedUp && direction == 1) {
+			scaledFraction = elevatorMinimumSpeedUp;
+		} else if (scaledFraction < elevatorMinimumSpeedDown && direction == -1) {
+			scaledFraction = elevatorMinimumSpeedDown;
 		}
 		
 		Elevator.set(direction * scaledFraction);

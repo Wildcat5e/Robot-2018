@@ -9,12 +9,12 @@ public class Intake {
 	static Spark rollersLeft = new Spark(leftIntakeSparkChannel);
 	static Spark rollersRight = new Spark(rightIntakeSparkChannel);
 	
-	static DoubleSolenoid leftSolenoid = new DoubleSolenoid(leftIntakeSolenoidForward, leftIntakeSolenoidReverse);
-	static DoubleSolenoid rightSolenoid = new DoubleSolenoid(rightIntakeSolenoidForward, rightIntakeSolenoidReverse);
+	static DoubleSolenoid leftSolenoid; 
+	static DoubleSolenoid rightSolenoid; 
 
 	public static void setup() {
-		//rollersLeft.setSafetyEnabled(false);
-		//rollersRight.setSafetyEnabled(false);
+		leftSolenoid = new DoubleSolenoid(leftIntakeSolenoidForward, leftIntakeSolenoidReverse);
+		rightSolenoid = new DoubleSolenoid(rightIntakeSolenoidForward, rightIntakeSolenoidReverse);
 	}
 	
 	public static void intake() {

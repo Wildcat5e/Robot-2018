@@ -68,7 +68,7 @@ public class Robot extends IterativeRobot {
 	public static Timer timer = new Timer();
 	
 	XboxController driveStick = new XboxController(driveStickChannel);
-	Compressor compressor = new Compressor();
+	//Compressor compressor = new Compressor();
 	StringBuilder sbL = new StringBuilder();
 	StringBuilder sbR  = new StringBuilder();
 	
@@ -95,17 +95,20 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData("Starting position", positionChooser);
 		SmartDashboard.putNumber("Stall Amps", Constants.stallCurrent);
 		
+		Constants.setup();
 		DriveTrain.setup();
 		Elevator.setup();
 		Intake.setup();
-		compressor.setClosedLoopControl(true);
-		compressor.start();
+		
+		//compressor.setClosedLoopControl(true);
+		//compressor.start();
+		
 		DriveTrain.gyro.calibrate();
 		SmartDashboard.putNumber("Right Talon Motor Output %", DriveTrain.rightTalon.getMotorOutputPercent());
-		PIDOutput pidOutput = DriveTrain.rightTalon;
-		PIDSource pidSource = DriveTrain.gyro;
-		PIDController mockPIDController = new PIDController(0,0,0,0,pidSource, pidOutput);
-		SmartDashboard.putData("Mock PID Controller",mockPIDController);
+		//PIDOutput pidOutput = DriveTrain.rightTalon;
+		//PIDSource pidSource = DriveTrain.gyro;
+		//PIDController mockPIDController = new PIDController(0,0,0,0,pidSource, pidOutput);
+		//SmartDashboard.putData("Mock PID Controller",mockPIDController);
 
 	}
 	

@@ -4,8 +4,10 @@
 
 package org.usfirst.frc.team6705.robot;
 
-public class Constants {
+import edu.wpi.first.wpilibj.Preferences;
 
+public class Constants {
+	
 	//Motor Controllers
 	public static final int leftTalonChannel = 1,
 			rightTalonChannel = 0,
@@ -80,11 +82,19 @@ public class Constants {
 			scaleHeight = 82.0;
 	
 	//PID for DriveTrain
-	public static double kP_R = 0.0004,//-(1023 * 0.1)/maxError,
-			kP_L  = 0.0035,//(1023 * 0.05)/maxError,
-			kD = 0,//kP * 10,//1023.0/maxError,
-			kI = 0,//1.023/maxError,
+	public static double kP_R,//-(1023 * 0.1)/maxError,
+			kP_L,//(1023 * 0.05)/maxError,
+			kD,//kP * 10,//1023.0/maxError,
+			kI,//1.023/maxError,
 			kF = 0.935  * 1023.0/maxTicksPer100ms;
+	
+	public static void setup() {
+		Preferences prefs = Preferences.getInstance();
+		kP_R = prefs.getDouble("kP_R", 0.0001);
+		kP_L = prefs.getDouble("kP_L", 0.0001);
+		kD = prefs.getDouble("kD", 0);
+		kI = prefs.getDouble("kI", 0);
+	}
 	
 	public static double convertInchesToTicks(double inches) {
 		return (inches/(2 * Math.PI * wheelRadius)) * ticksPerRevolution;

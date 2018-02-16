@@ -16,6 +16,9 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.PIDOutput;
+import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -90,6 +93,7 @@ public class Robot extends IterativeRobot {
 		positionChooser.addObject("Middle Starting Position", middle);
 		positionChooser.addObject("Right Starting Position", right);
 		SmartDashboard.putData("Starting position", positionChooser);
+		SmartDashboard.putNumber("Stall Amps", Constants.stallCurrent);
 		
 		DriveTrain.setup();
 		Elevator.setup();
@@ -97,6 +101,11 @@ public class Robot extends IterativeRobot {
 		compressor.setClosedLoopControl(true);
 		compressor.start();
 		DriveTrain.gyro.calibrate();
+		SmartDashboard.putNumber("Right Talon Motor Output %", DriveTrain.rightTalon.getMotorOutputPercent());
+		PIDOutput pidOutput = DriveTrain.rightTalon;
+		PIDSource pidSource = DriveTrain.gyro;
+		PIDController mockPIDController = new PIDController(0,0,0,0,pidSource, pidOutput);
+		SmartDashboard.putData("Mock PID Controller",mockPIDController);
 
 	}
 	

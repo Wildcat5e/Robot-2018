@@ -166,7 +166,7 @@ public class Autonomous {
 				state = nextState(state);
 				break;
 			case 1: //Move forward until parallel with switch
-				if (DriveTrain.moveByDistance(148.5, velocityMedium)) {
+				if (DriveTrain.moveByDistance(148.5, velocityMedium) && Elevator.moveToHeightAuto(switchHeight, switchHeight - floorHeight)) {
 					state = nextState(state);
 				}
 				break;
@@ -175,22 +175,17 @@ public class Autonomous {
 					state = nextState(state);
 				}
 				break;
-			case 3: //Move elevator
-				if (Elevator.moveToHeightAuto(switchHeight, switchHeight - floorHeight)) {
-					state = nextState(state);
-				}
-				break;
-			case 4: //Move until runs into switch wall
+			case 3: //Move until runs into switch wall
 				if (DriveTrain.moveByDistance(20, velocitySlow)) {
 					state = nextState(state);
 				}
 				break;
-			case 5: //Outtake
+			case 4: //Outtake
 				if (Intake.outtakeForTime(timeToRollOut, previousTime)) {
 					state = nextState(state);
 				}
 				break;
-			case 6:
+			case 5:
 				if (switchSide != scaleSide) {
 					if (DriveTrain.moveByDistance(-20, velocitySlow)) {
 						state = nextState(state);
@@ -199,59 +194,59 @@ public class Autonomous {
 					endAuto();				
 				}
 				break;
-			case 7:
+			case 6:
 				if (DriveTrain.turnDegrees(90 * switchSide)) {
 					state = nextState(state);
 				}
 				break;
-			case 8:
+			case 7:
 				if (DriveTrain.moveByDistance(40, velocityMedium)) {
 					state = nextState(state);
 				}
 				break;
-			case 9:
+			case 8:
 				if (DriveTrain.turnDegrees(-90 * switchSide)) {
 					state = nextState(state);
 				}
 				break;
-			case 10:
+			case 9:
 				if (DriveTrain.moveByDistance(200, velocityFast) && Elevator.moveToHeightAuto(floorHeight, previousElevatorHeight - floorHeight)) {
 					state = nextState(state);
 				}
 				break;
-			case 11:
+			case 10:
 				if (DriveTrain.turnDegrees(-90 * switchSide)) {
 					state = nextState(state);
 				}
 				break;
-			case 12:
+			case 11:
 				Intake.open();
 				if (DriveTrain.moveByDistance(50, velocitySlow)) {
 					Intake.close();
 					state = nextState(state);
 				}
 				break;
-			case 13:
+			case 12:
 				if (DriveTrain.moveByDistance(-70, velocityMedium) && Elevator.moveToHeightAuto(scaleHeight, scaleHeight - previousElevatorHeight)) {
 					state = nextState(state);
 				}
 				break;
-			case 14:
+			case 13:
 				if (DriveTrain.turnDegrees(180)) {
 					state = nextState(state);
 				}
 				break;
-			case 15:
+			case 14:
 				if (DriveTrain.moveByDistance(20, velocitySlow)) {
 					state = nextState(state);
 				}
 				break;
-			case 16:
+			case 15:
 				if (Intake.outtakeForTime(timeToRollOut, previousTime)) {
 					state = nextState(state);
 				}
 				break;
-			case 17:
+			case 16:
 				endAuto();
 				break;
 			}

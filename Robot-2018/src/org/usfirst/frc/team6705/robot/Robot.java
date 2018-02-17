@@ -11,6 +11,7 @@
 
 package org.usfirst.frc.team6705.robot;
 
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -100,11 +101,13 @@ public class Robot extends IterativeRobot {
 		Elevator.setup();
 		Intake.setup();
 		
+		CameraServer.getInstance().startAutomaticCapture();
+		
 		//compressor.setClosedLoopControl(true);
 		//compressor.start();
 		
 		DriveTrain.gyro.calibrate();
-		SmartDashboard.putNumber("Right Talon Motor Output %", DriveTrain.rightTalon.getMotorOutputPercent());
+		//SmartDashboard.putNumber("Right Talon Motor Output %", DriveTrain.rightTalon.getMotorOutputPercent());
 		//PIDOutput pidOutput = DriveTrain.rightTalon;
 		//PIDSource pidSource = DriveTrain.gyro;
 		//PIDController mockPIDController = new PIDController(0,0,0,0,pidSource, pidOutput);

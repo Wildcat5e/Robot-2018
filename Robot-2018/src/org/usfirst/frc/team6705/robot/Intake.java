@@ -13,8 +13,8 @@ public class Intake {
 	static DoubleSolenoid rightSolenoid; 
 
 	public static void setup() {
-		leftSolenoid = new DoubleSolenoid(leftIntakeSolenoidForward, leftIntakeSolenoidReverse);
-		rightSolenoid = new DoubleSolenoid(rightIntakeSolenoidForward, rightIntakeSolenoidReverse);
+		leftSolenoid = new DoubleSolenoid(intakeSolenoidA, intakeSolenoidB);
+		rightSolenoid = new DoubleSolenoid(intakeSolenoidA, intakeSolenoidB);
 	}
 	
 	public static void intake() {

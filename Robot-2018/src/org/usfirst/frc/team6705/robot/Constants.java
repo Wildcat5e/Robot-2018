@@ -13,20 +13,18 @@ public class Constants {
 			rightTalonChannel = 0,
 			leftVictorChannel = 1,
 			rightVictorChannel = 0,
-			leftIntakeSparkChannel = 4,
-			rightIntakeSparkChannel = 5,
-			elevatorSpark1 = 6,
-			elevatorSpark2 = 7;
+			leftIntakeSparkChannel = 2,
+			rightIntakeSparkChannel = 3,
+			elevatorSpark1 = 0,
+			elevatorSpark2 = 1;
 	
 	//Solenoids
-	public static final int leftIntakeSolenoidForward = 0,
-			leftIntakeSolenoidReverse = 1,
-			rightIntakeSolenoidForward = 2,
-			rightIntakeSolenoidReverse = 3,
-			leftRampSolenoidOpen = 4,
-			leftRampSolenoidClosed = 5,
-			rightRampSolenoidOpen = 6,
-			rightRampSolenoidClosed = 7;
+	public static final int intakeSolenoidA = 5,
+			intakeSolenoidB = 4,
+			leftRampSolenoidA = 0,
+			leftRampSolenoidB = 1,
+			rightRampSolenoidA = 2,
+			rightRampSolenoidB = 3;
 	
 	//Joysticks
 	public static final int driveStickChannel = 0,

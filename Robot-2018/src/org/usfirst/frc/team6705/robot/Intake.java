@@ -35,6 +35,14 @@ public class Intake {
 		return false;
 	}
 	
+	public static boolean intakeForTime(double time, double startTime) {
+		if (Robot.timer.get() - startTime >= time) {
+			return true;
+		}
+		intake();
+		return false;
+	}
+	
 	public static void stopRollers() {
 		
 		rollersLeft.set(0);

@@ -92,13 +92,13 @@ public class Elevator {
 		double currentHeight = getCurrentPosition();
 		int direction = (currentHeight > targetHeight) ? -1 : 1;
 		
-		double distanceRemaining = currentHeight - targetHeight;
+		double distanceRemaining = Math.abs(currentHeight - targetHeight);
 		if (distanceRemaining <= 0) {
+			Elevator.stop();
 			return true;
 		}
 		
-		double distanceRemainingAbs = Math.abs(distanceRemaining);
-		double fractionRemaining = Math.abs(distanceRemainingAbs/totalDistanceToLift);
+		double fractionRemaining = Math.abs(distanceRemaining/totalDistanceToLift);
 		double scaledFraction = fractionRemaining * 3;
 		if (scaledFraction > 1) {
 			scaledFraction = 1;

@@ -43,7 +43,7 @@ public class Robot extends IterativeRobot {
 	private String gameData;
 	
 	private static final String switchAuto = "switch";
-	private static final String scaleAuto = "scale";
+	private static final String twoCubeAuto = "twoCube";
 	private static final String baselineAuto = "baseline";
 	private static final String bestSimple = "bestSimple";
 	private static final String test = "test";
@@ -81,7 +81,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		autoChooser.addDefault("Power Cube on Switch", switchAuto);
-		autoChooser.addObject("Power Cube on Scale", scaleAuto);
+		autoChooser.addObject("Power Cube on Scale", twoCubeAuto);
 		autoChooser.addObject("Best Simple Scoring Method", bestSimple);
 		autoChooser.addObject("Cross Baseline Only", baselineAuto);
 		autoChooser.addObject("Test Auto - Drive, Turn, Drive", test);
@@ -155,9 +155,9 @@ public class Robot extends IterativeRobot {
 		switch (autoSelected) {
 		case switchAuto:
 			if (gameData.charAt(0) == 'L') {
-				auto.switchAuto(startingPosition, 1); //Note: side 1 means left, side -1 means right
+				auto.switchAuto(startingPosition, 1, (gameData.charAt(1) == 'L') ? 1 : -1); //Note: side 1 means left, side -1 means right
 			} else {
-				auto.switchAuto(startingPosition, -1);
+				auto.switchAuto(startingPosition, -1, (gameData.charAt(1) == 'L') ? 1 : -1);
 			}
 			break;
 			
@@ -166,11 +166,11 @@ public class Robot extends IterativeRobot {
 			auto.baselineAuto();
 			break;
 			
-		case scaleAuto:
+		case twoCubeAuto:
 			if (gameData.charAt(1) == 'L') {
-				auto.switchAuto(startingPosition, 1);
+				auto.twoCubeAuto(startingPosition, 1, (gameData.charAt(0) == 'L') ? 1 : -1);
 			} else {
-				auto.switchAuto(startingPosition, -1);
+				auto.twoCubeAuto(startingPosition, -1, (gameData.charAt(0) == 'L') ? 1 : -1);
 			}
 			break;
 			
@@ -178,25 +178,25 @@ public class Robot extends IterativeRobot {
 			switch(startingPosition) {
 			case left:
 				if(gameData.charAt(1) == 'L') {
-					auto.scaleAuto(startingPosition, 1);
+					auto.scaleAuto(startingPosition, 1, (gameData.charAt(0) == 'L') ? 1 : -1);
 				} else if(gameData.charAt(0) == 'L'){
-					auto.switchAuto(startingPosition, 1);
+					auto.switchAuto(startingPosition, 1, (gameData.charAt(1) == 'L') ? 1 : -1);
 				} else {
 					auto.baselineAuto();
 				}
 				break;
 			case middle:
 				if(gameData.charAt(0) == 'L') {
-					auto.switchAuto(startingPosition, 1);
+					auto.switchAuto(startingPosition, 1, (gameData.charAt(1) == 'L') ? 1 : -1);
 				} else {
-					auto.switchAuto(startingPosition, -1);
+					auto.switchAuto(startingPosition, -1, (gameData.charAt(1) == 'L') ? 1 : -1);
 				}
 				break;
 			case right:
 				if(gameData.charAt(1) == 'R') {
-					auto.scaleAuto(startingPosition, -1);
+					auto.scaleAuto(startingPosition, -1, (gameData.charAt(0) == 'L') ? 1 : -1);
 				} else if(gameData.charAt(0) == 'R') {
-					auto.switchAuto(startingPosition, -1);
+					auto.switchAuto(startingPosition, -1,  (gameData.charAt(1) == 'L') ? 1 : -1);
 				} else {
 					auto.baselineAuto();
 				}

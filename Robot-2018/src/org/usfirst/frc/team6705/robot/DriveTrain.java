@@ -31,10 +31,10 @@ public class DriveTrain {
 		leftVictor.setNeutralMode(NeutralMode.Brake);
 		rightVictor.setNeutralMode(NeutralMode.Brake);
 		
-		leftTalon.setInverted(true);
-		rightTalon.setInverted(false);
-		leftVictor.setInverted(true);
-		rightVictor.setInverted(false);
+		leftTalon.setInverted(false);
+		rightTalon.setInverted(true);
+		leftVictor.setInverted(false);
+		rightVictor.setInverted(true);
 		
 		leftTalon.configOpenloopRamp(rampRateTeleop, 0);
 		rightTalon.configOpenloopRamp(rampRateTeleop, 0);
@@ -44,8 +44,8 @@ public class DriveTrain {
 		leftTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 		rightTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 		
-		leftTalon.setSensorPhase(true);
-		rightTalon.setSensorPhase(true);
+		leftTalon.setSensorPhase(false);
+		rightTalon.setSensorPhase(false);
 		
 		leftTalon.config_kP(0, kP_L, 0);
 		leftTalon.config_kI(0, kI, 0);
@@ -68,8 +68,8 @@ public class DriveTrain {
 		
 		System.out.println("Left Speed: " + leftSpeed + " Right Speed: " + rightSpeed);
 
-		double leftTarget = Math.copySign(leftSpeed * leftSpeed, leftSpeed) * maxTicksPer100ms;
-		double rightTarget = Math.copySign(rightSpeed * rightSpeed, rightSpeed) * maxTicksPer100ms;
+		double leftTarget = Math.copySign(leftSpeed * leftSpeed * -1, leftSpeed) * maxTicksPer100ms;
+		double rightTarget = Math.copySign(rightSpeed * rightSpeed * -1, rightSpeed) * maxTicksPer100ms;
 		
 		setVelocity(leftTarget, rightTarget);
 		
@@ -92,18 +92,19 @@ public class DriveTrain {
 	}
 
 	//Autonomous move method
-	public static boolean moveByDistance(double inches, double velocity) {
+	public static boolean moveByDistance(double inches, double degrees, double velocity) {
 		System.out.print("Move By Distance ");
 		double targetEncoderTicks = Math.abs(convertInchesToTicks(inches));
 		double ticksSoFar = Math.abs(leftTalon.getSelectedSensorPosition(0));
 		double maxVelocity = convertVelocity(velocity);
 		
 		if (ticksSoFar >= targetEncoderTicks) {
+			DriveTrain.stop();
 			resetEncoders();
 			return true;
 		}
 		
-		int direction = (inches > 0) ? -1 : 1;
+		int direction = (inches > 0) ? 1 : -1;
 		
 		double ticksRemaining = targetEncoderTicks - ticksSoFar;
 		double fractionRemaining = ticksRemaining/targetEncoderTicks;
@@ -112,9 +113,9 @@ public class DriveTrain {
 			scaledFraction = 1;
 		}
 		
-		double heading = (Math.abs(getGyro())  > 0) ? getGyro() : 0;
-		double velocityLeft = maxVelocity + (angleP * heading * -direction);
-		System.out.println("Heading: " + heading);
+		double degreeError = getGyro() - degrees;
+		double velocityLeft = maxVelocity + (angleP * degreeError * direction);
+		System.out.println("Heading: " + degreeError);
 		
 		double scaledSpeedR = scaledFraction * maxVelocity;
 		double scaledSpeedL = scaledFraction * velocityLeft;
@@ -122,13 +123,19 @@ public class DriveTrain {
 		if (scaledSpeedR < minimumSpeed) {
 			scaledSpeedR = minimumSpeed;
 		}
-		if (scaledSpeedL < minimumSpeed + (angleP * heading * -direction)) {
-			scaledSpeedL = minimumSpeed  + (angleP * heading * -direction);
+		if (scaledSpeedL < minimumSpeed + (angleP * degreeError * direction)) {
+			scaledSpeedL = minimumSpeed  + (angleP * degreeError * direction);
 		}
 		
 		setVelocity(direction * scaledSpeedL, direction * scaledSpeedR);
 		return false;
 	}
+	
+	public static boolean moveByDistance(double inches, double velocity) {
+		return moveByDistance(inches, 0, velocity);
+	}
+
+	
 	
 	//Move until runs into switch
 	public static boolean moveTillStall() {
@@ -152,6 +159,7 @@ public class DriveTrain {
 		if (currentAngle < degrees + turningTolerance && currentAngle > degrees - turningTolerance) {
 			System.out.println("Attempting to stop at gyro angle: " + getGyro());
 			gyro.reset();
+			DriveTrain.stop();
 			return true;
 		}
 		
@@ -167,7 +175,7 @@ public class DriveTrain {
 		if (scaledSpeed < minimumTurningSpeed) {
 			scaledSpeed = minimumTurningSpeed;
 		}
-		setVelocity(-1 * turnMultiplier * scaledSpeed, turnMultiplier * scaledSpeed);
+		setVelocity(turnMultiplier * scaledSpeed, -1 * turnMultiplier * scaledSpeed);
 		return false;
 	}
 	

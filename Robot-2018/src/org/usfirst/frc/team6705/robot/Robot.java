@@ -64,6 +64,7 @@ public class Robot extends IterativeRobot {
 	double intakeStartTime = 0;
 	
 	double distanceToLift = 0;
+	double previousHeight = floorHeight;
 	ElevatorState elevatorState = ElevatorState.MANUAL;
 	
 	public static Timer timer = new Timer();
@@ -326,20 +327,20 @@ public class Robot extends IterativeRobot {
 		
 		//Bumpers - control intake pneumatics and rollers
 		if (driveStick.getBumper(GenericHID.Hand.kRight) && !intakeOpen) {
-			dropCube(); 
+			pickUpCube(); 
 		} else if (driveStick.getBumper(GenericHID.Hand.kLeft) && intakeOpen) {
-			pickUpCube();
+			dropCube();
 		}
 		
 		//Dpad - control only rollers
 		if (driveStick.getPOV(dPadChannel) > 325 || (driveStick.getPOV(dPadChannel) < 35 && driveStick.getPOV(dPadChannel) >= 0)) {
 			intakeState = IntakeState.MANUAL;
-			rollIn(); 
+			rollOut(); 
 		} else if (driveStick.getPOV(dPadChannel) > 145 && driveStick.getPOV(dPadChannel) < 215) {
 			intakeState = IntakeState.MANUAL;
-			rollOut(); 
+			//rollOut(); 
 		} else if (intakeState == IntakeState.MANUAL) {
-			Intake.stopRollers();
+			//Intake.stopRollers();
 		}
 		
 		//Buttons - set elevator lift to certain height - floor, switch, or scale
@@ -354,12 +355,14 @@ public class Robot extends IterativeRobot {
 		//Triggers - lift or lower elevator
 		if (driveStick.getTriggerAxis(GenericHID.Hand.kLeft) >= 0.05) {
 			moveElevatorDown(driveStick.getTriggerAxis(GenericHID.Hand.kLeft));
+			previousHeight = Elevator.getCurrentPosition();
 			elevatorState = ElevatorState.MANUAL;
 		} else if (driveStick.getTriggerAxis(GenericHID.Hand.kRight) >= 0.05) {
 			moveElevatorUp(driveStick.getTriggerAxis(GenericHID.Hand.kRight));
+			previousHeight = Elevator.getCurrentPosition();
 			elevatorState = ElevatorState.MANUAL;
 		} else if (elevatorState == ElevatorState.MANUAL) {
-			Elevator.stop();
+			Elevator.maintainHeight(previousHeight);
 		}
 		
 		//Start button - deploy ramps at end of game
@@ -398,6 +401,7 @@ public class Robot extends IterativeRobot {
 			if (currentHeight < floorHeight + elevatorTolerance && 
 					currentHeight > floorHeight - elevatorTolerance) { //Within desired range, stop elevating
 				Elevator.stop();
+				previousHeight = floorHeight;
 				elevatorState = ElevatorState.MANUAL;
 			} else {
 				Elevator.moveToHeight(floorHeight, currentHeight, distanceToLift);
@@ -410,6 +414,7 @@ public class Robot extends IterativeRobot {
 			if (currentHeight < switchHeight + elevatorTolerance && 
 					currentHeight > switchHeight - elevatorTolerance) { //Within desired range, stop elevating
 				Elevator.stop();
+				previousHeight = switchHeight;
 				elevatorState = ElevatorState.MANUAL;
 			} else {
 				Elevator.moveToHeight(switchHeight, currentHeight, distanceToLift);
@@ -422,6 +427,7 @@ public class Robot extends IterativeRobot {
 			if (currentHeight < scaleHeight + elevatorTolerance && 
 					currentHeight > scaleHeight - elevatorTolerance) { //Within desired range, stop elevating
 				Elevator.stop();
+				previousHeight = scaleHeight;
 				elevatorState = ElevatorState.MANUAL;
 			} else {
 				Elevator.moveToHeight(scaleHeight, currentHeight, distanceToLift);
@@ -433,15 +439,16 @@ public class Robot extends IterativeRobot {
 	//Left Bumper
 	public void pickUpCube() {
 		intakeStartTime = timer.get();
-		intakeState = IntakeState.INTAKING;
+		//intakeState = IntakeState.INTAKING;
 		Intake.close();
+		Intake.intake();
 		intakeOpen = false;
 	}
 	
 	//Right Bumper
 	public void dropCube() {
 		intakeStartTime = timer.get();
-		intakeState = IntakeState.OUTTAKING;
+		//intakeState = IntakeState.OUTTAKING;
 		Intake.open();
 		intakeOpen = true;
 	}

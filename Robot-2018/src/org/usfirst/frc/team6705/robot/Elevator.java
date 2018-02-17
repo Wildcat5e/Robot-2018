@@ -43,6 +43,12 @@ public class Elevator {
 		elevatorMotor.set(0);
 	}
 	
+	public static void maintainHeight(double height) {
+		if (getCurrentPosition() < height) {
+			set(0.1 * (height - getCurrentPosition()));
+		}
+	}
+	
 	public static void moveToHeight(double inches) {
 		
 		double startingHeight = getCurrentPosition();

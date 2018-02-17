@@ -9,6 +9,7 @@ public class Autonomous {
 	public int state = 0;
 	private static double previousTime = 0;
 	private static double previousElevatorHeight = floorHeight;
+	private static boolean isLifting = false;
 	/*
 	 * 	Note: Distance from alliance wall to front of switch = 140 in
 	 *        Distance from front of robot to front of switch = 101 in
@@ -70,6 +71,11 @@ public class Autonomous {
 	//***************************************************************************//
 
 	public void testAuto() {
+		
+		if (!isLifting) {
+			Elevator.maintainHeight(previousElevatorHeight);
+		}
+		
 		switch (state) {
 		case 0:
 			setupAuto();
@@ -159,6 +165,10 @@ public class Autonomous {
 		//SwitchSide: 1 -> left, -1 -> right
 		double horizDistance = (switchSide == 1) ? 57.5 : 54.5;
 		
+		if (!isLifting) {
+			Elevator.maintainHeight(previousElevatorHeight);
+		}
+		
 		if ((startingPosition == left && switchSide == 1) || (startingPosition == right && switchSide == -1)) { //Same side switch auto
 			switch (state) {
 			case 0:
@@ -166,7 +176,9 @@ public class Autonomous {
 				state = nextState(state);
 				break;
 			case 1: //Move forward until parallel with switch
+				isLifting = true;
 				if (DriveTrain.moveByDistance(148.5, velocityMedium) && Elevator.moveToHeightAuto(switchHeight, switchHeight - floorHeight)) {
+					isLifting = false;
 					state = nextState(state);
 				}
 				break;
@@ -210,7 +222,9 @@ public class Autonomous {
 				}
 				break;
 			case 9:
+				isLifting = true;
 				if (DriveTrain.moveByDistance(200, velocityFast) && Elevator.moveToHeightAuto(floorHeight, previousElevatorHeight - floorHeight)) {
+					isLifting = false;
 					state = nextState(state);
 				}
 				break;
@@ -227,7 +241,9 @@ public class Autonomous {
 				}
 				break;
 			case 12:
+				isLifting = true;
 				if (DriveTrain.moveByDistance(-70, velocityMedium) && Elevator.moveToHeightAuto(scaleHeight, scaleHeight - previousElevatorHeight)) {
+					isLifting = false;
 					state = nextState(state);
 				}
 				break;
@@ -278,7 +294,9 @@ public class Autonomous {
 				}
 				break;
 			case 5: //Move elevator
+				isLifting = true;
 				if (Elevator.moveToHeightAuto(switchHeight, switchHeight - floorHeight)) {
+					isLifting = false;
 					state = nextState(state);
 				}
 				break;
@@ -317,6 +335,10 @@ public class Autonomous {
 	public void scaleAuto(String startingPosition, int scaleSide, int switchSide) {
 		//scaleSide: 1 -> left, -1 -> right
 		
+		if (!isLifting) {
+			Elevator.maintainHeight(previousElevatorHeight);
+		}
+		
 		if ((startingPosition == left && scaleSide == 1) || (startingPosition == right && scaleSide == -1)) { //Same side scale auto
 			switch (state) {
 			case 0:
@@ -329,7 +351,9 @@ public class Autonomous {
 				}
 				break;
 			case 2: //Move at angle and lift elevator
+				isLifting = true;
 				if (DriveTrain.moveByDistance(131, 12 * -scaleSide, velocityMedium) &&  Elevator.moveToHeightAuto(scaleHeight, scaleHeight - previousElevatorHeight)) {
+					isLifting = false;
 					state = nextState(state);
 				}
 				break;
@@ -352,12 +376,16 @@ public class Autonomous {
 			case 5: //Outtake
 				if (switchSide == scaleSide) { //Switch on same side
 					Intake.open();
+					isLifting = true;
 					if (DriveTrain.moveByDistance(50, velocitySlow) && Elevator.moveToHeightAuto(floorHeight, previousElevatorHeight - floorHeight)) {
+						isLifting = false;
 						Intake.close();
 						state = nextState(state);
 					}
 				} else {  //Switch on opposite side
+					isLifting = true;
 					if (DriveTrain.moveByDistance(150, velocityMedium) && Elevator.moveToHeightAuto(floorHeight, previousElevatorHeight - floorHeight)) {
+						isLifting = false;
 						state = nextState(state);
 					}
 				}
@@ -375,7 +403,9 @@ public class Autonomous {
 				break;
 			case 7:
 				if (switchSide == scaleSide) {
+					isLifting = true;
 					if (Elevator.moveToHeightAuto(switchHeight, switchHeight - previousElevatorHeight)) {
+						isLifting = false;
 						state = nextState(state);
 					}
 				} else {
@@ -403,7 +433,9 @@ public class Autonomous {
 						state = nextState(state);
 					}
 				} else {
+					isLifting = true;
 					if (Elevator.moveToHeightAuto(switchHeight, switchHeight - previousElevatorHeight)) {
+						isLifting = false;
 						state = nextState(state);
 					}
 				}
@@ -458,7 +490,9 @@ public class Autonomous {
 				}
 				break;
 			case 5: //Drive rest of distance to scale
+				isLifting = true;
 				if (DriveTrain.moveByDistance(55, velocityMedium) && Elevator.moveToHeightAuto(scaleHeight, scaleHeight - previousElevatorHeight)) {
+					isLifting = false;
 					state = nextState(state);
 				}
 				break;
@@ -474,7 +508,9 @@ public class Autonomous {
 				break;
 			case 8: //Inch forward under scale
 				Intake.open();
+				isLifting = true;
 				if (DriveTrain.moveByDistance(50, velocitySlow) && Elevator.moveToHeightAuto(floorHeight, previousElevatorHeight - floorHeight)) {
+					isLifting = false;
 					Intake.close();
 					state = nextState(state);
 				}
@@ -485,7 +521,9 @@ public class Autonomous {
 				}
 				break;
 			case 10:
+				isLifting = true;
 				if (Elevator.moveToHeightAuto(switchHeight, switchHeight - previousElevatorHeight)) {
+					isLifting = false;
 					state = nextState(state);
 				}
 				break;

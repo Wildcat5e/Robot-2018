@@ -15,7 +15,8 @@ public class Constants {
 			rightVictorChannel = 0,
 			leftIntakeSparkChannel = 4,
 			rightIntakeSparkChannel = 5,
-			elevatorSparkChannel = 6;
+			elevatorSpark1 = 6,
+			elevatorSpark2 = 7;
 	
 	//Solenoids
 	public static final int leftIntakeSolenoidForward = 0,
@@ -60,7 +61,7 @@ public class Constants {
 			maxError = 400,
 			minimumSpeed = 900,//ticks per 100 ms
 			minimumTurningSpeed = 950,
-			angleP = 70;
+			kP_Angle = 70;
 	
 	//Driving Speeds in Feet Per Second (FPS)
 		public static final double velocityMax = getFPS(maxTicksPer100ms),

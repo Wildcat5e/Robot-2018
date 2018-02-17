@@ -114,7 +114,7 @@ public class DriveTrain {
 		}
 		
 		double degreeError = getGyro() - degrees;
-		double velocityLeft = maxVelocity + (angleP * degreeError * direction);
+		double velocityLeft = maxVelocity + (kP_Angle * degreeError * direction);
 		System.out.println("Heading: " + degreeError);
 		
 		double scaledSpeedR = scaledFraction * maxVelocity;
@@ -123,8 +123,8 @@ public class DriveTrain {
 		if (scaledSpeedR < minimumSpeed) {
 			scaledSpeedR = minimumSpeed;
 		}
-		if (scaledSpeedL < minimumSpeed + (angleP * degreeError * direction)) {
-			scaledSpeedL = minimumSpeed  + (angleP * degreeError * direction);
+		if (scaledSpeedL < minimumSpeed + (kP_Angle * degreeError * direction)) {
+			scaledSpeedL = minimumSpeed  + (kP_Angle * degreeError * direction);
 		}
 		
 		setVelocity(direction * scaledSpeedL, direction * scaledSpeedR);

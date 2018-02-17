@@ -8,7 +8,9 @@ import edu.wpi.first.wpilibj.Spark;
 
 public class Elevator {
 	
-	static Spark elevatorMotor = new Spark(elevatorSparkChannel);
+	static Spark motor1 = new Spark(elevatorSpark1);
+	static Spark motor2 = new Spark(elevatorSpark2);
+
 	static Encoder encoder = new Encoder(elevatorEncoderSourceA, elevatorEncoderSourceB, false, EncodingType.k4X);
 	
 	//static PIDController pid = new PIDController(kP, kI, kD, kF, encoder, elevatorMotor);
@@ -33,48 +35,22 @@ public class Elevator {
 	public static void set(double speed) {
 		if ((speed > 0 && getCurrentPosition() < maximumHeight) || (speed < 0 && getCurrentPosition() > floorHeight)) {
 			double maxSpeed = (speed < 0) ? elevatorMaxSpeedDown : elevatorMaxSpeedUp;
-			elevatorMotor.set(speed * maxSpeed);
+			motor1.set(speed * maxSpeed);
+			motor2.set(speed * maxSpeed);
 		} else {
 			stop();
 		}
 	}
 	
 	public static void stop() {
-		elevatorMotor.set(0);
+		motor1.set(0);
+		motor2.set(0);
 	}
 	
 	public static void maintainHeight(double height) {
 		if (getCurrentPosition() < height) {
 			set(0.1 * (height - getCurrentPosition()));
 		}
-	}
-	
-	public static void moveToHeight(double inches) {
-		
-		double startingHeight = getCurrentPosition();
-		double inchesToMove = Math.abs(inches - startingHeight);
-		double inchesRemaining;
-		
-		int direction = 1;
-		if (inches < startingHeight) {
-			direction = -1;
-		}
-
-		while (getCurrentPosition() * direction < inches * direction) {
-			inchesRemaining = inchesToMove - (direction * (getCurrentPosition() - startingHeight));
-			double fractionRemaining = inchesRemaining/inchesToMove;
-			double scaledFraction = fractionRemaining * 3;
-			if (scaledFraction > 1) {
-				scaledFraction = 1;
-			} else if (scaledFraction < 0.05) {
-				scaledFraction = 0.05;
-			}
-				
-			set(direction * scaledFraction);
-		}
-		
-		stop();
-		
 	}
 	
 	public static void moveToHeight(double targetHeight, double currentHeight, double distanceToLift) {
@@ -116,18 +92,6 @@ public class Elevator {
 		
 		Elevator.set(direction * scaledFraction);
 		return false;
-	}
-	
-	public static void toFloor() {
-		moveToHeight(floorHeight);
-	}
-			
-	public static void toSwitch() {
-		moveToHeight(switchHeight);
-	}
-	
-	public static void toScale() {
-		moveToHeight(scaleHeight);
 	}
 	
 	public static enum ElevatorState {

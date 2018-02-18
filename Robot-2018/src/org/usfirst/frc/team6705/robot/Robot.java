@@ -12,20 +12,17 @@
 package org.usfirst.frc.team6705.robot;
 
 import edu.wpi.first.wpilibj.CameraServer;
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.PIDController;
-import edu.wpi.first.wpilibj.PIDOutput;
-import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import static org.usfirst.frc.team6705.robot.Constants.*;
 
+import org.usfirst.frc.team6705.robot.Elevator;
 import org.usfirst.frc.team6705.robot.Elevator.ElevatorState;
 import org.usfirst.frc.team6705.robot.Intake.IntakeState;
 
@@ -57,7 +54,8 @@ public class Robot extends IterativeRobot {
 	private SendableChooser<String> autoChooser = new SendableChooser<>();
 	private SendableChooser<String> positionChooser = new SendableChooser<>();
 	
-	private Autonomous auto = new Autonomous();
+	public static Autonomous auto = new Autonomous();
+	public static Elevator elevator = new Elevator();
 	
 	boolean intakeOpen = false; 
 	IntakeState intakeState = IntakeState.MANUAL;
@@ -108,11 +106,6 @@ public class Robot extends IterativeRobot {
 		//compressor.start();
 		
 		DriveTrain.gyro.calibrate();
-		//SmartDashboard.putNumber("Right Talon Motor Output %", DriveTrain.rightTalon.getMotorOutputPercent());
-		//PIDOutput pidOutput = DriveTrain.rightTalon;
-		//PIDSource pidSource = DriveTrain.gyro;
-		//PIDController mockPIDController = new PIDController(0,0,0,0,pidSource, pidOutput);
-		//SmartDashboard.putData("Mock PID Controller",mockPIDController);
 
 	}
 	
@@ -351,7 +344,17 @@ public class Robot extends IterativeRobot {
 		} else if (driveStick.getYButton()) {
 			moveToScale();
 		} 
+				
+		//Triggers - lift and lower elevator
+		double netTrigger = driveStick.getTriggerAxis(GenericHID.Hand.kRight) - driveStick.getTriggerAxis(GenericHID.Hand.kLeft);
 		
+		if (Math.abs(netTrigger) >= 0.05) {
+			moveElevator(netTrigger);
+		} else {
+			moveElevator(0);
+		}
+		
+		/*
 		//Triggers - lift or lower elevator
 		if (driveStick.getTriggerAxis(GenericHID.Hand.kLeft) >= 0.05) {
 			moveElevatorDown(driveStick.getTriggerAxis(GenericHID.Hand.kLeft));
@@ -363,7 +366,7 @@ public class Robot extends IterativeRobot {
 			elevatorState = ElevatorState.MANUAL;
 		} else if (elevatorState == ElevatorState.MANUAL) {
 			Elevator.maintainHeight(previousHeight);
-		}
+		}*/
 		
 		//Start button - deploy ramps at end of game
 		if (timer.get() >= 120 && driveStick.getStartButton()) {
@@ -372,6 +375,7 @@ public class Robot extends IterativeRobot {
 		
 		//*********************************************************************//
 		
+		/*
 		//Check Intake State
 		if (intakeState == IntakeState.INTAKING) {
 			if (currentTime - intakeStartTime >= timeToRollIn) {
@@ -390,10 +394,11 @@ public class Robot extends IterativeRobot {
 			} else {
 				Intake.outtake();
 			}
-		}
+		}*/
 		
 		//*********************************************************************//
 		
+		/*
 		//Check Elevator State
 		if (elevatorState == ElevatorState.FLOOR) {
 			
@@ -432,7 +437,7 @@ public class Robot extends IterativeRobot {
 			} else {
 				Elevator.moveToHeight(scaleHeight, currentHeight, distanceToLift);
 			}
-		}
+		}*/
 		
 	}
 	
@@ -465,30 +470,40 @@ public class Robot extends IterativeRobot {
 	
 	//A Button
 	public void moveToFloor() {
-		elevatorState = ElevatorState.FLOOR;
-		distanceToLift = Math.abs(Elevator.getCurrentPosition() - floorHeight);
+		elevator.setHeight(floorHeight);
+		//elevatorState = ElevatorState.FLOOR;
+		//distanceToLift = Math.abs(Elevator.getCurrentPosition() - floorHeight);
 	}
 	
 	//B Button
 	public void moveToSwitch() {
-		elevatorState = ElevatorState.SWITCH;
-		distanceToLift = Math.abs(Elevator.getCurrentPosition() - switchHeight);
+		elevator.setHeight(switchHeight);
+		//elevatorState = ElevatorState.SWITCH;
+		//distanceToLift = Math.abs(Elevator.getCurrentPosition() - switchHeight);
 	}
 	
 	//Y Button
 	public void moveToScale() {
-		elevatorState = ElevatorState.SCALE;
-		distanceToLift = Math.abs(Elevator.getCurrentPosition() - scaleHeight);
+		elevator.setHeight(scaleHeight);
+		//elevatorState = ElevatorState.SCALE;
+		//distanceToLift = Math.abs(Elevator.getCurrentPosition() - scaleHeight);
 	}
 	
+	/*
 	//Left Trigger
 	public void moveElevatorDown(double speed) {
-		Elevator.set(-speed);
+		//Elevator.set(-speed);
+		elevator.setHeight(-speed * );
 	}
 	
 	//Right Trigger
 	public void moveElevatorUp(double speed) {
-		Elevator.set(speed);
+		//Elevator.set(speed);
+	}*/
+	
+	//Both Triggers (Left is negative/down, right is positive/up)
+	public void moveElevator(double speed) {
+		elevator.setHeight(previousHeight + (speed * (maximumHeight - floorHeight)));
 	}
 	
 	//Start Button

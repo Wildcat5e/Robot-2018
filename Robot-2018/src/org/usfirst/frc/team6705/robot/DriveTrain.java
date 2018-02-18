@@ -201,13 +201,13 @@ public class DriveTrain {
 		rightTalon.set(ControlMode.PercentOutput, 0);
 	}
 	
-	/*
-	public static boolean wait(double time) {
-		if (Robot.timer.get() >= time) {
+	
+	public static boolean wait(double time, double previousTime) {
+		if (Robot.timer.get() - previousTime >= time) {
 			return true;
 		}
 		return false;
-	}*/
+	}
 	
 	public static double getGyro() {
 		return -gyro.getAngle();

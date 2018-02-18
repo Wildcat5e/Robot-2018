@@ -69,11 +69,13 @@ public class Constants {
 				velocityTurning = 3;
 	
 	//Elevator Constants
-	public static final double elevatorMaxSpeedUp = 1,
+	public static final double elevatorRampBand = 0.1,
+		elevatorMaxSpeedUp = 1,
 			elevatorMaxSpeedDown = 0.8,
 			elevatorMinimumSpeedUp = 0.2,
 			elevatorMinimumSpeedDown = 0.05,
-			verticalInchesPerTick = 0.1,
+			ticksPerRotationElevator = 8192,
+			verticalInchesPerTick = (3 * Math.PI) / ticksPerRotationElevator,
 			elevatorTolerance = 0.5, //Inches
 			maximumHeight = 90,
 			floorHeight = 7.0,
@@ -87,12 +89,22 @@ public class Constants {
 			kI,//1.023/maxError,
 			kF = 0.935  * 1023.0/maxTicksPer100ms;
 	
+	//PID for Elevator
+	public static double kP_Lift,
+		kD_Lift,
+		kI_Lift,
+		kF_Lift;
+	
 	public static void setup() {
 		Preferences prefs = Preferences.getInstance();
 		kP_R = prefs.getDouble("kP_R", 0.0001);
 		kP_L = prefs.getDouble("kP_L", 0.0001);
 		kD = prefs.getDouble("kD", 0);
 		kI = prefs.getDouble("kI", 0);
+		kP_Lift = prefs.getDouble("kP_Lift", 0);
+		kI_Lift = prefs.getDouble("kI_Lift", 0);
+		kD_Lift= prefs.getDouble("kD_LIft", 0);
+		kF_Lift = prefs.getDouble("kF_LIft", 0);
 	}
 	
 	public static double convertInchesToTicks(double inches) {

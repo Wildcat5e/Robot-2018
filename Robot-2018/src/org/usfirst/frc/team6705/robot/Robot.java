@@ -260,6 +260,7 @@ public class Robot extends IterativeRobot {
 		double currentTime = timer.get();
 		SmartDashboard.putNumber("Current Time", currentTime);
 		
+		/*
 		double leftYStick = driveStick.getY(GenericHID.Hand.kLeft);
 		if (leftYStick < -0.93)  {
 			leftYStick = -1.0;
@@ -304,10 +305,10 @@ public class Robot extends IterativeRobot {
 		}
 		
 		sbL.setLength(0);
-		sbR.setLength(0);
+		sbR.setLength(0);*/
 		
 		
-		/*
+		
 		//Joystick - control tank drive
 		DriveTrain.tankDrive(driveStick.getY(GenericHID.Hand.kLeft), driveStick.getY(GenericHID.Hand.kRight));
 		//DriveTrain.tankDrive(0.8, 0.8);
@@ -400,7 +401,7 @@ public class Robot extends IterativeRobot {
 		
 		//*********************************************************************//
 		
-		
+		/*
 		//Check Elevator State
 		if (elevatorState == ElevatorState.FLOOR) {
 			
@@ -416,7 +417,7 @@ public class Robot extends IterativeRobot {
 				ElevatorState = ElevatorState.MANUAL;
 			} else {
 				Elevator.moveToHeight(floorHeight, currentHeight, distanceToLift);
-			}*/
+			}
 		}
 		
 		if (elevatorState == ElevatorState.SWITCH) {
@@ -433,7 +434,7 @@ public class Robot extends IterativeRobot {
 				ElevatorState = ElevatorState.MANUAL;
 			} else {
 				Elevator.moveToHeight(switchHeight, currentHeight, distanceToLift);
-			}*/
+			}
 		}
 		
 		if (elevatorState == ElevatorState.SCALE) {
@@ -450,8 +451,8 @@ public class Robot extends IterativeRobot {
 				ElevatorState = ElevatorState.MANUAL;
 			} else {
 				Elevator.moveToHeight(scaleHeight, currentHeight, distanceToLift);
-			}*/
-		}
+			}
+		}*/
 		
 	}
 	
@@ -517,8 +518,8 @@ public class Robot extends IterativeRobot {
 	
 	//Both Triggers (Left is negative/down, right is positive/up)
 	public void moveElevator(double speed) {
-		Elevator.setHeight(previousHeight + (speed * (maximumHeight - floorHeight)));
-	    //Elevator.set(speed);
+		//Elevator.setHeight(previousHeight + (speed * (maximumHeight - floorHeight)));
+	    Elevator.set(speed);
 	}
 	
 	//Start Button

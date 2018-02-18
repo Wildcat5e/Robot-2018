@@ -18,7 +18,7 @@ public class Elevator /*extends PIDSubsystem*/ {
 
 	static Encoder encoder = new Encoder(elevatorEncoderSourceA, elevatorEncoderSourceB, false, EncodingType.k4X);
 	
-	static PIDController pid = new PIDController(kP_Lift, kI_Lift, kD_Lift, kF_Lift, encoder, motor);
+	//static PIDController pid = new PIDController(kP_Lift, kI_Lift, kD_Lift, kF_Lift, encoder, motor);
 	
 	//static PIDMotor motor1;
 	//static PIDMotor motor2;
@@ -45,12 +45,12 @@ public class Elevator /*extends PIDSubsystem*/ {
 		encoder.reset();
 		encoder.setDistancePerPulse(verticalInchesPerTick);
 		
-		
+		/*
 		pid.enable();
 		pid.setOutputRange(-1, 1);
 		pid.setInputRange(0, (maximumHeight - floorHeight) * (1/verticalInchesPerTick));
 		pid.setAbsoluteTolerance(convertVerticalInchesToTicks(0.5));
-		pid.setContinuous(false);
+		pid.setContinuous(false);*/
 		
 	}
 	/*
@@ -87,7 +87,7 @@ public class Elevator /*extends PIDSubsystem*/ {
 		}
 		double absoluteHeight = height - floorHeight;
 		double ticks = convertVerticalInchesToTicks(absoluteHeight);
-		pid.setSetpoint(ticks);
+		//pid.setSetpoint(ticks);
 	}
 	
 	public static void set(double speed) {

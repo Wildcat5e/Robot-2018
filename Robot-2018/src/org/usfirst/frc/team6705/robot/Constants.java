@@ -83,9 +83,9 @@ public class Constants {
 			scaleHeight = 82.0;
 	
 	//PID for DriveTrain
-	public static double kP_L = (1023 * 0.05)/120,//-(1023 * 0.1)/maxError,
-	        kP_R = (1023 * 0.05)/110,
-			kD = kP_L * 10,//kP * 10,//1023.0/maxError,
+	public static double kP_L = (1023 * 0.05)/240,//-(1023 * 0.1)/maxError,
+	        kP_R = (1023 * 0.05)/200,
+			kD = kP_L = 0,//kP * 10,//1023.0/maxError,
 			kI = 0,//1.023/maxError,
 			kF_R = 1023/854,
 			kF_L = 1023/764;

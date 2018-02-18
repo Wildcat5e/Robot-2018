@@ -180,7 +180,7 @@ public class Autonomous {
 				break;
 			case 1: //Move forward until parallel with switch
 				////isLifting = true;
-				Robot.elevator.setHeight(switchHeight);
+				Elevator.setHeight(switchHeight);
 				if (DriveTrain.moveByDistance(148.5, velocityMedium) /*&& Elevator.moveToHeightAuto(switchHeight, switchHeight - floorHeight)*/) {
 					//isLifting = false;
 					state = nextState(state);
@@ -227,7 +227,7 @@ public class Autonomous {
 				break;
 			case 9:
 				//isLifting = true;
-				Robot.elevator.setHeight(floorHeight);
+				Elevator.setHeight(floorHeight);
 				if (DriveTrain.moveByDistance(200, velocityFast)/* && Elevator.moveToHeightAuto(floorHeight, previousElevatorHeight - floorHeight)*/) {
 					//isLifting = false;
 					state = nextState(state);
@@ -247,7 +247,7 @@ public class Autonomous {
 				break;
 			case 12:
 				//isLifting = true;
-				Robot.elevator.setHeight(scaleHeight);
+				Elevator.setHeight(scaleHeight);
 				if (DriveTrain.moveByDistance(-70, velocityMedium)/* && Elevator.moveToHeightAuto(scaleHeight, scaleHeight - previousElevatorHeight)*/) {
 					//isLifting = false;
 					state = nextState(state);
@@ -295,7 +295,7 @@ public class Autonomous {
 				}
 				break;
 			case 4: //Turn & raise elevator
-				Robot.elevator.setHeight(switchHeight);
+				Elevator.setHeight(switchHeight);
 				if (DriveTrain.turnDegrees(-90 * switchSide)) {
 					state = nextState(state);
 				}
@@ -360,7 +360,7 @@ public class Autonomous {
 				break;
 			case 2: //Move at angle and lift elevator
 				//isLifting = true;
-				Robot.elevator.setHeight(scaleHeight);
+				Elevator.setHeight(scaleHeight);
 				if (DriveTrain.moveByDistance(131, 12 * -scaleSide, velocityMedium) /*&&  Elevator.moveToHeightAuto(scaleHeight, scaleHeight - previousElevatorHeight)*/) {
 					//isLifting = false;
 					state = nextState(state);
@@ -386,7 +386,7 @@ public class Autonomous {
 				if (switchSide == scaleSide) { //Switch on same side
 					Intake.open();
 					//isLifting = true;
-					Robot.elevator.setHeight(floorHeight);
+					Elevator.setHeight(floorHeight);
 					if (DriveTrain.moveByDistance(50, velocitySlow) /*&& Elevator.moveToHeightAuto(floorHeight, previousElevatorHeight - floorHeight)*/) {
 						//isLifting = false;
 						Intake.close();
@@ -394,7 +394,7 @@ public class Autonomous {
 					}
 				} else {  //Switch on opposite side
 					//isLifting = true;
-					Robot.elevator.setHeight(floorHeight);
+					Elevator.setHeight(floorHeight);
 					if (DriveTrain.moveByDistance(150, velocityMedium) /*&& Elevator.moveToHeightAuto(floorHeight, previousElevatorHeight - floorHeight)*/) {
 						//isLifting = false;
 						state = nextState(state);
@@ -415,7 +415,7 @@ public class Autonomous {
 			case 7:
 				if (switchSide == scaleSide) {
 					//isLifting = true;
-					Robot.elevator.setHeight(switchHeight);
+					Elevator.setHeight(switchHeight);
 					if (DriveTrain.wait(1, previousTime)) {
 						state = nextState(state);
 					}
@@ -449,7 +449,7 @@ public class Autonomous {
 					}
 				} else {
 					//isLifting = true;
-					Robot.elevator.setHeight(switchHeight);
+					Elevator.setHeight(switchHeight);
 					if (DriveTrain.wait(1, previousTime)) {
 						state = nextState(state);
 					}
@@ -510,7 +510,7 @@ public class Autonomous {
 				break;
 			case 5: //Drive rest of distance to scale
 				//isLifting = true;
-				Robot.elevator.setHeight(scaleHeight);
+				Elevator.setHeight(scaleHeight);
 				if (DriveTrain.moveByDistance(55, velocityMedium)/* && Elevator.moveToHeightAuto(scaleHeight, scaleHeight - previousElevatorHeight)*/) {
 					//isLifting = false;
 					state = nextState(state);
@@ -529,7 +529,7 @@ public class Autonomous {
 			case 8: //Inch forward under scale
 				Intake.open();
 				//isLifting = true;
-				Robot.elevator.setHeight(floorHeight);
+				Elevator.setHeight(floorHeight);
 				if (DriveTrain.moveByDistance(50, velocitySlow) /*&& Elevator.moveToHeightAuto(floorHeight, previousElevatorHeight - floorHeight)*/) {
 					//isLifting = false;
 					Intake.close();
@@ -543,7 +543,7 @@ public class Autonomous {
 				break;
 			case 10:
 				//isLifting = true;
-				Robot.elevator.setHeight(switchHeight);
+				Elevator.setHeight(switchHeight);
 				if (DriveTrain.wait(1, previousTime)) {
 					state = nextState(state);
 				}

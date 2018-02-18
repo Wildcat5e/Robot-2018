@@ -6,17 +6,19 @@ import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 
 public class Elevator /*extends PIDSubsystem*/ {
 	
 	static Spark spark1 = new Spark(elevatorSpark1);
 	static Spark spark2 = new Spark(elevatorSpark2);
+	
+	static SpeedControllerGroup motor = new SpeedControllerGroup(spark1, spark2);
 
 	static Encoder encoder = new Encoder(elevatorEncoderSourceA, elevatorEncoderSourceB, false, EncodingType.k4X);
 	
-	static PIDController pid1 = new PIDController(kP_Lift, kI_Lift, kD_Lift, kF_Lift, encoder, spark1);
-	static PIDController pid2 = new PIDController(kP_Lift, kI_Lift, kD_Lift, kF_Lift, encoder, spark2);
+	static PIDController pid = new PIDController(kP_Lift, kI_Lift, kD_Lift, kF_Lift, encoder, motor);
 	
 	//static PIDMotor motor1;
 	//static PIDMotor motor2;
@@ -42,17 +44,11 @@ public class Elevator /*extends PIDSubsystem*/ {
 		encoder.reset();
 		encoder.setDistancePerPulse(verticalInchesPerTick);
 		
-		pid1.enable();
-		pid1.setOutputRange(-1, 1);
-		pid1.setInputRange(0, (maximumHeight - floorHeight) * (1/verticalInchesPerTick));
-		pid1.setAbsoluteTolerance(convertVerticalInchesToTicks(0.5));
-		pid1.setContinuous(false);
-		
-		pid2.enable();
-		pid2.setOutputRange(-1, 1);
-		pid2.setInputRange(0, (maximumHeight - floorHeight) * (1/verticalInchesPerTick));
-		pid2.setAbsoluteTolerance(convertVerticalInchesToTicks(0.5));
-		pid2.setContinuous(false);
+		pid.enable();
+		pid.setOutputRange(-1, 1);
+		pid.setInputRange(0, (maximumHeight - floorHeight) * (1/verticalInchesPerTick));
+		pid.setAbsoluteTolerance(convertVerticalInchesToTicks(0.5));
+		pid.setContinuous(false);
 		
 	}
 	/*
@@ -77,11 +73,11 @@ public class Elevator /*extends PIDSubsystem*/ {
 		return inches * (1/verticalInchesPerTick);
 	}
 	
-	public double getCurrentPosition() {
+	public static double getCurrentPosition() {
 		return convertTicksToVerticalInches(encoder.get()) + floorHeight;
 	}
 	
-	public void setHeight(double height) {
+	public static void setHeight(double height) {
 		if (height < floorHeight) {
 			height = floorHeight;
 		} else if (height > maximumHeight) {
@@ -89,8 +85,7 @@ public class Elevator /*extends PIDSubsystem*/ {
 		}
 		double absoluteHeight = height - floorHeight;
 		double ticks = convertVerticalInchesToTicks(absoluteHeight);
-		pid1.setSetpoint(ticks);
-		pid2.setSetpoint(ticks);
+		pid.setSetpoint(ticks);
 	}
 	
 	public static void stop() {

@@ -41,8 +41,10 @@ public class Elevator /*extends PIDSubsystem*/ {
 	
 	
 	public static void setup() {
+	    //encoder = new Encoder(elevatorEncoderSourceA, elevatorEncoderSourceB, false, EncodingType.k4X);
 		encoder.reset();
 		encoder.setDistancePerPulse(verticalInchesPerTick);
+		
 		
 		pid.enable();
 		pid.setOutputRange(-1, 1);
@@ -86,6 +88,15 @@ public class Elevator /*extends PIDSubsystem*/ {
 		double absoluteHeight = height - floorHeight;
 		double ticks = convertVerticalInchesToTicks(absoluteHeight);
 		pid.setSetpoint(ticks);
+	}
+	
+	public static void set(double speed) {
+	    if ((speed > 0 && getCurrentPosition() < maximumHeight) || (speed < 0 && getCurrentPosition() > floorHeight)) {
+            double maxSpeed = (speed < 0) ? elevatorMaxSpeedDown : elevatorMaxSpeedUp;
+            motor.set(speed * maxSpeed);
+        } else {
+            stop();
+        }
 	}
 	
 	public static void stop() {

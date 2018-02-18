@@ -31,10 +31,10 @@ public class DriveTrain {
 		leftVictor.setNeutralMode(NeutralMode.Brake);
 		rightVictor.setNeutralMode(NeutralMode.Brake);
 		
-		leftTalon.setInverted(false);
-		rightTalon.setInverted(true);
-		leftVictor.setInverted(false);
-		rightVictor.setInverted(true);
+		leftTalon.setInverted(true);
+		rightTalon.setInverted(false);
+		leftVictor.setInverted(true);
+		rightVictor.setInverted(false);
 		
 		leftTalon.configOpenloopRamp(rampRateTeleop, 0);
 		rightTalon.configOpenloopRamp(rampRateTeleop, 0);
@@ -44,17 +44,17 @@ public class DriveTrain {
 		leftTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 		rightTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 		
-		leftTalon.setSensorPhase(false);
-		rightTalon.setSensorPhase(false);
+		leftTalon.setSensorPhase(true);
+		rightTalon.setSensorPhase(true);
 		
 		leftTalon.config_kP(0, kP_L, 0);
 		leftTalon.config_kI(0, kI, 0);
 		leftTalon.config_kD(0, kD, 0);
-		leftTalon.config_kF(0, kF, 0);
+		leftTalon.config_kF(0, kF_L, 0);
 		rightTalon.config_kP(0, kP_R, 0);
 		rightTalon.config_kI(0, kI, 0);
 		rightTalon.config_kD(0, kD, 0);
-		rightTalon.config_kF(0, kF, 0);
+		rightTalon.config_kF(0, kF_R, 0);
 		//TODO: Perform any other talon and victor config here
 		
 		gyro.reset();

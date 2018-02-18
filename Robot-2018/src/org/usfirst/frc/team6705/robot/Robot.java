@@ -26,7 +26,7 @@ import org.usfirst.frc.team6705.robot.Elevator;
 import org.usfirst.frc.team6705.robot.Elevator.ElevatorState;
 import org.usfirst.frc.team6705.robot.Intake.IntakeState;
 
-//import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 
 
 /**
@@ -100,7 +100,7 @@ public class Robot extends IterativeRobot {
 		Elevator.setup();
 		Intake.setup();
 		
-		CameraServer.getInstance().startAutomaticCapture();
+		//CameraServer.getInstance().startAutomaticCapture();
 		
 		//compressor.setClosedLoopControl(true);
 		//compressor.start();
@@ -226,9 +226,9 @@ public class Robot extends IterativeRobot {
 		DriveTrain.rightTalon.configClosedloopRamp(rampRateTeleop, 0);
 		
 		//If the intake is open due to whatever happened in auto, set intakeOpen to true
-		if (Intake.leftSolenoid.get() == DoubleSolenoid.Value.kForward) {
+		if (Intake.solenoid.get() == DoubleSolenoid.Value.kForward) {
 			intakeOpen = true;
-		} else if (Intake.leftSolenoid.get() == DoubleSolenoid.Value.kReverse) {
+		} else if (Intake.solenoid.get() == DoubleSolenoid.Value.kReverse) {
 			intakeOpen = false;
 		}
 		
@@ -259,7 +259,7 @@ public class Robot extends IterativeRobot {
 		
 		double currentTime = timer.get();
 		SmartDashboard.putNumber("Current Time", currentTime);
-		/*
+		
 		double leftYStick = driveStick.getY(GenericHID.Hand.kLeft);
 		if (leftYStick < -0.93)  {
 			leftYStick = -1.0;
@@ -279,7 +279,7 @@ public class Robot extends IterativeRobot {
 		sbR.append(DriveTrain.rightTalon.getSelectedSensorVelocity(0));
 		
 		if (driveStick.getAButton()) {
-			double targetVelocity  = leftYStick * 350 * 8192 / 600;
+			double targetVelocity  = leftYStick * 350 * 1024 / 600;
 			DriveTrain.leftTalon.set(ControlMode.Velocity, targetVelocity);
 			DriveTrain.rightTalon.set(ControlMode.Velocity, targetVelocity);
 			
@@ -305,9 +305,9 @@ public class Robot extends IterativeRobot {
 		
 		sbL.setLength(0);
 		sbR.setLength(0);
-		*/
 		
 		
+		/*
 		//Joystick - control tank drive
 		DriveTrain.tankDrive(driveStick.getY(GenericHID.Hand.kLeft), driveStick.getY(GenericHID.Hand.kRight));
 		//DriveTrain.tankDrive(0.8, 0.8);
@@ -368,12 +368,12 @@ public class Robot extends IterativeRobot {
 			ElevatorState = ElevatorState.MANUAL;
 		} else if (ElevatorState == ElevatorState.MANUAL) {
 			Elevator.maintainHeight(previousHeight);
-		}*/
+		}
 		
 		//Start button - deploy ramps at end of game
 		if (timer.get() >= 120 && driveStick.getStartButton()) {
 			deployRamps();
-		}
+		}*/
 		
 		//*********************************************************************//
 		
@@ -518,6 +518,7 @@ public class Robot extends IterativeRobot {
 	//Both Triggers (Left is negative/down, right is positive/up)
 	public void moveElevator(double speed) {
 		Elevator.setHeight(previousHeight + (speed * (maximumHeight - floorHeight)));
+	    //Elevator.set(speed);
 	}
 	
 	//Start Button
@@ -533,6 +534,8 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Gyro Value", DriveTrain.getGyro());
 		SmartDashboard.putNumber("Left Talon Current", DriveTrain.leftTalon.getOutputCurrent());
 		SmartDashboard.putNumber("Right Talon Current", DriveTrain.rightTalon.getOutputCurrent());
+		SmartDashboard.putNumber("Elevator Encoder Count", Elevator.encoder.get());
+		SmartDashboard.putNumber("Elevator Current Height From Ground", Elevator.getCurrentPosition());
 	}
 	
 }

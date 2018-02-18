@@ -11,8 +11,8 @@ public class Constants {
 	//Motor Controllers
 	public static final int leftTalonChannel = 1,
 			rightTalonChannel = 0,
-			leftVictorChannel = 1,
-			rightVictorChannel = 0,
+			leftVictorChannel = 0,
+			rightVictorChannel = 1,
 			leftIntakeSparkChannel = 2,
 			rightIntakeSparkChannel = 3,
 			elevatorSpark1 = 0,
@@ -83,28 +83,30 @@ public class Constants {
 			scaleHeight = 82.0;
 	
 	//PID for DriveTrain
-	public static double kP_R,//-(1023 * 0.1)/maxError,
-			kP_L,//(1023 * 0.05)/maxError,
-			kD,//kP * 10,//1023.0/maxError,
-			kI,//1.023/maxError,
-			kF = 0.935  * 1023.0/maxTicksPer100ms;
+	public static double kP_L = (1023 * 0.05)/120,//-(1023 * 0.1)/maxError,
+	        kP_R = (1023 * 0.05)/110,
+			kD = kP_L * 10,//kP * 10,//1023.0/maxError,
+			kI = 0,//1.023/maxError,
+			kF_R = 1023/854,
+			kF_L = 1023/764;
 	
 	//PID for Elevator
-	public static double kP_Lift,
-		kD_Lift,
-		kI_Lift,
-		kF_Lift;
+	public static double kP_Lift = 0.1,
+		kD_Lift = 0.01,
+		kI_Lift = 0.01,
+		kF_Lift = 0.1;
 	
 	public static void setup() {
-		Preferences prefs = Preferences.getInstance();
-		kP_R = prefs.getDouble("kP_R", 0.0001);
-		kP_L = prefs.getDouble("kP_L", 0.0001);
+		/*Preferences prefs = Preferences.getInstance();
+		kP = prefs.getDouble("kP_R", 0.0001);
 		kD = prefs.getDouble("kD", 0);
 		kI = prefs.getDouble("kI", 0);
+		kF_L = prefs.getDouble("kF_L", 0.1);
+		kF_R = prefs.getDouble("kF_R", 0.1);
 		kP_Lift = prefs.getDouble("kP_Lift", 0);
 		kI_Lift = prefs.getDouble("kI_Lift", 0);
 		kD_Lift= prefs.getDouble("kD_LIft", 0);
-		kF_Lift = prefs.getDouble("kF_LIft", 0);
+		kF_Lift = prefs.getDouble("kF_LIft", 0);*/
 	}
 	
 	public static double convertInchesToTicks(double inches) {

@@ -9,12 +9,10 @@ public class Intake {
 	static Spark rollersLeft = new Spark(leftIntakeSparkChannel);
 	static Spark rollersRight = new Spark(rightIntakeSparkChannel);
 	
-	static DoubleSolenoid leftSolenoid; 
-	static DoubleSolenoid rightSolenoid; 
+	static DoubleSolenoid solenoid = new DoubleSolenoid(intakeSolenoidA, intakeSolenoidB);
 
 	public static void setup() {
-		leftSolenoid = new DoubleSolenoid(intakeSolenoidA, intakeSolenoidB);
-		rightSolenoid = new DoubleSolenoid(intakeSolenoidA, intakeSolenoidB);
+	    solenoid.set(DoubleSolenoid.Value.kForward);
 	}
 	
 	public static void intake() {
@@ -50,16 +48,13 @@ public class Intake {
 	}
 	
 	public static void open() {
-		leftSolenoid.set(DoubleSolenoid.Value.kForward);
-		rightSolenoid.set(DoubleSolenoid.Value.kForward);
+		solenoid.set(DoubleSolenoid.Value.kForward);
 		
 	}
 	
 	
 	public static void close() {
-		leftSolenoid.set(DoubleSolenoid.Value.kReverse);
-		rightSolenoid.set(DoubleSolenoid.Value.kReverse);
-		
+		solenoid.set(DoubleSolenoid.Value.kReverse);
 	}
 	
 	public static enum IntakeState {

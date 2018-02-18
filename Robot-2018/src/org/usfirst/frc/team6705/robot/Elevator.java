@@ -8,19 +8,20 @@ import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 
-public class Elevator extends PIDSubsystem {
+public class Elevator /*extends PIDSubsystem*/ {
 	
 	static Spark spark1 = new Spark(elevatorSpark1);
 	static Spark spark2 = new Spark(elevatorSpark2);
 
 	static Encoder encoder = new Encoder(elevatorEncoderSourceA, elevatorEncoderSourceB, false, EncodingType.k4X);
 	
-	//static PIDController pid1 = new PIDController(kP_Lift, kI_Lift, kD_Lift, kF_Lift, encoder, spark1);
-	//static PIDController pid2 = new PIDController(kP_Lift, kI_Lift, kD_Lift, kF_Lift, encoder, spark2);
+	static PIDController pid1 = new PIDController(kP_Lift, kI_Lift, kD_Lift, kF_Lift, encoder, spark1);
+	static PIDController pid2 = new PIDController(kP_Lift, kI_Lift, kD_Lift, kF_Lift, encoder, spark2);
 	
-	static PIDMotor motor1;
-	static PIDMotor motor2;
+	//static PIDMotor motor1;
+	//static PIDMotor motor2;
 
+	/*
 	public Elevator() {
 		super("Elevator", kP_Lift, kI_Lift, kD_Lift);
 		PIDController pid = getPIDController();
@@ -34,14 +35,27 @@ public class Elevator extends PIDSubsystem {
 		motor1 = new PIDMotor(spark1, elevatorRampBand, pid);
 		motor2 = new PIDMotor(spark1, elevatorRampBand, pid);
 
-	}
+	}*/
+	
 	
 	public static void setup() {
 		encoder.reset();
 		encoder.setDistancePerPulse(verticalInchesPerTick);
 		
+		pid1.enable();
+		pid1.setOutputRange(-1, 1);
+		pid1.setInputRange(0, (maximumHeight - floorHeight) * (1/verticalInchesPerTick));
+		pid1.setAbsoluteTolerance(convertVerticalInchesToTicks(0.5));
+		pid1.setContinuous(false);
+		
+		pid2.enable();
+		pid2.setOutputRange(-1, 1);
+		pid2.setInputRange(0, (maximumHeight - floorHeight) * (1/verticalInchesPerTick));
+		pid2.setAbsoluteTolerance(convertVerticalInchesToTicks(0.5));
+		pid2.setContinuous(false);
+		
 	}
-	
+	/*
 	public void initDefaultCommand() {
     }
 	
@@ -52,7 +66,7 @@ public class Elevator extends PIDSubsystem {
 	 protected void usePIDOutput(double output) {
          motor1.pidWrite(output); // this is where the computed output value from the PIDController is applied to the motor
          motor2.pidWrite(output);
-	 }
+	 }*/
 	
 	public static double convertTicksToVerticalInches(double ticks) {
 		return ticks * verticalInchesPerTick;
@@ -75,7 +89,8 @@ public class Elevator extends PIDSubsystem {
 		}
 		double absoluteHeight = height - floorHeight;
 		double ticks = convertVerticalInchesToTicks(absoluteHeight);
-		setSetpoint(ticks);
+		pid1.setSetpoint(ticks);
+		pid2.setSetpoint(ticks);
 	}
 	
 	public static void stop() {

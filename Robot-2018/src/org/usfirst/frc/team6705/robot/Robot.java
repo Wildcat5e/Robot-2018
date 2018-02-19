@@ -317,25 +317,28 @@ public class Robot extends IterativeRobot {
 		if (driveStick.getBackButton()) {
 			DriveTrain.resetEncoders();
 			DriveTrain.gyro.reset();
+			Elevator.encoder.reset();
 		}
 		
 		//Bumpers - control intake pneumatics and rollers
-		if (driveStick.getBumper(GenericHID.Hand.kRight) && !intakeOpen) {
-			pickUpCube(); 
-		} else if (driveStick.getBumper(GenericHID.Hand.kLeft) && intakeOpen) {
-			dropCube();
-		}
+		
 		
 		//Dpad - control only rollers
 		if (driveStick.getPOV(dPadChannel) > 325 || (driveStick.getPOV(dPadChannel) < 35 && driveStick.getPOV(dPadChannel) >= 0)) {
 			intakeState = IntakeState.MANUAL;
+			System.out.println("Dpad up");
 			rollOut(); 
 		} else if (driveStick.getPOV(dPadChannel) > 145 && driveStick.getPOV(dPadChannel) < 215) {
 			intakeState = IntakeState.MANUAL;
 			rollIn(); 
-		} else if (intakeState == IntakeState.MANUAL) {
-			Intake.stopRollers();
-		}
+		} else if (driveStick.getBumper(GenericHID.Hand.kRight)) {
+            pickUpCube(); 
+            System.out.println("Bumper right, pick up");
+       } else if (driveStick.getBumper(GenericHID.Hand.kLeft)) {
+           dropCube();
+       } else {
+           Intake.stopRollers();
+       }
 		
 		//Buttons - set Elevator lift to certain height - floor, switch, or scale
 		if (driveStick.getAButton()) {
@@ -347,14 +350,15 @@ public class Robot extends IterativeRobot {
 		} 
 				
 		//Triggers - lift and lower Elevator
-		previousHeight = Elevator.getCurrentPosition();
+
 		double netTrigger = driveStick.getTriggerAxis(GenericHID.Hand.kRight) - driveStick.getTriggerAxis(GenericHID.Hand.kLeft);
 		
-		if (Math.abs(netTrigger) >= 0.05) {
+		if (Math.abs(netTrigger) >= 0.2) {
+	        previousHeight = Elevator.getCurrentPosition();
 			moveElevator(netTrigger);
 			elevatorState = ElevatorState.MANUAL;
-		} else if (elevatorState == ElevatorState.MANUAL) {
-			moveElevator(0);
+		} else if (elevatorState == ElevatorState.MANUAL && Elevator.getCurrentPosition() > floorHeight + elevatorTolerance) {
+			Elevator.maintainHeight(previousHeight);
 		}
 		
 		/*
@@ -401,58 +405,58 @@ public class Robot extends IterativeRobot {
 		
 		//*********************************************************************//
 		
-		/*
+		
 		//Check Elevator State
 		if (elevatorState == ElevatorState.FLOOR) {
 			
-			if (Elevator.pid.onTarget()) {
-				elevatorState = ElevatorState.MANUAL;
-			}
-			/*
+			//if (Elevator.pid.onTarget()) {
+				//elevatorState = ElevatorState.MANUAL;
+			//}
+			
 			double currentHeight = Elevator.getCurrentPosition();
-			if (currentHeight < floorHeight + ElevatorTolerance && 
-					currentHeight > floorHeight - ElevatorTolerance) { //Within desired range, stop elevating
+			if (currentHeight < floorHeight + elevatorTolerance && 
+					currentHeight > floorHeight - elevatorTolerance) { //Within desired range, stop elevating
 				Elevator.stop();
 				previousHeight = floorHeight;
-				ElevatorState = ElevatorState.MANUAL;
+				elevatorState = ElevatorState.MANUAL;
 			} else {
 				Elevator.moveToHeight(floorHeight, currentHeight, distanceToLift);
 			}
 		}
 		
 		if (elevatorState == ElevatorState.SWITCH) {
-			if (Elevator.pid.onTarget()) {
-				elevatorState = ElevatorState.MANUAL;
-			}
-			/*
+			//if (Elevator.pid.onTarget()) {
+			//	elevatorState = ElevatorState.MANUAL;
+			//}
+			
 			double currentHeight = Elevator.getCurrentPosition();
 			
-			if (currentHeight < switchHeight + ElevatorTolerance && 
-					currentHeight > switchHeight - ElevatorTolerance) { //Within desired range, stop elevating
+			if (currentHeight < switchHeight + elevatorTolerance && 
+					currentHeight > switchHeight - elevatorTolerance) { //Within desired range, stop elevating
 				Elevator.stop();
 				previousHeight = switchHeight;
-				ElevatorState = ElevatorState.MANUAL;
+				elevatorState = ElevatorState.MANUAL;
 			} else {
 				Elevator.moveToHeight(switchHeight, currentHeight, distanceToLift);
 			}
 		}
 		
 		if (elevatorState == ElevatorState.SCALE) {
-			if (Elevator.pid.onTarget()) {
-				elevatorState = ElevatorState.MANUAL;
-			}
-			/*
+			//if (Elevator.pid.onTarget()) {
+				//elevatorState = ElevatorState.MANUAL;
+			//}
+			
 			double currentHeight = Elevator.getCurrentPosition();
 			
-			if (currentHeight < scaleHeight + ElevatorTolerance && 
-					currentHeight > scaleHeight - ElevatorTolerance) { //Within desired range, stop elevating
+			if (currentHeight < scaleHeight + elevatorTolerance && 
+					currentHeight > scaleHeight - elevatorTolerance) { //Within desired range, stop elevating
 				Elevator.stop();
 				previousHeight = scaleHeight;
-				ElevatorState = ElevatorState.MANUAL;
+				elevatorState = ElevatorState.MANUAL;
 			} else {
 				Elevator.moveToHeight(scaleHeight, currentHeight, distanceToLift);
 			}
-		}*/
+		}
 		
 	}
 	
@@ -462,7 +466,7 @@ public class Robot extends IterativeRobot {
 		//intakeState = IntakeState.INTAKING;
 		Intake.close();
 		Intake.intake();
-		intakeOpen = false;
+		//intakeOpen = false;
 	}
 	
 	//Right Bumper
@@ -487,21 +491,21 @@ public class Robot extends IterativeRobot {
 	public void moveToFloor() {
 		Elevator.setHeight(floorHeight);
 		elevatorState = ElevatorState.FLOOR;
-		//distanceToLift = Math.abs(Elevator.getCurrentPosition() - floorHeight);
+		distanceToLift = Math.abs(Elevator.getCurrentPosition() - floorHeight);
 	}
 	
 	//B Button
 	public void moveToSwitch() {
 		Elevator.setHeight(switchHeight);
 		elevatorState = ElevatorState.SWITCH;
-		//distanceToLift = Math.abs(Elevator.getCurrentPosition() - switchHeight);
+		distanceToLift = Math.abs(Elevator.getCurrentPosition() - switchHeight);
 	}
 	
 	//Y Button
 	public void moveToScale() {
 		Elevator.setHeight(scaleHeight);
 		elevatorState = ElevatorState.SCALE;
-		//distanceToLift = Math.abs(Elevator.getCurrentPosition() - scaleHeight);
+		distanceToLift = Math.abs(Elevator.getCurrentPosition() - scaleHeight);
 	}
 	
 	/*

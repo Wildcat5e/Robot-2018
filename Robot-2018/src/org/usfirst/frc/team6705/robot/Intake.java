@@ -12,7 +12,10 @@ public class Intake {
 	static DoubleSolenoid solenoid = new DoubleSolenoid(intakeSolenoidA, intakeSolenoidB);
 
 	public static void setup() {
-	    solenoid.set(DoubleSolenoid.Value.kForward);
+	    solenoid.set(DoubleSolenoid.Value.kReverse);
+	    rollersRight.setInverted(true);
+	    rollersLeft.setInverted(true);
+	    
 	}
 	
 	public static void intake() {
@@ -48,12 +51,14 @@ public class Intake {
 	}
 	
 	public static void open() {
+	    System.out.print("Open Pneumatics");
 		solenoid.set(DoubleSolenoid.Value.kForward);
 		
 	}
 	
 	
 	public static void close() {
+	    System.out.println("Close Pneumatics");
 		solenoid.set(DoubleSolenoid.Value.kReverse);
 	}
 	

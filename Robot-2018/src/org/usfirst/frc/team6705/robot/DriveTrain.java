@@ -190,9 +190,9 @@ public class DriveTrain {
 		leftTalon.set(ControlMode.Velocity, left);
 		rightTalon.set(ControlMode.Velocity, right);
 		
-		System.out.println("Setting velocities L: " + left + " R: " + right);
-		System.out.println("Actual speed L: " + leftTalon.getSelectedSensorVelocity(0) + " R: " + rightTalon.getSelectedSensorVelocity(0));
-		System.out.println("Error L: " + (Math.abs(leftTalon.getSelectedSensorVelocity(0)) - Math.abs(left)) + " R: " + (Math.abs(rightTalon.getSelectedSensorVelocity(0)) - Math.abs(right)));
+		//System.out.println("Setting velocities L: " + left + " R: " + right);
+		//System.out.println("Actual speed L: " + leftTalon.getSelectedSensorVelocity(0) + " R: " + rightTalon.getSelectedSensorVelocity(0));
+		//System.out.println("Error L: " + (Math.abs(leftTalon.getSelectedSensorVelocity(0)) - Math.abs(left)) + " R: " + (Math.abs(rightTalon.getSelectedSensorVelocity(0)) - Math.abs(right)));
 		//System.out.println("kF Left: " + (1023  * left/maxTicksPer100ms));
 		//System.out.println("kF Right: " + (1023  * right/maxTicksPer100ms));
 		//System.out.println("L-R Difference: " + (leftTalon.getSelectedSensorVelocity(0) - rightTalon.getSelectedSensorVelocity(0)));

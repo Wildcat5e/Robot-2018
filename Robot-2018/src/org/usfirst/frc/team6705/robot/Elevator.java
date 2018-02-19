@@ -47,7 +47,7 @@ public class Elevator /*extends PIDSubsystem*/ {
 		
 		/*
 		pid.enable();
-		pid.setOutputRange(-1, 1);
+		pid.setOutputRange(-0.1, 1);
 		pid.setInputRange(0, (maximumHeight - floorHeight) * (1/verticalInchesPerTick));
 		pid.setAbsoluteTolerance(convertVerticalInchesToTicks(0.5));
 		pid.setContinuous(false);*/
@@ -81,7 +81,6 @@ public class Elevator /*extends PIDSubsystem*/ {
 	
 	public static void setHeight(double height) {
 		if (height < floorHeight) {
-			height = floorHeight;
 		} else if (height > maximumHeight) {
 			height = maximumHeight;
 		}
@@ -92,11 +91,30 @@ public class Elevator /*extends PIDSubsystem*/ {
 	
 	public static void set(double speed) {
 	    if ((speed > 0 && getCurrentPosition() < maximumHeight) || (speed < 0 && getCurrentPosition() > floorHeight)) {
+	        
             double maxSpeed = (speed < 0) ? elevatorMaxSpeedDown : elevatorMaxSpeedUp;
-            motor.set(speed * maxSpeed);
+            System.out.println("Setting lift speed " + speed);
+            if (speed < 0) {
+                double downSpeed = (speed/2) + 0.55;
+                motor.set(downSpeed);
+            } else {
+                double upSpeed = (speed * (1 - elevatorMinimumSpeedUp)) * + elevatorMinimumSpeedUp;
+                motor.set(upSpeed);
+            }
         } else {
             stop();
         }
+	}
+	
+	public static void maintainHeight(double height) {
+	    if (getCurrentPosition() < height + elevatorTolerance) {
+	        System.out.println("Trying to maintain height " + height + "Current Position is " + getCurrentPosition());
+	        double speed = elevatorConstantSpeed;//elevatorMinimumSpeedUp * (height - getCurrentPosition());
+	        System.out.println("Equilibrium speed: " + speed);
+	        motor.set(speed);
+	    } /*else {
+	        motor.set(0);
+	    }*/
 	}
 	
 	public static void stop() {
@@ -104,18 +122,7 @@ public class Elevator /*extends PIDSubsystem*/ {
 		spark2.set(0);
 	}
 	
-	/*
-	public static void set(double speed) {
-		if ((speed > 0 && getCurrentPosition() < maximumHeight) || (speed < 0 && getCurrentPosition() > floorHeight)) {
-			double maxSpeed = (speed < 0) ? elevatorMaxSpeedDown : elevatorMaxSpeedUp;
-			motor1.set(speed * maxSpeed);
-			motor2.set(speed * maxSpeed);
-		} else {
-			stop();
-		}
-	}*/
 	
-	/*
 	public static void moveToHeight(double targetHeight, double currentHeight, double distanceToLift) {
 		int direction = (currentHeight > targetHeight) ? -1 : 1;
 
@@ -153,9 +160,17 @@ public class Elevator /*extends PIDSubsystem*/ {
 		
 		double fractionRemaining = Math.abs(distanceRemaining/totalDistanceToLift);
 		double scaledFraction = fractionRemaining * 3;
+		
+		double fractionLifted = 1 - fractionRemaining;
+        double scaledFractionLifted = fractionLifted * 5;
+		
 		if (scaledFraction > 1) {
-			scaledFraction = 1;
-		} else if (scaledFraction < elevatorMinimumSpeedUp && direction == 1) {
+            if (fractionLifted < 0.2) {
+                scaledFraction = scaledFractionLifted;
+            } else {
+                scaledFraction = 1;
+            }
+        } else if (scaledFraction < elevatorMinimumSpeedUp && direction == 1) {
 			scaledFraction = elevatorMinimumSpeedUp;
 		} else if (scaledFraction < elevatorMinimumSpeedDown && direction == -1) {
 			scaledFraction = elevatorMinimumSpeedDown;
@@ -164,7 +179,7 @@ public class Elevator /*extends PIDSubsystem*/ {
 		Elevator.set(direction * scaledFraction);
 		return false;
 	}
-	*/
+	
 	public static enum ElevatorState {
 		MANUAL, FLOOR, SWITCH, SCALE;
 	}

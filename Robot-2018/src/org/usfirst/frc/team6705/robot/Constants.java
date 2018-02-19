@@ -14,13 +14,13 @@ public class Constants {
 			leftVictorChannel = 0,
 			rightVictorChannel = 1,
 			leftIntakeSparkChannel = 2,
-			rightIntakeSparkChannel = 3,
+			rightIntakeSparkChannel = 4,
 			elevatorSpark1 = 0,
 			elevatorSpark2 = 1;
 	
 	//Solenoids
-	public static final int intakeSolenoidA = 5,
-			intakeSolenoidB = 4,
+	public static final int intakeSolenoidA = 0,
+			intakeSolenoidB = 1,
 			leftRampSolenoidA = 0,
 			leftRampSolenoidB = 1,
 			rightRampSolenoidA = 2,
@@ -42,16 +42,16 @@ public class Constants {
 	
 	//Rollers
 	public static final double timeToRollIn = 1.5, //seconds
-		timeToRollOut = 1.5; //seconds
+		timeToRollOut = 1.5, //seconds
+		rollersSpeed = 0.5;//[-1, 1]
 		
 	
 	//Drive Train
 	public static final double wheelRadius = 3.0, //inches
 			ticksPerRevolution = 256 * 4, //encoder ticks, multiplied by 4 because quadrature encoders do 4 pulses per count
 			distancePerTick = (wheelRadius * 2.0 * Math.PI)/ticksPerRevolution, //inches per tick
-			rollersSpeed = 0.5,//[-1, 1]
 			turningTolerance = 2.5, //Degrees
-			deadband = 0.04, //-1 to 1
+			deadband = 0.08, //-1 to 1
 			rampRateAuto = 1, //Seconds to ramp from 0 to full
 			rampRateTeleop = 0.25,
 			stallCurrent = 60, // TODO  This number needs to be defined in testing (estimate);
@@ -69,10 +69,10 @@ public class Constants {
 				velocityTurning = 3;
 	
 	//Elevator Constants
-	public static final double elevatorRampBand = 0.1,
+	public static final double elevatorConstantSpeed = 0.37,
 		elevatorMaxSpeedUp = 1,
-			elevatorMaxSpeedDown = 0.8,
-			elevatorMinimumSpeedUp = 0.2,
+			elevatorMaxSpeedDown = 0.1,
+			elevatorMinimumSpeedUp = 0.4,
 			elevatorMinimumSpeedDown = 0.05,
 			ticksPerRotationElevator = 8192,
 			verticalInchesPerTick = (3 * Math.PI) / ticksPerRotationElevator,

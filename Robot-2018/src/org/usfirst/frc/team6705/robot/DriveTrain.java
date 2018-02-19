@@ -68,8 +68,8 @@ public class DriveTrain {
 		
 		System.out.println("Left Speed: " + leftSpeed + " Right Speed: " + rightSpeed);
 
-		double leftTarget = Math.copySign(leftSpeed * leftSpeed * -1, leftSpeed) * maxTicksPer100ms;
-		double rightTarget = Math.copySign(rightSpeed * rightSpeed * -1, rightSpeed) * maxTicksPer100ms;
+		double leftTarget = Math.copySign(leftSpeed * leftSpeed * leftSpeed * -1, leftSpeed) * maxTicksPer100ms;
+		double rightTarget = Math.copySign(rightSpeed * rightSpeed * rightSpeed * -1, rightSpeed) * maxTicksPer100ms;
 		
 		setVelocity(leftTarget, rightTarget);
 		

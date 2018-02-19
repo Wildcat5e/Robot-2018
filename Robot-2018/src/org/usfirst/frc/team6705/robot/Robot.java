@@ -353,7 +353,7 @@ public class Robot extends IterativeRobot {
 
 		double netTrigger = driveStick.getTriggerAxis(GenericHID.Hand.kRight) - driveStick.getTriggerAxis(GenericHID.Hand.kLeft);
 		
-		if (Math.abs(netTrigger) >= 0.2) {
+		if (Math.abs(netTrigger) >= 0.1) {
 	        previousHeight = Elevator.getCurrentPosition();
 			moveElevator(netTrigger);
 			elevatorState = ElevatorState.MANUAL;

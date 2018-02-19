@@ -3,6 +3,7 @@ import static org.usfirst.frc.team6705.robot.Constants.*;
 import org.usfirst.frc.team6705.robot.PIDMotor;
 
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.Spark;
@@ -89,16 +90,16 @@ public class Elevator /*extends PIDSubsystem*/ {
 		//pid.setSetpoint(ticks);
 	}
 	
-	public static void set(double speed) {
+	public static void set(double speed) { //Takes in a value from -1 to 1, scales it to the values that work for the elevator, and sets the motor to that speed
 	    if ((speed > 0 && getCurrentPosition() < maximumHeight) || (speed < 0 && getCurrentPosition() > floorHeight)) {
-	        
-            double maxSpeed = (speed < 0) ? elevatorMaxSpeedDown : elevatorMaxSpeedUp;
-            System.out.println("Setting lift speed " + speed);
+            System.out.println("Setting lift speed (unscaled): " + speed);
             if (speed < 0) {
-                double downSpeed = (speed/2) + 0.55;
+                double downSpeed = (speed * (elevatorMinimumSpeedDown - elevatorMaxSpeedDown)) + elevatorMinimumSpeedDown;
+                System.out.println("Setting elevator speed down: " + downSpeed);
                 motor.set(downSpeed);
             } else {
                 double upSpeed = (speed * (1 - elevatorMinimumSpeedUp)) * + elevatorMinimumSpeedUp;
+                System.out.println("Setting elevator speed up: " + upSpeed);
                 motor.set(upSpeed);
             }
         } else {
@@ -109,7 +110,7 @@ public class Elevator /*extends PIDSubsystem*/ {
 	public static void maintainHeight(double height) {
 	    if (getCurrentPosition() < height + elevatorTolerance) {
 	        System.out.println("Trying to maintain height " + height + "Current Position is " + getCurrentPosition());
-	        double speed = elevatorConstantSpeed;//elevatorMinimumSpeedUp * (height - getCurrentPosition());
+	        double speed = (Intake.solenoid.get() == DoubleSolenoid.Value.kReverse) ? elevatorConstantSpeedCube : elevatorConstantSpeedNoCube;//elevatorMinimumSpeedUp * (height - getCurrentPosition());
 	        System.out.println("Equilibrium speed: " + speed);
 	        motor.set(speed);
 	    } /*else {
@@ -139,11 +140,11 @@ public class Elevator /*extends PIDSubsystem*/ {
 			} else {
 				scaledFraction = 1;
 			}
-		} else if (scaledFraction < elevatorMinimumSpeedUp && direction == 1) {
+		} /*else if (scaledFraction < elevatorMinimumSpeedUp && direction == 1) {
 			scaledFraction = elevatorMinimumSpeedUp;
 		} else if (scaledFraction < elevatorMinimumSpeedDown && direction == -1) {
 			scaledFraction = elevatorMinimumSpeedDown;
-		}
+		}*/
 		
 		Elevator.set(direction * scaledFraction);
 	}
@@ -170,11 +171,11 @@ public class Elevator /*extends PIDSubsystem*/ {
             } else {
                 scaledFraction = 1;
             }
-        } else if (scaledFraction < elevatorMinimumSpeedUp && direction == 1) {
+        } /*else if (scaledFraction < elevatorMinimumSpeedUp && direction == 1) {
 			scaledFraction = elevatorMinimumSpeedUp;
 		} else if (scaledFraction < elevatorMinimumSpeedDown && direction == -1) {
 			scaledFraction = elevatorMinimumSpeedDown;
-		}
+		}*/
 		
 		Elevator.set(direction * scaledFraction);
 		return false;

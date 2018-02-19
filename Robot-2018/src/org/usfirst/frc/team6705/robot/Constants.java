@@ -39,7 +39,7 @@ public class Constants {
 	//Sensors
 	public static final int elevatorEncoderSourceA = 0,
 			elevatorEncoderSourceB = 1,
-			elevatorLimitSwitchDIO = 0;
+			elevatorLimitSwitchDIO = 2;
 	
 	//Rollers
 	public static final double timeToRollIn = 1.5, //seconds
@@ -75,17 +75,17 @@ public class Constants {
 			elevatorMaxSpeedUp = 1,
 			elevatorMaxSpeedDown = 0.05,
 			elevatorMinimumSpeedUp = 0.4,
-			elevatorMinimumSpeedDown = 0.3,
+			elevatorMinimumSpeedDown = 0.2,
 			ticksPerRotationElevator = 2048,
 			verticalInchesPerTick = (3 * Math.PI) / ticksPerRotationElevator,
-			elevatorTolerance = 0.5, //Inches
+			elevatorTolerance = 1, //Inches
 			maximumHeight = 90,
 			floorHeight = 7.0,
 			switchHeight = 25.0,
 			scaleHeight = 82.0,
-			elevatorRampTime = 0.5, //seconds
+			elevatorRampTime = 0.2, //seconds
 			elevatorDecelerationDistance = 8,
-			ropeThickness = 0.05; //inches
+			ropeThickness = 0; //inches
 	
 	//PID for DriveTrain
 	public static double kP_L = (1023 * 0.05)/240,//-(1023 * 0.1)/maxError,

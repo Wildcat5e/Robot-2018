@@ -37,7 +37,7 @@ public class Elevator /*extends PIDSubsystem*/ {
 	public static double convertTicksToVerticalInches(double ticks) {
 		double rotations = Math.floor(encoder.get()/ticksPerRotationElevator);
 		double inchesPerTick = verticalInchesPerTick + ((rotations * Math.PI * 2 * ropeThickness)/ticksPerRotationElevator);
-		return ticks * inchesPerTick;
+		return ticks * inchesPerTick * 2;
 	}
 	
 	public static double getCurrentPosition() {
@@ -45,14 +45,14 @@ public class Elevator /*extends PIDSubsystem*/ {
 	}
 	
 	public static void set(double speed) { //Takes in a value from -1 to 1, scales it to the values that work for the elevator, and sets the motor to that speed
-	    if ((speed > 0 && getCurrentPosition() < maximumHeight) || (speed < 0 && getCurrentPosition() > floorHeight)) {
+	    if ((speed >= 0 && getCurrentPosition() < maximumHeight) || (speed < 0 && !isAtFloor())) {
             System.out.println("Setting lift speed (unscaled): " + speed);
             if (speed < 0) {
                 double downSpeed = (speed * (elevatorMinimumSpeedDown - elevatorMaxSpeedDown)) + elevatorMinimumSpeedDown;
                 System.out.println("Setting elevator speed down: " + downSpeed);
                 motor.set(downSpeed);
-            } else {
-                double upSpeed = (speed * (1 - elevatorMinimumSpeedUp)) * + elevatorMinimumSpeedUp;
+            } else if (speed > 0) {
+                double upSpeed = (speed * (1 - elevatorMinimumSpeedUp)) + elevatorMinimumSpeedUp;
                 System.out.println("Setting elevator speed up: " + upSpeed);
                 motor.set(upSpeed);
             }
@@ -62,13 +62,13 @@ public class Elevator /*extends PIDSubsystem*/ {
 	}
 	
 	public static void setTeleop(double speed, int intervalsCounted) {
-		int intervals = (intervalsCounted > elevatorRampTime * 50) ? 20 : intervalsCounted;
+		double intervals = (intervalsCounted > elevatorRampTime * 50) ? elevatorRampTime * 50 : intervalsCounted;
 		if (speed < 0 && getCurrentPosition() < floorHeight + elevatorDecelerationDistance) {
 			Elevator.set(speed * ((getCurrentPosition() - floorHeight)/elevatorDecelerationDistance));
 		} else if (speed > 0 && getCurrentPosition() > maximumHeight - elevatorDecelerationDistance) {
 			Elevator.set(speed * ((maximumHeight - getCurrentPosition())/elevatorDecelerationDistance));
-		} else if (intervals < 20) {
-			Elevator.set((intervals/20) * speed);
+		} else if (intervals < 20 && speed > 0) {
+			Elevator.set((intervals/(elevatorRampTime * 50)) * speed);
 		} else {
 			set(speed);
 		}
@@ -103,7 +103,7 @@ public class Elevator /*extends PIDSubsystem*/ {
 
 		double distanceRemaining = Math.abs(currentHeight - targetHeight);
 		double fractionRemaining = distanceRemaining/distanceToLift;
-		double scaledFraction = fractionRemaining * 4;
+		double scaledFraction = fractionRemaining * 3;
 		
 		double fractionLifted = 1 - fractionRemaining;
 		double scaledFractionLifted = fractionLifted * 5;
@@ -134,7 +134,7 @@ public class Elevator /*extends PIDSubsystem*/ {
 		}
 		
 		double fractionRemaining = Math.abs(distanceRemaining/totalDistanceToLift);
-		double scaledFraction = fractionRemaining * 4;
+		double scaledFraction = fractionRemaining * 3;
 		
 		double fractionLifted = 1 - fractionRemaining;
         double scaledFractionLifted = fractionLifted * 5;
@@ -162,7 +162,7 @@ public class Elevator /*extends PIDSubsystem*/ {
 		}
 		
 		double fractionRemaining = Math.abs(distanceRemaining/totalDistanceToLift);
-		double scaledFraction = fractionRemaining * 4;
+		double scaledFraction = fractionRemaining * 3;
 		
 		double fractionLifted = 1 - fractionRemaining;
         double scaledFractionLifted = fractionLifted * 5;

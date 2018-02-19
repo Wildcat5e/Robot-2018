@@ -81,6 +81,8 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void robotInit() {
+		System.out.println("Robot Init");
+		
 		autoChooser.addDefault("Power Cube on Switch", switchAuto);
 		autoChooser.addObject("Power Cube on Scale", twoCubeAuto);
 		autoChooser.addObject("Best Simple Scoring Method", bestSimple);
@@ -352,13 +354,13 @@ public class Robot extends IterativeRobot {
 				
 		//Triggers - lift and lower Elevator
 		double netTrigger = driveStick.getTriggerAxis(GenericHID.Hand.kRight) - driveStick.getTriggerAxis(GenericHID.Hand.kLeft);
-		
+		System.out.println("Net Trigger: " + netTrigger);
 		if (Math.abs(netTrigger) >= 0.1) {
 			triggerIntervalsCounted += 1;
 	        previousHeight = Elevator.getCurrentPosition();
 			Elevator.setTeleop(netTrigger, triggerIntervalsCounted);
 			elevatorState = ElevatorState.MANUAL;
-		} else if (elevatorState == ElevatorState.MANUAL && Elevator.getCurrentPosition() > floorHeight + elevatorTolerance) {
+		} else if (elevatorState == ElevatorState.MANUAL && !Elevator.isAtFloor()) {
 			triggerIntervalsCounted = 0;
 			Elevator.maintainHeight(previousHeight);
 		} else {
@@ -509,6 +511,15 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Elevator Encoder Count", Elevator.encoder.get());
 		SmartDashboard.putNumber("Elevator Current Height From Ground", Elevator.getCurrentPosition());
 		SmartDashboard.putBoolean("Is At Floor Limit Switch?", Elevator.isAtFloor());
+		int state = 0;
+		if (elevatorState == ElevatorState.FLOOR) {
+			state = 1;
+		} else if (elevatorState == ElevatorState.SWITCH) {
+			state = 2;
+		} else if (elevatorState == ElevatorState.SCALE) {
+			state = 3;
+		}
+		SmartDashboard.putNumber("Elevator State", state);
 	}
 	
 }

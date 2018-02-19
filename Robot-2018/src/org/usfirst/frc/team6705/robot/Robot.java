@@ -62,6 +62,7 @@ public class Robot extends IterativeRobot {
 	double intakeStartTime = 0;
 	
 	double distanceToLift = 0;
+	int direction = 1;
 	double previousHeight = floorHeight;
 	int triggerIntervalsCounted = 0;
 	ElevatorState elevatorState = ElevatorState.MANUAL;
@@ -390,7 +391,7 @@ public class Robot extends IterativeRobot {
 				elevatorState = ElevatorState.MANUAL;
 			} else {
 				System.out.println("GOING TO FLOOR");
-				Elevator.moveToHeight(floorHeight, currentHeight, distanceToLift);
+				Elevator.moveToHeight(floorHeight, distanceToLift, direction);
 			}
 		}
 		
@@ -404,7 +405,7 @@ public class Robot extends IterativeRobot {
 				elevatorState = ElevatorState.MANUAL;
 				System.out.println("STOP SWITCH");
 			} else {
-				Elevator.moveToHeight(switchHeight, currentHeight, distanceToLift);
+				Elevator.moveToHeight(switchHeight, distanceToLift, direction);
 				System.out.println("SWITCH MOVE");
 			}
 		}
@@ -419,7 +420,7 @@ public class Robot extends IterativeRobot {
 				previousHeight = scaleHeight;
 				elevatorState = ElevatorState.MANUAL;
 			} else {
-				Elevator.moveToHeight(scaleHeight, currentHeight, distanceToLift);
+				Elevator.moveToHeight(scaleHeight, distanceToLift, direction);
 			}
 		}
 		
@@ -481,6 +482,7 @@ public class Robot extends IterativeRobot {
 	public void moveToFloor() {
 		//Elevator.setHeight(floorHeight);
 		elevatorState = ElevatorState.FLOOR;
+		direction = -1;
 		distanceToLift = Math.abs(Elevator.getCurrentPosition() - floorHeight);
 	}
 	
@@ -488,6 +490,7 @@ public class Robot extends IterativeRobot {
 	public void moveToSwitch() {
 		//Elevator.setHeight(switchHeight);
 		elevatorState = ElevatorState.SWITCH;
+		direction = (Elevator.getCurrentPosition() < switchHeight) ? 1 : -1;
 		distanceToLift = Math.abs(Elevator.getCurrentPosition() - switchHeight);
 	}
 	
@@ -495,6 +498,7 @@ public class Robot extends IterativeRobot {
 	public void moveToScale() {
 		//Elevator.setHeight(scaleHeight);
 		elevatorState = ElevatorState.SCALE;
+		direction = (Elevator.getCurrentPosition() < scaleHeight) ? 1 : -1;
 		distanceToLift = Math.abs(Elevator.getCurrentPosition() - scaleHeight);
 	}
 	

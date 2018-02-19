@@ -98,25 +98,29 @@ public class Elevator /*extends PIDSubsystem*/ {
 		}
 	}
 	
-	public static void moveToHeight(double targetHeight, double currentHeight, double distanceToLift) {
-		int direction = (currentHeight > targetHeight) ? -1 : 1;
+	public static void moveToHeight(double targetHeight, double distanceToLift, int direction) {
+		//int direction = (currentHeight > targetHeight) ? -1 : 1;
 
-		double distanceRemaining = Math.abs(currentHeight - targetHeight);
-		double fractionRemaining = distanceRemaining/distanceToLift;
+		double distanceRemaining = Math.abs(getCurrentPosition() - targetHeight);
+		double fractionRemaining = Math.abs(distanceRemaining/distanceToLift);
+		System.out.println("Fraction Remaining: " + fractionRemaining);
+		if (fractionRemaining > 1) {
+			fractionRemaining = 1;
+		}
 		double scaledFraction = fractionRemaining * 1;
 		
 		double fractionLifted = 1 - fractionRemaining;
-		if (fractionLifted <= 0.07) {
-			fractionLifted = 0.07;
+		if (fractionLifted <= 0.03) {
+			fractionLifted = 0.03;
 		}
 		double scaledFractionLifted = fractionLifted * 5;
 		
 		
-			if (fractionLifted < 0.2) {
-				scaledFraction = scaledFractionLifted;
-			} else if (scaledFraction > 1) {
-				scaledFraction = 1;
-			}
+		if (fractionLifted < 0.2) {
+			scaledFraction = scaledFractionLifted;
+		} else if (scaledFraction > 1) {
+			scaledFraction = 1;
+		}
 		 /*else if (scaledFraction < elevatorMinimumSpeedUp && direction == 1) {
 			scaledFraction = elevatorMinimumSpeedUp;
 		} else if (scaledFraction < elevatorMinimumSpeedDown && direction == -1) {

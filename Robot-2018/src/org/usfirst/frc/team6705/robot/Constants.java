@@ -70,11 +70,11 @@ public class Constants {
 				velocityTurning = 3;
 	
 	//Elevator Constants
-	public static final double elevatorConstantSpeedCube = 0.37,
-			elevatorConstantSpeedNoCube = 0.35,
+	public static final double elevatorConstantSpeedCube = 0.38,
+			elevatorConstantSpeedNoCube = 0.36,
 			elevatorMaxSpeedUp = 1,
 			elevatorMaxSpeedDown = 0.01,
-			elevatorMinimumSpeedUp = 0.4,
+			elevatorMinimumSpeedUp = 0.45,
 			elevatorMinimumSpeedDown = 0.15,
 			ticksPerRotationElevator = 2048,
 			verticalInchesPerTick = (3 * Math.PI) / ticksPerRotationElevator,

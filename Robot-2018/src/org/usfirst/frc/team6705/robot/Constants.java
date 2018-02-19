@@ -73,9 +73,9 @@ public class Constants {
 	public static final double elevatorConstantSpeedCube = 0.37,
 			elevatorConstantSpeedNoCube = 0.35,
 			elevatorMaxSpeedUp = 1,
-			elevatorMaxSpeedDown = 0.05,
+			elevatorMaxSpeedDown = 0.01,
 			elevatorMinimumSpeedUp = 0.4,
-			elevatorMinimumSpeedDown = 0.2,
+			elevatorMinimumSpeedDown = 0.15,
 			ticksPerRotationElevator = 2048,
 			verticalInchesPerTick = (3 * Math.PI) / ticksPerRotationElevator,
 			elevatorTolerance = 1, //Inches

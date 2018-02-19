@@ -63,11 +63,11 @@ public class Elevator /*extends PIDSubsystem*/ {
 	
 	public static void setTeleop(double speed, int intervalsCounted) {
 		double intervals = (intervalsCounted > elevatorRampTime * 50) ? elevatorRampTime * 50 : intervalsCounted;
-		if (speed < 0 && getCurrentPosition() < floorHeight + elevatorDecelerationDistance) {
+		/*if (speed < 0 && getCurrentPosition() < floorHeight + elevatorDecelerationDistance) {
 			Elevator.set(speed * ((getCurrentPosition() - floorHeight)/elevatorDecelerationDistance));
 		} else if (speed > 0 && getCurrentPosition() > maximumHeight - elevatorDecelerationDistance) {
 			Elevator.set(speed * ((maximumHeight - getCurrentPosition())/elevatorDecelerationDistance));
-		} else if (intervals < 20 && speed > 0) {
+		} */ if (intervals < elevatorRampTime * 50 && speed > 0) {
 			Elevator.set((intervals/(elevatorRampTime * 50)) * speed);
 		} else {
 			set(speed);
@@ -103,18 +103,21 @@ public class Elevator /*extends PIDSubsystem*/ {
 
 		double distanceRemaining = Math.abs(currentHeight - targetHeight);
 		double fractionRemaining = distanceRemaining/distanceToLift;
-		double scaledFraction = fractionRemaining * 3;
+		double scaledFraction = fractionRemaining * 1;
 		
 		double fractionLifted = 1 - fractionRemaining;
+		if (fractionLifted <= 0.07) {
+			fractionLifted = 0.07;
+		}
 		double scaledFractionLifted = fractionLifted * 5;
 		
-		if (scaledFraction > 1) {
+		
 			if (fractionLifted < 0.2) {
 				scaledFraction = scaledFractionLifted;
-			} else {
+			} else if (scaledFraction > 1) {
 				scaledFraction = 1;
 			}
-		} /*else if (scaledFraction < elevatorMinimumSpeedUp && direction == 1) {
+		 /*else if (scaledFraction < elevatorMinimumSpeedUp && direction == 1) {
 			scaledFraction = elevatorMinimumSpeedUp;
 		} else if (scaledFraction < elevatorMinimumSpeedDown && direction == -1) {
 			scaledFraction = elevatorMinimumSpeedDown;

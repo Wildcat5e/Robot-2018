@@ -354,7 +354,7 @@ public class Robot extends IterativeRobot {
 				
 		//Triggers - lift and lower Elevator
 		double netTrigger = driveStick.getTriggerAxis(GenericHID.Hand.kRight) - driveStick.getTriggerAxis(GenericHID.Hand.kLeft);
-		System.out.println("Net Trigger: " + netTrigger);
+		//System.out.println("Net Trigger: " + netTrigger);
 		if (Math.abs(netTrigger) >= 0.1) {
 			triggerIntervalsCounted += 1;
 	        previousHeight = Elevator.getCurrentPosition();
@@ -382,13 +382,14 @@ public class Robot extends IterativeRobot {
 		
 		if (elevatorState == ElevatorState.FLOOR) {
 			double currentHeight = Elevator.getCurrentPosition();
-			
 			if (Elevator.isAtFloor()) { //Within desired range, stop elevating
+				System.out.println("AT FLOOR, STOP");
 				Elevator.stop();
 				Elevator.encoder.reset();
 				previousHeight = floorHeight;
 				elevatorState = ElevatorState.MANUAL;
 			} else {
+				System.out.println("GOING TO FLOOR");
 				Elevator.moveToHeight(floorHeight, currentHeight, distanceToLift);
 			}
 		}
@@ -401,8 +402,10 @@ public class Robot extends IterativeRobot {
 				Elevator.stop();
 				previousHeight = switchHeight;
 				elevatorState = ElevatorState.MANUAL;
+				System.out.println("STOP SWITCH");
 			} else {
 				Elevator.moveToHeight(switchHeight, currentHeight, distanceToLift);
+				System.out.println("SWITCH MOVE");
 			}
 		}
 		

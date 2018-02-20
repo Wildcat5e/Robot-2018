@@ -253,7 +253,8 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void testPeriodic() {
 		
-		operatorControl();
+		testMotors();
+		//testDriveTrain();
 		
 	}
 	
@@ -263,55 +264,6 @@ public class Robot extends IterativeRobot {
 		
 		double currentTime = timer.get();
 		SmartDashboard.putNumber("Current Time", currentTime);
-		
-		/*
-		double leftYStick = driveStick.getY(GenericHID.Hand.kLeft);
-		if (leftYStick < -0.93)  {
-			leftYStick = -1.0;
-		}
-		
-		double motorOutputLeft = DriveTrain.leftTalon.getMotorOutputPercent();
-		double motorOutputRight = DriveTrain.rightTalon.getMotorOutputPercent();
-		
-		sbL.append("LOut:");
-		sbR.append("ROut:");
-		sbL.append(motorOutputLeft);
-		sbR.append(motorOutputRight);
-		
-		sbL.append("LSpd:");
-		sbR.append("RSpd");
-		sbL.append(DriveTrain.leftTalon.getSelectedSensorVelocity(0));
-		sbR.append(DriveTrain.rightTalon.getSelectedSensorVelocity(0));
-		
-		if (driveStick.getAButton()) {
-			double targetVelocity  = leftYStick * 350 * 1024 / 600;
-			DriveTrain.leftTalon.set(ControlMode.Velocity, targetVelocity);
-			DriveTrain.rightTalon.set(ControlMode.Velocity, targetVelocity);
-			
-			sbL.append("LErr:");
-			sbR.append("RErr:");
-			sbL.append(DriveTrain.leftTalon.getClosedLoopError(0));
-			sbR.append(DriveTrain.rightTalon.getClosedLoopError(0));
-			
-			sbL.append("LTarg:");
-			sbR.append("RTarg:");
-			sbL.append(targetVelocity);
-			sbR.append(targetVelocity);
-		} else  {
-			DriveTrain.leftTalon.set(ControlMode.PercentOutput, leftYStick);
-			DriveTrain.rightTalon.set(ControlMode.PercentOutput, leftYStick);
-		}
-		
-		if (++loops >= 10) {
-			loops = 0;
-			System.out.println(sbL.toString());
-			System.out.println(sbR.toString());
-		}
-		
-		sbL.setLength(0);
-		sbR.setLength(0);*/
-		
-		
 		
 		//Joystick - control tank drive
 		DriveTrain.tankDrive(driveStick.getY(GenericHID.Hand.kLeft), driveStick.getY(GenericHID.Hand.kRight));
@@ -538,6 +490,69 @@ public class Robot extends IterativeRobot {
 		    intake = "Closed";
 		}
 		SmartDashboard.putString("Intake Pneumatic Status", intake);
+	}
+	
+	public void testMotors() {
+		if (driveStick.getAButton()) {
+			Elevator.spark1.set(0.5);
+		} else {
+			Elevator.spark1.set(0);
+		}
+		
+		if (driveStick.getBButton()) {
+			Elevator.spark2.set(0.5);
+		} else {
+			Elevator.spark2.set(0);
+		}
+	}
+	
+	public void testDriveTrain() {
+		/*
+		double leftYStick = driveStick.getY(GenericHID.Hand.kLeft);
+		if (leftYStick < -0.93)  {
+			leftYStick = -1.0;
+		}
+		
+		double motorOutputLeft = DriveTrain.leftTalon.getMotorOutputPercent();
+		double motorOutputRight = DriveTrain.rightTalon.getMotorOutputPercent();
+		
+		sbL.append("LOut:");
+		sbR.append("ROut:");
+		sbL.append(motorOutputLeft);
+		sbR.append(motorOutputRight);
+		
+		sbL.append("LSpd:");
+		sbR.append("RSpd");
+		sbL.append(DriveTrain.leftTalon.getSelectedSensorVelocity(0));
+		sbR.append(DriveTrain.rightTalon.getSelectedSensorVelocity(0));
+		
+		if (driveStick.getAButton()) {
+			double targetVelocity  = leftYStick * 350 * 1024 / 600;
+			DriveTrain.leftTalon.set(ControlMode.Velocity, targetVelocity);
+			DriveTrain.rightTalon.set(ControlMode.Velocity, targetVelocity);
+			
+			sbL.append("LErr:");
+			sbR.append("RErr:");
+			sbL.append(DriveTrain.leftTalon.getClosedLoopError(0));
+			sbR.append(DriveTrain.rightTalon.getClosedLoopError(0));
+			
+			sbL.append("LTarg:");
+			sbR.append("RTarg:");
+			sbL.append(targetVelocity);
+			sbR.append(targetVelocity);
+		} else  {
+			DriveTrain.leftTalon.set(ControlMode.PercentOutput, leftYStick);
+			DriveTrain.rightTalon.set(ControlMode.PercentOutput, leftYStick);
+		}
+		
+		if (++loops >= 10) {
+			loops = 0;
+			System.out.println(sbL.toString());
+			System.out.println(sbR.toString());
+		}
+		
+		sbL.setLength(0);
+		sbR.setLength(0);*/
 	}
 	
 }

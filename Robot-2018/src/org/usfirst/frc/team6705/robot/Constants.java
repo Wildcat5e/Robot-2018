@@ -56,7 +56,7 @@ public class Constants {
 			rampRateAuto = 1, //Seconds to ramp from 0 to full
 			rampRateTeleop = 0.25,
 			stallCurrent = 60, // TODO  This number needs to be defined in testing (estimate);
-			maxTicksPer100ms = 850,//This is the max speed in native units per 100 ms of the motors (percent output 100%)
+			maxTicksPer100ms = 750,//This is the max speed in native units per 100 ms of the motors (percent output 100%)
 			maxError = 400,
 			minimumSpeed = 900,//ticks per 100 ms
 			minimumTurningSpeed = 950,
@@ -77,12 +77,12 @@ public class Constants {
 			elevatorMinimumSpeedUp = 0.5,
 			elevatorMinimumSpeedDown = 0.2,
 			ticksPerRotationElevator = 2048,
-			verticalInchesPerTick = 2 * (3.3 * Math.PI) / ticksPerRotationElevator,
+			verticalInchesPerTick = 2 * (3.25 * Math.PI) / ticksPerRotationElevator,
 			elevatorTolerance = 2, //Inches
-			maximumHeight = 80,
+			maximumHeight = 73,
 			floorHeight = 5.0,
 			switchHeight = 24,
-			scaleHeight = 70.0,
+			scaleHeight = 72.0,
 			elevatorRampTime = 0.2, //seconds
 			elevatorDecelerationDistance = 8,
 			ropeThickness = 0.065, //inches

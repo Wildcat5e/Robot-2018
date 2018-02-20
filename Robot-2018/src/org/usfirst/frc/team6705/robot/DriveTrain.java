@@ -5,9 +5,8 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import static org.usfirst.frc.team6705.robot.Constants.*;
 
@@ -24,15 +23,38 @@ public class DriveTrain {
 		leftVictor.follow(leftTalon);
 		rightVictor.follow(rightTalon);
 		
-		leftTalon.setSafetyEnabled(true);
-		rightTalon.setSafetyEnabled(false);
+		//leftTalon.setSafetyEnabled(true);
+		//rightTalon.setSafetyEnabled(true);
 		
 		leftTalon.setNeutralMode(NeutralMode.Brake);
 		rightTalon.setNeutralMode(NeutralMode.Brake);
+		leftVictor.setNeutralMode(NeutralMode.Brake);
+		rightVictor.setNeutralMode(NeutralMode.Brake);
+		
+		leftTalon.setInverted(true);
+		rightTalon.setInverted(false);
+		leftVictor.setInverted(true);
+		rightVictor.setInverted(false);
+		
+		leftTalon.configOpenloopRamp(rampRateTeleop, 0);
+		rightTalon.configOpenloopRamp(rampRateTeleop, 0);
+		leftTalon.configClosedloopRamp(rampRateAuto, 0);
+		rightTalon.configClosedloopRamp(rampRateAuto, 0);
 		
 		leftTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 		rightTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 		
+		leftTalon.setSensorPhase(true);
+		rightTalon.setSensorPhase(true);
+		
+		leftTalon.config_kP(0, kP_L, 0);
+		leftTalon.config_kI(0, kI, 0);
+		leftTalon.config_kD(0, kD, 0);
+		leftTalon.config_kF(0, kF_L, 0);
+		rightTalon.config_kP(0, kP_R, 0);
+		rightTalon.config_kI(0, kI, 0);
+		rightTalon.config_kD(0, kD, 0);
+		rightTalon.config_kF(0, kF_R, 0);
 		//TODO: Perform any other talon and victor config here
 		
 		gyro.reset();
@@ -41,65 +63,143 @@ public class DriveTrain {
 	
 	//Tank drive for teleop control
 	public static void tankDrive(double leftSpeed, double rightSpeed) {
-		leftTalon.set(ControlMode.PercentOutput, leftSpeed);
-		rightTalon.set(ControlMode.PercentOutput, rightSpeed);
+		leftSpeed = applyDeadband(leftSpeed);
+		rightSpeed = applyDeadband(rightSpeed);
+		
+
+		
+		double leftTarget = Math.copySign(leftSpeed * leftSpeed * leftSpeed * -1, leftSpeed) * maxTicksPer100ms;
+		double rightTarget = Math.copySign(rightSpeed * rightSpeed * rightSpeed * -1, rightSpeed) * maxTicksPer100ms;
+		
+		setVelocity(leftTarget, rightTarget);
+		
+		/* Percent Output Mode
+		leftTalon.set(ControlMode.PercentOutput, Math.copySign(leftSpeed * leftSpeed, leftSpeed));
+		rightTalon.set(ControlMode.PercentOutput, Math.copySign(rightSpeed * rightSpeed, rightSpeed));
+		*/
+		
+	}
+	
+	public static double applyDeadband(double speed) {
+		if ((speed < deadband && speed > 0) || (speed > -deadband && speed < 0)) {
+			speed = 0;
+		} else if (speed > 0.92) {
+			speed = 1;
+		} else if (speed < -0.92) {
+			speed = -1;
+		}
+		return speed;
 	}
 
-	public static void moveByDistance(double inches) {
-		//Reset encoders
-		resetEncoders();
+	//Autonomous move method
+	public static boolean moveByDistance(double inches, double degrees, double velocity) {
+		System.out.print("Move By Distance ");
+		double targetEncoderTicks = Math.abs(convertInchesToTicks(inches));
+		double ticksSoFar = Math.abs(leftTalon.getSelectedSensorPosition(0));
+		double maxVelocity = convertVelocity(velocity);
 		
-		//Convert argument from inches to encoder ticks
-		double targetEncoderTicks = convertInchesToTicks(inches);
-		
-		int direction = 1;
-		if (inches < 0) {
-			direction = -1;
+		if (ticksSoFar >= targetEncoderTicks) {
+			DriveTrain.stop();
+			resetEncoders();
+			return true;
 		}
 		
-		double maxVelocity = convertFPSToTicksPer100MS(velocityMedium);
-		double ticksRemaining;
+		int direction = (inches > 0) ? 1 : -1;
 		
-		while (direction * leftTalon.getSelectedSensorPosition(0) < direction * targetEncoderTicks && DriverStation.getInstance().isAutonomous()) {
-			ticksRemaining = targetEncoderTicks - leftTalon.getSelectedSensorPosition(0);
-			double fractionRemaining = ticksRemaining/targetEncoderTicks;
-			double scaledFraction = fractionRemaining * 3; //Start slowing down 2/3 of the way there
-			if (scaledFraction > 1) {
-				scaledFraction = 1;
-			} else if (scaledFraction < 0.05) {
-				scaledFraction = 0.05;
-			}
-			
-			double velocity = scaledFraction * maxVelocity;
-			setVelocity(direction * velocity, direction * velocity);
+		double ticksRemaining = targetEncoderTicks - ticksSoFar;
+		double fractionRemaining = ticksRemaining/targetEncoderTicks;
+		double scaledFraction = fractionRemaining * 3; //Start slowing down 2/3 of the way there
+		if (scaledFraction > 1) {
+			scaledFraction = 1;
+		}
+		
+		double degreeErrorLeft = (getGyro() - degrees > 0) ? getGyro() - degrees : 0;
+		double degreeErrorRight = (getGyro() - degrees < 0) ? degrees - getGyro() : 0;
+
+		double velocityLeft = maxVelocity + (kP_Angle * degreeErrorLeft * direction);
+		double velocityRight = maxVelocity + (kP_Angle * degreeErrorRight * direction);
+		
+		double scaledSpeedR = scaledFraction * velocityRight;
+		double scaledSpeedL = scaledFraction * velocityLeft;
+		
+		if (scaledSpeedR < minimumSpeed + (kP_Angle * degreeErrorRight * direction)) {
+			scaledSpeedR = minimumSpeed + + (kP_Angle * degreeErrorRight * direction);
+		}
+		if (scaledSpeedL < minimumSpeed + (kP_Angle * degreeErrorLeft * direction)) {
+			scaledSpeedL = minimumSpeed  + (kP_Angle * degreeErrorLeft * direction);
+		}
+		
+		setVelocity(direction * scaledSpeedL, direction * scaledSpeedR);
+		return false;
+	}
+	
+	public static boolean moveByDistance(double inches, double velocity) {
+		return moveByDistance(inches, 0, velocity);
+	}
+
+	
+	
+	//Move until runs into switch
+	public static boolean moveTillStall() {
+		if (leftTalon.getOutputCurrent() > stallCurrent || rightTalon.getOutputCurrent() > stallCurrent) {
+			return true;
+		}
+		
+		double velocity = convertVelocity(velocitySlow);
+		setVelocity(-velocity, -velocity);
+		return false;
+	}
+	
+	//Autonomous turn method
+	public static boolean turnDegrees(double degrees) {
+		//Positive degrees -> counterclockwise; negative degrees -> clockwise
+		System.out.println("Starting gyro angle: " + gyro.getAngle());
+		double maxVelocity = convertVelocity(velocityTurning);
+		int turnMultiplier = (degrees < 0) ? 1 : -1;
+		double currentAngle = getGyro();
+		
+		if (currentAngle < degrees + turningTolerance && currentAngle > degrees - turningTolerance) {
+			System.out.println("Attempting to stop at gyro angle: " + getGyro());
+			gyro.reset();
+			DriveTrain.stop();
+			return true;
+		}
+		
+		double degreesRemaining = Math.abs(degrees) - Math.abs(currentAngle);
+		double fractionRemaining = Math.abs(degreesRemaining/degrees);
+		double scaledFraction = fractionRemaining * 1.5; //Uncomment the * 2 to decelerate halfway through the turn
+		if (scaledFraction > 1) {
+			scaledFraction = 1;
 		} 
 		
-		stop(); //Stop driving when loop finishes
+		System.out.println("Scaled Fraction: " + scaledFraction);
+		double scaledSpeed = maxVelocity * scaledFraction;
+		if (scaledSpeed < minimumTurningSpeed) {
+			scaledSpeed = minimumTurningSpeed;
+		}
+		setVelocity(turnMultiplier * scaledSpeed, -1 * turnMultiplier * scaledSpeed);
+		return false;
 	}
-		
+	
 	
 	public static void setVelocity(double left, double right) {
-		leftTalon.set(ControlMode.Velocity, left);
-		rightTalon.set(ControlMode.Velocity, right);
-	}
-	
-	public static void turnDegrees(double degrees) {
-		//Positive degrees -> counterclockwise; negative degrees -> clockwise
+		//leftTalon.config_kF(0,  1023  * left/maxTicksPer100ms, 0);
+		//rightTalon.config_kF(0, 1023 * right/maxTicksPer100ms, 0);
+	    double elevatorHeight = Elevator.encoder.get();
+	    double scale = 1;
+	    if (elevatorHeight > 3000) {
+	        scale = 1 - (elevatorHeight/(maxElevatorTicks * 2));
+	    }
 		
-		double maxVelocity = convertFPSToTicksPer100MS(velocityTurning);
-		int turnMultiplier = (degrees < 0) ? -1 : 1;
-		boolean isDoneTurning = false;
-		double currentAngle;
-		gyro.reset();
+		leftTalon.set(ControlMode.Velocity, left * scale);
+		rightTalon.set(ControlMode.Velocity, right * scale);
 		
-		while (!isDoneTurning && DriverStation.getInstance().isAutonomous()) {
-			setVelocity(-1 * turnMultiplier * maxVelocity, turnMultiplier * maxVelocity);
-			currentAngle = Math.abs(gyro.getAngle());
-			if (currentAngle < Math.abs(degrees) + turningTolerance && currentAngle > Math.abs(degrees) - turningTolerance) {
-				isDoneTurning = true;
-			}
-		}
-		stop();
+		//System.out.println("Setting velocities L: " + left + " R: " + right);
+		//System.out.println("Actual speed L: " + leftTalon.getSelectedSensorVelocity(0) + " R: " + rightTalon.getSelectedSensorVelocity(0));
+		//System.out.println("Error L: " + (Math.abs(leftTalon.getSelectedSensorVelocity(0)) - Math.abs(left)) + " R: " + (Math.abs(rightTalon.getSelectedSensorVelocity(0)) - Math.abs(right)));
+		//System.out.println("kF Left: " + (1023  * left/maxTicksPer100ms));
+		//System.out.println("kF Right: " + (1023  * right/maxTicksPer100ms));
+		//System.out.println("L-R Difference: " + (leftTalon.getSelectedSensorVelocity(0) - rightTalon.getSelectedSensorVelocity(0)));
 	}
 	
 	public static void stop() {
@@ -107,23 +207,21 @@ public class DriveTrain {
 		rightTalon.set(ControlMode.PercentOutput, 0);
 	}
 	
-	public static void wait(double time) {
-		Timer timer = new Timer();
-		timer.start();
-		while (timer.get() < time) {
-			stop();
+	
+	public static boolean wait(double time, double previousTime) {
+		if (Robot.timer.get() - previousTime >= time) {
+			return true;
 		}
+		return false;
+	}
+	
+	public static double getGyro() {
+		return -gyro.getAngle();
 	}
 	
 	public static void resetEncoders() {
 		leftTalon.setSelectedSensorPosition(0, 0, 0);
 		rightTalon.setSelectedSensorPosition(0, 0, 0);
-	}
-	
-	public static void moveTillStall() {
-		while(leftTalon.getOutputCurrent() < 20) {	
-			setVelocity(velocityMedium, velocityMedium);
-		}
 	}
 	
 }

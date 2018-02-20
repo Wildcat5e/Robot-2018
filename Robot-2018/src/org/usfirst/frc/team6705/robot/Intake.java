@@ -9,26 +9,39 @@ public class Intake {
 	static Spark rollersLeft = new Spark(leftIntakeSparkChannel);
 	static Spark rollersRight = new Spark(rightIntakeSparkChannel);
 	
-	static DoubleSolenoid leftSolenoid = new DoubleSolenoid(leftIntakeSolenoidForward, leftIntakeSolenoidReverse);
-	static DoubleSolenoid rightSolenoid = new DoubleSolenoid(rightIntakeSolenoidForward, rightIntakeSolenoidReverse);
+	static DoubleSolenoid solenoid = new DoubleSolenoid(intakeSolenoidA, intakeSolenoidB);
 
 	public static void setup() {
-		rollersLeft.setSafetyEnabled(false);
-		rollersRight.setSafetyEnabled(false);
+	    solenoid.set(DoubleSolenoid.Value.kReverse);
+	    rollersRight.setInverted(false);
+	    rollersLeft.setInverted(true);
+	    
 	}
 	
 	public static void intake() {
-		
 		rollersLeft.set(rollersSpeed);
 		rollersRight.set(-rollersSpeed);
-		
 	}
 	
 	public static void outtake() {
-		
 		rollersLeft.set(-rollersSpeed);
 		rollersRight.set(rollersSpeed);
-		
+	}
+	
+	public static boolean outtakeForTime(double time, double startTime) {
+		if (Robot.timer.get() - startTime >= time) {
+			return true;
+		}
+		outtake();
+		return false;
+	}
+	
+	public static boolean intakeForTime(double time, double startTime) {
+		if (Robot.timer.get() - startTime >= time) {
+			return true;
+		}
+		intake();
+		return false;
 	}
 	
 	public static void stopRollers() {
@@ -38,16 +51,15 @@ public class Intake {
 	}
 	
 	public static void open() {
-		leftSolenoid.set(DoubleSolenoid.Value.kForward);
-		rightSolenoid.set(DoubleSolenoid.Value.kForward);
+	    System.out.print("Open Pneumatics");
+		solenoid.set(DoubleSolenoid.Value.kForward);
 		
 	}
 	
 	
 	public static void close() {
-		leftSolenoid.set(DoubleSolenoid.Value.kReverse);
-		rightSolenoid.set(DoubleSolenoid.Value.kReverse);
-		
+	    System.out.println("Close Pneumatics");
+		solenoid.set(DoubleSolenoid.Value.kReverse);
 	}
 	
 	public static enum IntakeState {

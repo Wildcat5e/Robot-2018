@@ -28,7 +28,8 @@ public class Constants {
 	
 	//Joysticks
 	public static final int driveStickChannel = 0,
-			dPadChannel = 0;
+			dPadChannel = 0,
+			liftStickChannel = 1;
 	
 	
 	//Auto Starting Positions
@@ -72,10 +73,10 @@ public class Constants {
 	//Elevator Constants
 	public static final double elevatorConstantSpeedCube = 0.39,
 			elevatorConstantSpeedNoCube = 0.37,
-			elevatorMaxSpeedUp = 0.9,
-			elevatorMaxSpeedDown = 0.05,
+			elevatorMaxSpeedUp = 0.95,
+			elevatorMaxSpeedDown = 0.01,
 			elevatorMinimumSpeedUp = 0.5,
-			elevatorMinimumSpeedDown = 0.2,
+			elevatorMinimumSpeedDown = 0.25,
 			ticksPerRotationElevator = 2048,
 			verticalInchesPerTick = 2 * (3.25 * Math.PI) / ticksPerRotationElevator,
 			elevatorTolerance = 2, //Inches

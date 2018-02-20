@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -70,6 +71,8 @@ public class Robot extends IterativeRobot {
 	public static Timer timer = new Timer();
 	
 	XboxController driveStick = new XboxController(driveStickChannel);
+	Joystick liftStick = new Joystick(liftStickChannel);
+	
 	//Compressor compressor = new Compressor();
 	StringBuilder sbL = new StringBuilder();
 	StringBuilder sbR  = new StringBuilder();
@@ -274,12 +277,9 @@ public class Robot extends IterativeRobot {
 			DriveTrain.resetEncoders();
 			DriveTrain.gyro.reset();
 			Elevator.encoder.reset();
-		}
+		}		
 		
-		//Bumpers - control intake pneumatics and rollers
-		
-		
-		//Dpad - control only rollers
+		//Dpad and bumpers - control rollers and pneumatics
 		if (driveStick.getPOV(dPadChannel) > 325 || (driveStick.getPOV(dPadChannel) < 35 && driveStick.getPOV(dPadChannel) >= 0)) {
 			intakeState = IntakeState.MANUAL;
 			System.out.println("Dpad up");
@@ -297,21 +297,23 @@ public class Robot extends IterativeRobot {
        }
 		
 		//Buttons - set Elevator lift to certain height - floor, switch, or scale
-		if (driveStick.getAButton()) {
+		if (liftStick.getRawButton(12) || liftStick.getRawButton(11)) {
 			moveToFloor();
-		} else if (driveStick.getBButton()) {
+		} else if (liftStick.getRawButton(10) || liftStick.getRawButton(9)) {
 			moveToSwitch();
-		} else if (driveStick.getYButton()) {
+		} else if (liftStick.getRawButton(8) || liftStick.getRawButton(7)) {
 			moveToScale();
 		} 
 				
 		//Triggers - lift and lower Elevator
-		double netTrigger = driveStick.getTriggerAxis(GenericHID.Hand.kRight) - driveStick.getTriggerAxis(GenericHID.Hand.kLeft);
+		
+		double joystickValue = -liftStick.getRawAxis(1);
+		//double netTrigger = driveStick.getTriggerAxis(GenericHID.Hand.kRight) - driveStick.getTriggerAxis(GenericHID.Hand.kLeft);
 		//System.out.println("Net Trigger: " + netTrigger);
-		if (Math.abs(netTrigger) >= 0.1) {
+		if (Math.abs(joystickValue) >= 0.1) {
 			triggerIntervalsCounted += 1;
 	        previousHeight = Elevator.getCurrentPosition();
-			Elevator.setTeleop(netTrigger, triggerIntervalsCounted);
+			Elevator.setTeleop(joystickValue, triggerIntervalsCounted);
 			elevatorState = ElevatorState.MANUAL;
 		} else if (elevatorState == ElevatorState.MANUAL && !Elevator.isAtFloor()) {
 			triggerIntervalsCounted = 0;
@@ -335,7 +337,7 @@ public class Robot extends IterativeRobot {
 		}
 		
 		if (elevatorState == ElevatorState.FLOOR) {
-			double currentHeight = Elevator.getCurrentPosition();
+			//double currentHeight = Elevator.getCurrentPosition();
 			if (Elevator.isAtFloor()) { //Within desired range, stop elevating
 				System.out.println("AT FLOOR, STOP");
 				Elevator.stop();
@@ -476,15 +478,15 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Elevator Encoder Count", Elevator.encoder.get());
 		SmartDashboard.putNumber("Elevator Current Height From Ground", Elevator.getCurrentPosition());
 		SmartDashboard.putBoolean("Is At Floor Limit Switch?", Elevator.isAtFloor());
-		int state = 0;
+		String state = "Manual";
 		if (elevatorState == ElevatorState.FLOOR) {
-			state = 1;
+			state = "Floor";
 		} else if (elevatorState == ElevatorState.SWITCH) {
-			state = 2;
+			state = "Switch";
 		} else if (elevatorState == ElevatorState.SCALE) {
-			state = 3;
+			state = "Scale";
 		}
-		SmartDashboard.putNumber("Elevator State", state);
+		SmartDashboard.putString("Elevator State", state);
 		String intake = "Open";
 		if (Intake.solenoid.get() == DoubleSolenoid.Value.kReverse) {
 		    intake = "Closed";
@@ -503,6 +505,18 @@ public class Robot extends IterativeRobot {
 			Elevator.spark2.set(0.5);
 		} else {
 			Elevator.spark2.set(0);
+		}
+		
+		if (driveStick.getYButton()) {
+			DriveTrain.leftTalon.set(0.5);
+		} else {
+			DriveTrain.leftTalon.set(0.5);
+		}
+		
+		if (driveStick.getXButton()) {
+			DriveTrain.rightTalon.set(0.5);
+		} else {
+			DriveTrain.rightTalon.set(0.5);
 		}
 	}
 	

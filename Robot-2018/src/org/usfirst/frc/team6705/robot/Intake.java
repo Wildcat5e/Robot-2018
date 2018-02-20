@@ -13,7 +13,7 @@ public class Intake {
 
 	public static void setup() {
 	    solenoid.set(DoubleSolenoid.Value.kReverse);
-	    rollersRight.setInverted(true);
+	    rollersRight.setInverted(false);
 	    rollersLeft.setInverted(true);
 	    
 	}

@@ -35,9 +35,9 @@ public class Elevator /*extends PIDSubsystem*/ {
 	}
 	
 	public static double convertTicksToVerticalInches(double ticks) {
-		double rotations = Math.floor(encoder.get()/ticksPerRotationElevator);
-		double inchesPerTick = verticalInchesPerTick + ((rotations * Math.PI * 2 * ropeThickness)/ticksPerRotationElevator);
-		return ticks * inchesPerTick * 2;
+		//double rotations = Math.floor(encoder.get()/ticksPerRotationElevator);
+		double inchesPerTick = verticalInchesPerTick; //+ ((rotations * Math.PI * 2 * ropeThickness)/ticksPerRotationElevator);
+		return ticks * inchesPerTick;
 	}
 	
 	public static double getCurrentPosition() {
@@ -57,6 +57,7 @@ public class Elevator /*extends PIDSubsystem*/ {
                 motor.set(upSpeed);
             }
         } else {
+            System.out.println("REACHED A LIMIT");
             stop();
         }
 	}
@@ -68,7 +69,9 @@ public class Elevator /*extends PIDSubsystem*/ {
 		} else if (speed > 0 && getCurrentPosition() > maximumHeight - elevatorDecelerationDistance) {
 			Elevator.set(speed * ((maximumHeight - getCurrentPosition())/elevatorDecelerationDistance));
 		} */ if (intervals < elevatorRampTime * 50 && speed > 0) {
-			Elevator.set((intervals/(elevatorRampTime * 50)) * speed);
+		    double actualSpeed = (intervals/(elevatorRampTime * 50)) * speed * elevatorMaxSpeedUp;
+		    System.out.println("Setting teleop speed " + actualSpeed);
+			Elevator.set(actualSpeed);
 		} else {
 			set(speed);
 		}
@@ -104,6 +107,8 @@ public class Elevator /*extends PIDSubsystem*/ {
 		double distanceRemaining = Math.abs(getCurrentPosition() - targetHeight);
 		double fractionRemaining = Math.abs(distanceRemaining/distanceToLift);
 		System.out.println("Fraction Remaining: " + fractionRemaining);
+		System.out.println("Distance Remaining: " + distanceRemaining);
+		
 		if (fractionRemaining > 1) {
 			fractionRemaining = 1;
 		}
@@ -113,7 +118,7 @@ public class Elevator /*extends PIDSubsystem*/ {
 		if (fractionLifted <= 0.03) {
 			fractionLifted = 0.03;
 		}
-		double scaledFractionLifted = fractionLifted * 5;
+		double scaledFractionLifted = fractionLifted * 4;
 		
 		
 		if (fractionLifted < 0.2) {

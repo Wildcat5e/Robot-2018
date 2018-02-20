@@ -366,6 +366,7 @@ public class Robot extends IterativeRobot {
 			Elevator.maintainHeight(previousHeight);
 		} else {
 			triggerIntervalsCounted = 0;
+			Elevator.stop();
 		}
 		
 		
@@ -416,10 +417,12 @@ public class Robot extends IterativeRobot {
 			
 			if (currentHeight < scaleHeight + elevatorTolerance && 
 					currentHeight > scaleHeight - elevatorTolerance) { //Within desired range, stop elevating
-				Elevator.stop();
+				System.out.println("STOP SCALE");
+			    Elevator.stop();
 				previousHeight = scaleHeight;
 				elevatorState = ElevatorState.MANUAL;
 			} else {
+			    System.out.println("SCALE MOVE");
 				Elevator.moveToHeight(scaleHeight, distanceToLift, direction);
 			}
 		}
@@ -483,6 +486,7 @@ public class Robot extends IterativeRobot {
 		//Elevator.setHeight(floorHeight);
 		elevatorState = ElevatorState.FLOOR;
 		direction = -1;
+		previousHeight = Elevator.getCurrentPosition();
 		distanceToLift = Math.abs(Elevator.getCurrentPosition() - floorHeight);
 	}
 	
@@ -491,6 +495,7 @@ public class Robot extends IterativeRobot {
 		//Elevator.setHeight(switchHeight);
 		elevatorState = ElevatorState.SWITCH;
 		direction = (Elevator.getCurrentPosition() < switchHeight) ? 1 : -1;
+	    previousHeight = Elevator.getCurrentPosition();
 		distanceToLift = Math.abs(Elevator.getCurrentPosition() - switchHeight);
 	}
 	
@@ -499,6 +504,7 @@ public class Robot extends IterativeRobot {
 		//Elevator.setHeight(scaleHeight);
 		elevatorState = ElevatorState.SCALE;
 		direction = (Elevator.getCurrentPosition() < scaleHeight) ? 1 : -1;
+	    previousHeight = Elevator.getCurrentPosition();
 		distanceToLift = Math.abs(Elevator.getCurrentPosition() - scaleHeight);
 	}
 	
@@ -527,6 +533,11 @@ public class Robot extends IterativeRobot {
 			state = 3;
 		}
 		SmartDashboard.putNumber("Elevator State", state);
+		String intake = "Open";
+		if (Intake.solenoid.get() == DoubleSolenoid.Value.kReverse) {
+		    intake = "Closed";
+		}
+		SmartDashboard.putString("Intake Pneumatic Status", intake);
 	}
 	
 }

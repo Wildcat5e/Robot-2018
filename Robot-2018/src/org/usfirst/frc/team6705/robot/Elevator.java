@@ -149,9 +149,9 @@ public class Elevator /*extends PIDSubsystem*/ {
 		Elevator.set(direction * scaledFraction);
 	}
 	
-	public static boolean moveToHeightAuto(double targetHeight, double totalDistanceToLift) {
+	public static boolean moveToHeightAuto(double targetHeight, double totalDistanceToLift, int direction) {
 		double currentHeight = getCurrentPosition();
-		int direction = (currentHeight > targetHeight) ? -1 : 1;
+		//int direction = (currentHeight > targetHeight) ? -1 : 1;
 		
 		double distanceRemaining = Math.abs(currentHeight - targetHeight);
 		if (distanceRemaining <= 0) {
@@ -160,18 +160,23 @@ public class Elevator /*extends PIDSubsystem*/ {
 		}
 		
 		double fractionRemaining = Math.abs(distanceRemaining/totalDistanceToLift);
-		double scaledFraction = fractionRemaining * 3;
+		if (fractionRemaining > 1) {
+			fractionRemaining = 1;
+		}
+		double scaledFraction = fractionRemaining * 1;
 		
 		double fractionLifted = 1 - fractionRemaining;
-        double scaledFractionLifted = fractionLifted * 5;
+		if (fractionLifted <= 0.03) {
+			fractionLifted = 0.03;
+		}
+        double scaledFractionLifted = fractionLifted * 4;
 		
-		if (scaledFraction > 1) {
-            if (fractionLifted < 0.2) {
-                scaledFraction = scaledFractionLifted;
-            } else {
-                scaledFraction = 1;
-            }
-        }
+        if (fractionLifted < 0.2) {
+			scaledFraction = scaledFractionLifted;
+		} else if (scaledFraction > 1) {
+			scaledFraction = 1;
+		}
+        
 		Elevator.set(direction * scaledFraction);
 		return false;
 	}
@@ -188,15 +193,23 @@ public class Elevator /*extends PIDSubsystem*/ {
 		}
 		
 		double fractionRemaining = Math.abs(distanceRemaining/totalDistanceToLift);
-		double scaledFraction = fractionRemaining * 3;
+		if (fractionRemaining > 1) {
+			fractionRemaining = 1;
+		}
+		double scaledFraction = fractionRemaining * 1;
 		
 		double fractionLifted = 1 - fractionRemaining;
-        double scaledFractionLifted = fractionLifted * 5;
+		if (fractionLifted <= 0.03) {
+			fractionLifted = 0.03;
+		}
+        double scaledFractionLifted = fractionLifted * 4;
 		
         if (fractionLifted < 0.2) {
         	scaledFraction = scaledFractionLifted;
-        } else if (getCurrentPosition() < floorHeight + elevatorDecelerationDistance) {
+        } /*else if (getCurrentPosition() < floorHeight + elevatorDecelerationDistance) {
         	scaledFraction = (getCurrentPosition() - floorHeight)/elevatorDecelerationDistance;
+        }*/ else if (scaledFraction > 1) {
+        	scaledFraction = 1;
         }
 		
 		Elevator.set(direction * scaledFraction);

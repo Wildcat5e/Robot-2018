@@ -66,6 +66,8 @@ public class DriveTrain {
 		leftSpeed = applyDeadband(leftSpeed);
 		rightSpeed = applyDeadband(rightSpeed);
 		
+
+		
 		double leftTarget = Math.copySign(leftSpeed * leftSpeed * leftSpeed * -1, leftSpeed) * maxTicksPer100ms;
 		double rightTarget = Math.copySign(rightSpeed * rightSpeed * rightSpeed * -1, rightSpeed) * maxTicksPer100ms;
 		
@@ -183,10 +185,14 @@ public class DriveTrain {
 	public static void setVelocity(double left, double right) {
 		//leftTalon.config_kF(0,  1023  * left/maxTicksPer100ms, 0);
 		//rightTalon.config_kF(0, 1023 * right/maxTicksPer100ms, 0);
+	    double elevatorHeight = Elevator.encoder.get();
+	    double scale = 1;
+	    if (elevatorHeight > 3000) {
+	        scale = 1 - (elevatorHeight/(maxElevatorTicks * 2));
+	    }
 		
-		
-		leftTalon.set(ControlMode.Velocity, left);
-		rightTalon.set(ControlMode.Velocity, right);
+		leftTalon.set(ControlMode.Velocity, left * scale);
+		rightTalon.set(ControlMode.Velocity, right * scale);
 		
 		//System.out.println("Setting velocities L: " + left + " R: " + right);
 		//System.out.println("Actual speed L: " + leftTalon.getSelectedSensorVelocity(0) + " R: " + rightTalon.getSelectedSensorVelocity(0));

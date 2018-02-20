@@ -35,9 +35,23 @@ public class Elevator /*extends PIDSubsystem*/ {
 	}
 	
 	public static double convertTicksToVerticalInches(double ticks) {
-		//double rotations = Math.floor(encoder.get()/ticksPerRotationElevator);
-		double inchesPerTick = verticalInchesPerTick; //+ ((rotations * Math.PI * 2 * ropeThickness)/ticksPerRotationElevator);
-		return ticks * inchesPerTick;
+		double rotations = Math.floor(ticks/ticksPerRotationElevator);
+		double inchesPerTick1 = verticalInchesPerTick + ((1 * Math.PI * 4 * ropeThickness)/ticksPerRotationElevator);
+	    double inchesPerTick2 = verticalInchesPerTick + ((2 * Math.PI * 4 * ropeThickness)/ticksPerRotationElevator);
+        double inchesPerTick3 = verticalInchesPerTick + ((3 * Math.PI * 4 * ropeThickness)/ticksPerRotationElevator);
+
+		if (rotations == 0) {
+		    return ticks * verticalInchesPerTick;
+		} else if (rotations == 1 ) {
+		    return (verticalInchesPerTick * ticksPerRotationElevator) + (inchesPerTick1 * (ticks - ticksPerRotationElevator));
+		} else if (rotations == 2) {
+		    return (verticalInchesPerTick * ticksPerRotationElevator) + (inchesPerTick1 * ticksPerRotationElevator) + (inchesPerTick2 * (ticks - (2 * ticksPerRotationElevator)));
+		} else if (rotations == 3) {
+	        return (verticalInchesPerTick * ticksPerRotationElevator) + (inchesPerTick1 * ticksPerRotationElevator) + (inchesPerTick2 * ticksPerRotationElevator) + (inchesPerTick3 * (ticks - (3 * ticksPerRotationElevator)));
+		} else {
+		    return ticks * verticalInchesPerTick;
+		}
+		//.01, ..0104, ..0108, ..0112  // 20.48 + 21.3 + 22.12 + 4
 	}
 	
 	public static double getCurrentPosition() {

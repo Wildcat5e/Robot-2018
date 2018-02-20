@@ -77,15 +77,16 @@ public class Constants {
 			elevatorMinimumSpeedUp = 0.5,
 			elevatorMinimumSpeedDown = 0.2,
 			ticksPerRotationElevator = 2048,
-			verticalInchesPerTick = 2 * (3 * Math.PI) / ticksPerRotationElevator,
-			elevatorTolerance = 1, //Inches
+			verticalInchesPerTick = 2 * (3.3 * Math.PI) / ticksPerRotationElevator,
+			elevatorTolerance = 2, //Inches
 			maximumHeight = 80,
 			floorHeight = 5.0,
-			switchHeight = 23.5,
+			switchHeight = 24,
 			scaleHeight = 70.0,
 			elevatorRampTime = 0.2, //seconds
 			elevatorDecelerationDistance = 8,
-			ropeThickness = 0; //inches
+			ropeThickness = 0.065, //inches
+	        maxElevatorTicks = 6500;
 	
 	//PID for DriveTrain
 	public static double kP_L = (1023 * 0.05)/240,//-(1023 * 0.1)/maxError,

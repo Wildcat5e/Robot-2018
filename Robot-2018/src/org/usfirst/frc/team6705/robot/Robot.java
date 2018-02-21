@@ -279,22 +279,29 @@ public class Robot extends IterativeRobot {
 			Elevator.encoder.reset();
 		}		
 		
+		double netTrigger = driveStick.getTriggerAxis(GenericHID.Hand.kRight) - driveStick.getTriggerAxis(GenericHID.Hand.kLeft);
+		
 		//Dpad and bumpers - control rollers and pneumatics
-		if (driveStick.getPOV(dPadChannel) > 325 || (driveStick.getPOV(dPadChannel) < 35 && driveStick.getPOV(dPadChannel) >= 0)) {
-			intakeState = IntakeState.MANUAL;
-			System.out.println("Dpad up");
-			rollOut(); 
-		} else if (driveStick.getPOV(dPadChannel) > 145 && driveStick.getPOV(dPadChannel) < 215) {
-			intakeState = IntakeState.MANUAL;
-			rollIn(); 
+	
+		if (Math.abs(netTrigger) > 0.05) {
+			Intake.roll(netTrigger);
 		} else if (driveStick.getBumper(GenericHID.Hand.kRight)) {
             pickUpCube(); 
             System.out.println("Bumper right, pick up");
-       } else if (driveStick.getBumper(GenericHID.Hand.kLeft)) {
-           dropCube();
-       } else {
-           Intake.stopRollers();
-       }
+		} else if (driveStick.getBumper(GenericHID.Hand.kLeft)) {
+			dropCube();
+		} else {
+			Intake.stopRollers();
+		}
+		
+		/*if (driveStick.getPOV(dPadChannel) > 325 || (driveStick.getPOV(dPadChannel) < 35 && driveStick.getPOV(dPadChannel) >= 0)) {
+		intakeState = IntakeState.MANUAL;
+		System.out.println("Dpad up");
+		rollOut(); 
+	} else if (driveStick.getPOV(dPadChannel) > 145 && driveStick.getPOV(dPadChannel) < 215) {
+		intakeState = IntakeState.MANUAL;
+		rollIn(); 
+	}*/
 		
 		//Buttons - set Elevator lift to certain height - floor, switch, or scale
 		if (liftStick.getRawButton(12) || liftStick.getRawButton(11)) {
@@ -425,6 +432,7 @@ public class Robot extends IterativeRobot {
 		intakeOpen = true;
 	}
 	
+	/*
 	//Dpad up
 	public void rollOut() {
 		Intake.outtake();
@@ -433,7 +441,7 @@ public class Robot extends IterativeRobot {
 	//Dpad down
 	public void rollIn() {
 		Intake.intake();
-	}
+	}*/
 	
 	//A Button
 	public void moveToFloor() {

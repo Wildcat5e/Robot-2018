@@ -19,13 +19,18 @@ public class Intake {
 	}
 	
 	public static void intake() {
-		rollersLeft.set(rollersSpeed);
-		rollersRight.set(-rollersSpeed);
+		rollersLeft.set(rollersSpeedAuto);
+		rollersRight.set(-rollersSpeedAuto);
 	}
 	
 	public static void outtake() {
-		rollersLeft.set(-rollersSpeed);
-		rollersRight.set(rollersSpeed);
+		rollersLeft.set(-rollersSpeedAuto);
+		rollersRight.set(rollersSpeedAuto);
+	}
+	
+	public static void roll(double speed) {
+		rollersLeft.set(speed * maxRollersSpeed);
+		rollersRight.set(-speed * maxRollersSpeed);
 	}
 	
 	public static boolean outtakeForTime(double time, double startTime) {

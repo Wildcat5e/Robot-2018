@@ -9,8 +9,8 @@ import edu.wpi.first.wpilibj.Preferences;
 public class Constants {
 	
 	//Motor Controllers
-	public static final int leftTalonChannel = 1,
-			rightTalonChannel = 0,
+	public static final int leftTalonChannel = 0,
+			rightTalonChannel = 1,
 			leftVictorChannel = 0,
 			rightVictorChannel = 1,
 			leftIntakeSparkChannel = 2,
@@ -45,7 +45,8 @@ public class Constants {
 	//Rollers
 	public static final double timeToRollIn = 1.5, //seconds
 		timeToRollOut = 1.5, //seconds
-		rollersSpeed = 0.5;//[-1, 1]
+		maxRollersSpeed = 0.8,
+		rollersSpeedAuto = 0.5;//[-1, 1]
 		
 	
 	//Drive Train

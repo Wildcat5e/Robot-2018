@@ -35,7 +35,8 @@ public class Elevator /*extends PIDSubsystem*/ {
 	}
 	
 	public static double convertTicksToVerticalInches(double ticks) {
-		double rotations = Math.floor(ticks/ticksPerRotationElevator);
+		return ticks * verticalInchesPerTick;
+		/*double rotations = Math.floor(ticks/ticksPerRotationElevator);
 		double inchesPerTick1 = verticalInchesPerTick + ((1 * Math.PI * 4 * ropeThickness)/ticksPerRotationElevator);
 	    double inchesPerTick2 = verticalInchesPerTick + ((2 * Math.PI * 4 * ropeThickness)/ticksPerRotationElevator);
         double inchesPerTick3 = verticalInchesPerTick + ((3 * Math.PI * 4 * ropeThickness)/ticksPerRotationElevator);
@@ -50,7 +51,7 @@ public class Elevator /*extends PIDSubsystem*/ {
 	        return (verticalInchesPerTick * ticksPerRotationElevator) + (inchesPerTick1 * ticksPerRotationElevator) + (inchesPerTick2 * ticksPerRotationElevator) + (inchesPerTick3 * (ticks - (3 * ticksPerRotationElevator)));
 		} else {
 		    return ticks * verticalInchesPerTick;
-		}
+		}*/
 		//.01, ..0104, ..0108, ..0112  // 20.48 + 21.3 + 22.12 + 4
 	}
 	
@@ -72,7 +73,7 @@ public class Elevator /*extends PIDSubsystem*/ {
             }
         } else {
             System.out.println("REACHED A LIMIT");
-            stop();
+            //stop();
         }
 	}
 	
@@ -126,13 +127,13 @@ public class Elevator /*extends PIDSubsystem*/ {
 		if (fractionRemaining > 1) {
 			fractionRemaining = 1;
 		}
-		double scaledFraction = fractionRemaining * 1;
+		double scaledFraction = fractionRemaining * 1.25;
 		
 		double fractionLifted = 1 - fractionRemaining;
 		if (fractionLifted <= 0.03) {
 			fractionLifted = 0.03;
 		}
-		double scaledFractionLifted = fractionLifted * 4;
+		double scaledFractionLifted = fractionLifted * 5;
 		
 		
 		if (fractionLifted < 0.2) {
@@ -155,7 +156,7 @@ public class Elevator /*extends PIDSubsystem*/ {
 		
 		double distanceRemaining = Math.abs(currentHeight - targetHeight);
 		if (distanceRemaining <= 0) {
-			Elevator.stop();
+			//Elevator.stop();
 			return true;
 		}
 		
@@ -163,13 +164,13 @@ public class Elevator /*extends PIDSubsystem*/ {
 		if (fractionRemaining > 1) {
 			fractionRemaining = 1;
 		}
-		double scaledFraction = fractionRemaining * 1;
+		double scaledFraction = fractionRemaining * 1.25;
 		
 		double fractionLifted = 1 - fractionRemaining;
 		if (fractionLifted <= 0.03) {
 			fractionLifted = 0.03;
 		}
-        double scaledFractionLifted = fractionLifted * 4;
+        double scaledFractionLifted = fractionLifted * 5;
 		
         if (fractionLifted < 0.2) {
 			scaledFraction = scaledFractionLifted;
@@ -188,7 +189,7 @@ public class Elevator /*extends PIDSubsystem*/ {
 		double distanceRemaining = Math.abs(currentHeight - floorHeight);
 		if (Elevator.isAtFloor()) {
 			encoder.reset();
-			Elevator.stop();
+			//Elevator.stop();
 			return true;
 		}
 		
@@ -196,13 +197,13 @@ public class Elevator /*extends PIDSubsystem*/ {
 		if (fractionRemaining > 1) {
 			fractionRemaining = 1;
 		}
-		double scaledFraction = fractionRemaining * 1;
+		double scaledFraction = fractionRemaining * 1.25;
 		
 		double fractionLifted = 1 - fractionRemaining;
 		if (fractionLifted <= 0.03) {
 			fractionLifted = 0.03;
 		}
-        double scaledFractionLifted = fractionLifted * 4;
+        double scaledFractionLifted = fractionLifted * 5;
 		
         if (fractionLifted < 0.2) {
         	scaledFraction = scaledFractionLifted;

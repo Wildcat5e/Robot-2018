@@ -29,8 +29,8 @@ public class Intake {
 	}
 	
 	public static void roll(double speed) {
-		rollersLeft.set(speed * maxRollersSpeed);
-		rollersRight.set(-speed * maxRollersSpeed);
+		rollersLeft.set(-speed * maxRollersSpeed);
+		rollersRight.set(speed * maxRollersSpeed);
 	}
 	
 	public static boolean outtakeForTime(double time, double startTime) {

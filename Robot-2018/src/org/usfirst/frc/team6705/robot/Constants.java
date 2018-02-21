@@ -4,7 +4,7 @@
 
 package org.usfirst.frc.team6705.robot;
 
-import edu.wpi.first.wpilibj.Preferences;
+//import edu.wpi.first.wpilibj.Preferences;
 
 public class Constants {
 	
@@ -21,10 +21,10 @@ public class Constants {
 	//Solenoids
 	public static final int intakeSolenoidA = 0,
 			intakeSolenoidB = 1,
-			leftRampSolenoidA = 0,
-			leftRampSolenoidB = 1,
-			rightRampSolenoidA = 2,
-			rightRampSolenoidB = 3;
+			leftRampSolenoidA = 2,
+			leftRampSolenoidB = 3,
+			rightRampSolenoidA = 4,
+			rightRampSolenoidB = 5;
 	
 	//Joysticks
 	public static final int driveStickChannel = 0,
@@ -45,7 +45,7 @@ public class Constants {
 	//Rollers
 	public static final double timeToRollIn = 1.5, //seconds
 		timeToRollOut = 1.5, //seconds
-		maxRollersSpeed = 0.8,
+		maxRollersSpeed = 0.6,
 		rollersSpeedAuto = 0.5;//[-1, 1]
 		
 	
@@ -72,19 +72,19 @@ public class Constants {
 				velocityTurning = 3;
 	
 	//Elevator Constants
-	public static final double elevatorConstantSpeedCube = 0.39,
-			elevatorConstantSpeedNoCube = 0.37,
-			elevatorMaxSpeedUp = 0.95,
-			elevatorMaxSpeedDown = 0.01,
-			elevatorMinimumSpeedUp = 0.5,
+	public static final double elevatorConstantSpeedCube = 0.4,
+			elevatorConstantSpeedNoCube = 0.38,
+			elevatorMaxSpeedUp = 0.85,
+			elevatorMaxSpeedDown = 0,
+			elevatorMinimumSpeedUp = 0.55,
 			elevatorMinimumSpeedDown = 0.25,
 			ticksPerRotationElevator = 2048,
-			verticalInchesPerTick = 2 * (3.25 * Math.PI) / ticksPerRotationElevator,
-			elevatorTolerance = 2, //Inches
-			maximumHeight = 73,
-			floorHeight = 5.0,
-			switchHeight = 24,
-			scaleHeight = 72.0,
+			verticalInchesPerTick = 2 * (3.1 * Math.PI) / ticksPerRotationElevator,
+			elevatorTolerance = 1, //Inches
+			maximumHeight = 71,
+			floorHeight = 0.0,
+			switchHeight = 25,
+			scaleHeight = 66.0,
 			elevatorRampTime = 0.2, //seconds
 			elevatorDecelerationDistance = 8,
 			ropeThickness = 0.065, //inches

@@ -227,7 +227,7 @@ public class Robot extends IterativeRobot {
 		
 		DriveTrain.stop();
 		Intake.stopRollers();
-		Elevator.stop();
+		//Elevator.stop();
 		
 		DriveTrain.leftTalon.configClosedloopRamp(rampRateTeleop, 0);
 		DriveTrain.rightTalon.configClosedloopRamp(rampRateTeleop, 0);
@@ -304,11 +304,11 @@ public class Robot extends IterativeRobot {
 	}*/
 		
 		//Buttons - set Elevator lift to certain height - floor, switch, or scale
-		if (liftStick.getRawButton(12) || liftStick.getRawButton(11)) {
+		if (liftStick.getRawButton(12) || liftStick.getRawButton(11) || driveStick.getAButton()) {
 			moveToFloor();
-		} else if (liftStick.getRawButton(10) || liftStick.getRawButton(9)) {
+		} else if (liftStick.getRawButton(10) || liftStick.getRawButton(9) || driveStick.getBButton()) {
 			moveToSwitch();
-		} else if (liftStick.getRawButton(8) || liftStick.getRawButton(7)) {
+		} else if (liftStick.getRawButton(8) || liftStick.getRawButton(7)  || driveStick.getYButton()) {
 			moveToScale();
 		} 
 				
@@ -325,9 +325,11 @@ public class Robot extends IterativeRobot {
 		} else if (elevatorState == ElevatorState.MANUAL && !Elevator.isAtFloor()) {
 			triggerIntervalsCounted = 0;
 			Elevator.maintainHeight(previousHeight);
-		} else {
+		} else if (Elevator.getCurrentPosition() < 10) {
 			triggerIntervalsCounted = 0;
 			Elevator.stop();
+		} else {
+			Elevator.maintainHeight(previousHeight);
 		}
 		
 		
@@ -362,7 +364,7 @@ public class Robot extends IterativeRobot {
 			
 			if (currentHeight < switchHeight + elevatorTolerance && 
 					currentHeight > switchHeight - elevatorTolerance) { //Within desired range, stop elevating
-				Elevator.stop();
+				//Elevator.stop();
 				previousHeight = switchHeight;
 				elevatorState = ElevatorState.MANUAL;
 				System.out.println("STOP SWITCH");
@@ -379,7 +381,7 @@ public class Robot extends IterativeRobot {
 			if (currentHeight < scaleHeight + elevatorTolerance && 
 					currentHeight > scaleHeight - elevatorTolerance) { //Within desired range, stop elevating
 				System.out.println("STOP SCALE");
-			    Elevator.stop();
+			    //Elevator.stop();
 				previousHeight = scaleHeight;
 				elevatorState = ElevatorState.MANUAL;
 			} else {

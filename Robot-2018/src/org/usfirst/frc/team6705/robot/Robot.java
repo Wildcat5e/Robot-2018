@@ -46,7 +46,7 @@ public class Robot extends IterativeRobot {
 	private static final String baselineAuto = "baseline";
 	private static final String bestSimple = "bestSimple";
 	private static final String test = "test";
-	private static final String basic = "basic";
+	private static final String motionProfileTest = "mp";
 	private static final String stall = "stall";
 	private String autoSelected;
 	
@@ -92,7 +92,7 @@ public class Robot extends IterativeRobot {
 		autoChooser.addObject("Best Simple Scoring Method", bestSimple);
 		autoChooser.addObject("Cross Baseline Only", baselineAuto);
 		autoChooser.addObject("Test Auto - Drive, Turn, Drive", test);
-		autoChooser.addObject("Super Basic Test Auto", basic);
+		autoChooser.addObject("Super Basic Test Auto", motionProfileTest);
 		autoChooser.addObject("Stalling Test Auto", stall);
 		SmartDashboard.putData("Auto choices", autoChooser);
 		
@@ -211,8 +211,8 @@ public class Robot extends IterativeRobot {
 			System.out.println("Running test auto");
 			auto.testAuto();
 			break;
-		case basic:
-			auto.basicAuto();
+		case motionProfileTest:
+			auto.motionProfileTestAuto();
 			break;
 		case stall:
 		    auto.testStallAuto();

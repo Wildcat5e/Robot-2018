@@ -1,9 +1,11 @@
 package org.usfirst.frc.team6705.robot;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+import com.ctre.phoenix.motion.SetValueMotionProfile;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -55,7 +57,11 @@ public class DriveTrain {
 		rightTalon.config_kI(0, kI, 0);
 		rightTalon.config_kD(0, kD, 0);
 		rightTalon.config_kF(0, kF_R, 0);
-		//TODO: Perform any other talon and victor config here
+		
+		rightTalon.configMotionProfileTrajectoryPeriod(10, 0);
+		leftTalon.configMotionProfileTrajectoryPeriod(10, 0);
+		rightTalon.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 0);
+		leftTalon.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 0);
 		
 		gyro.reset();
 		resetEncoders();
@@ -137,6 +143,18 @@ public class DriveTrain {
 		return moveByDistance(inches, 0, velocity);
 	}
 
+	public static boolean runMotionProfile(MotionProfile profile) {
+		profile.periodic();
+
+		SetValueMotionProfile setValue = profile.getSetValue();
+		leftTalon.set(ControlMode.MotionProfile, setValue.value);
+		rightTalon.set(ControlMode.MotionProfile, setValue.value);
+
+		if (profile.getSetValue() == SetValueMotionProfile.Hold) {
+			return true;
+		}
+		return false;
+	}
 	
 	
 	//Move until runs into switch

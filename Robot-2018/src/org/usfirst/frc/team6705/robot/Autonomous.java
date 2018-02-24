@@ -2,6 +2,8 @@ package org.usfirst.frc.team6705.robot;
 
 import static org.usfirst.frc.team6705.robot.Constants.*;
 
+import com.ctre.phoenix.motion.SetValueMotionProfile;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -29,7 +31,9 @@ public class Autonomous {
 	private void endAuto() {
 		DriveTrain.stop();
 		Intake.stopRollers();
-		Elevator.stop();
+		//Elevator.stop();
+		DriveTrain.leftTalon.set(ControlMode.PercentOutput, 0);
+		DriveTrain.rightTalon.set(ControlMode.PercentOutput, 0);
 		System.out.println("Finished auto routine!");
 	}
 	
@@ -51,19 +55,26 @@ public class Autonomous {
 	
 	//***************************************************************************//
 	
-	public void basicAuto() {
-		System.out.println("Running basic auto");
+	double [][]pointsExample = new double[][]{{3,4},{4,6}};
+	MotionProfile exampleProfile = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, pointsExample, pointsExample, 2);
+	
+	public void motionProfileTestAuto() {
 		switch (state) {
 		case 0:
 			setupAuto();
 			state = nextState(state);
 			break;
 		case 1:
-			if (DriveTrain.moveByDistance(60, velocitySlow)) {
+			exampleProfile.periodic();
+			exampleProfile.startMotionProfile();
+			state = nextState(state);
+			break;
+		case 2:
+			if (DriveTrain.runMotionProfile(exampleProfile)) {
 				state = nextState(state);
 			}
 			break;
-		case 2:
+		case 3:
 			endAuto();
 			break;
 		}

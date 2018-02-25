@@ -6,6 +6,7 @@ import com.ctre.phoenix.motion.SetValueMotionProfile;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import static org.usfirst.frc.team6705.robot.MotionProfileDataSets.*;
 
 
 public class Autonomous {
@@ -55,8 +56,7 @@ public class Autonomous {
 	
 	//***************************************************************************//
 	
-	double [][]pointsExample = new double[][]{{3,4},{4,6}};
-	MotionProfile exampleProfile = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, pointsExample, pointsExample, 2);
+	MotionProfile exampleProfile = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitch_Middle_L, leftSwitch_Middle_L, 2);
 	
 	public void motionProfileTestAuto() {
 		switch (state) {
@@ -70,7 +70,7 @@ public class Autonomous {
 			state = nextState(state);
 			break;
 		case 2:
-			if (DriveTrain.runMotionProfile(exampleProfile)) {
+			if (DriveTrain.runMotionProfile(exampleProfile) /*&& Elevator.moveToHeightAuto(switchHeight, switchHeight - floorHeight, 1)*/) {
 				state = nextState(state);
 			}
 			break;

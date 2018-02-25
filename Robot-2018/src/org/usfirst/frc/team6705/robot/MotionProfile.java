@@ -154,11 +154,11 @@ public class MotionProfile {
 		talonRight.configMotionProfileTrajectoryPeriod(0, 0);
 
 		for (int i = 0; i < totalCount; ++i) {
-			double positionRotationsLeft = profileLeft[i][0];
-			double velocityRPMLeft = profileLeft[i][1];
+			double positionFeetLeft = profileLeft[i][0];
+			double velocityFPSLeft = profileLeft[i][1];
 			/* for each point, fill our structure and pass it to API */
-			pointLeft.position = positionRotationsLeft * ticksPerRevolution; //Convert Revolutions to Units
-			pointLeft.velocity = velocityRPMLeft * ticksPerRevolution / 600.0; //Convert RPM to Units/100ms
+			pointLeft.position = 12 * positionFeetLeft/(2 * Math.PI * wheelRadius) * ticksPerRevolution; //Convert Revolutions to Units
+			pointLeft.velocity = 12 * 60 * velocityFPSLeft/(2 * Math.PI * wheelRadius) * ticksPerRevolution / 600.0; //Convert RPM to Units/100ms
 			pointLeft.headingDeg = 0; /* future feature - not used in this example*/
 			pointLeft.profileSlotSelect0 = 0; /* which set of gains would you like to use [0,3]? */
 			pointLeft.profileSlotSelect1 = 0; /* future feature  - not used in this example - cascaded PID [0,1], leave zero */
@@ -175,11 +175,11 @@ public class MotionProfile {
 			talonLeft.pushMotionProfileTrajectory(pointLeft);
 			
 			//Do the same for the Right side
-			double positionRotationsRight = profileRight[i][0];
-			double velocityRPMRight = profileRight[i][1];
+			double positionFeetRight = profileRight[i][0];
+			double velocityFPSRight = profileRight[i][1];
 			/* for each point, fill our structure and pass it to API */
-			pointRight.position = positionRotationsRight * ticksPerRevolution;
-			pointRight.velocity = velocityRPMRight * ticksPerRevolution / 600.0; 
+			pointRight.position = 12 * positionFeetRight/(2 * Math.PI * wheelRadius) * ticksPerRevolution;
+			pointRight.velocity = 12 * 60 * velocityFPSRight/(2 * Math.PI * wheelRadius) * ticksPerRevolution / 600.0; 
 			pointRight.headingDeg = 0; 
 			pointRight.profileSlotSelect0 = 0; 
 			pointRight.profileSlotSelect1 = 0; 

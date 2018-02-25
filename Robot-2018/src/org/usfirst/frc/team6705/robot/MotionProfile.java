@@ -21,6 +21,7 @@ public class MotionProfile {
 	
 	private int state = 0;
 	private boolean start = false;
+	private boolean finished = false;
 	
 	private double[][] profileLeft;
 	private double[][] profileRight;
@@ -116,6 +117,7 @@ public class MotionProfile {
 				
 				if (status.activePointValid && status.isLast) {
 					//Motion Profile complete, load next one
+					finished = true;
 					setValue = SetValueMotionProfile.Hold;
 					state = 0;
 					timeoutLoops = -1;
@@ -205,6 +207,10 @@ public class MotionProfile {
 	
 	public SetValueMotionProfile getSetValue() {
 		return setValue;
+	}
+	
+	public boolean isMotionProfileComplete() {
+		return finished;
 	}
 	
 	

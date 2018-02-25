@@ -56,7 +56,7 @@ public class Autonomous {
 	
 	//***************************************************************************//
 	
-	MotionProfile exampleProfile = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitch_Middle_L, leftSwitch_Middle_L, 2);
+	MotionProfile exampleProfile = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitch_Middle_L, leftSwitch_Middle_R, leftSwitch_Middle_L.length);
 	
 	public void motionProfileTestAuto() {
 		switch (state) {

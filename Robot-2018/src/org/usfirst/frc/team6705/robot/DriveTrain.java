@@ -149,8 +149,8 @@ public class DriveTrain {
 		SetValueMotionProfile setValue = profile.getSetValue();
 		leftTalon.set(ControlMode.MotionProfile, setValue.value);
 		rightTalon.set(ControlMode.MotionProfile, setValue.value);
-
-		if (profile.getSetValue() == SetValueMotionProfile.Hold) {
+		
+		if (profile.isMotionProfileComplete()) {
 			return true;
 		}
 		return false;

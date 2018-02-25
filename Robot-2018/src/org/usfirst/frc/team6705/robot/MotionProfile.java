@@ -47,15 +47,17 @@ public class MotionProfile {
 		talonLeft = left;
 		talonRight = right;
 		
-		talonLeft.changeMotionControlFramePeriod(5);
-		talonRight.changeMotionControlFramePeriod(5);
-		
-		notifier.startPeriodic(0.005);
-		
 		profileLeft = arrayLeft;
 		profileRight = arrayRight;
 
 		numberOfPoints = totalCount;
+	}
+	
+	public void setup() {
+		talonLeft.changeMotionControlFramePeriod(5);
+		talonRight.changeMotionControlFramePeriod(5);
+		
+		notifier.startPeriodic(0.005);
 	}
 	
 	public void reset() {
@@ -66,6 +68,10 @@ public class MotionProfile {
 		state = 0;
 		timeoutLoops = -1;
 		start = false;
+	}
+	
+	public void startFilling() {
+		startFillingPoints(profileLeft, profileRight, numberOfPoints);
 	}
 	
 	public void periodic() {
@@ -95,9 +101,7 @@ public class MotionProfile {
 				if (start) {
 					start = false;
 					setValue = SetValueMotionProfile.Disable;
-					
-					startFillingPoints(profileLeft, profileRight, numberOfPoints);
-					
+									
 					state = 1;
 					timeoutLoops = timeoutLimit;
 				}

@@ -142,6 +142,18 @@ public class DriveTrain {
 	public static boolean moveByDistance(double inches, double velocity) {
 		return moveByDistance(inches, 0, velocity);
 	}
+	
+	//***************************************//
+	
+	public static void setupMotionProfile(MotionProfile profile) {
+		profile.setup();
+		profile.startFilling();
+	}
+	
+	public static void startMotionProfile(MotionProfile profile) {
+		profile.periodic();
+		profile.startMotionProfile();
+	}
 
 	public static boolean runMotionProfile(MotionProfile profile) {
 		profile.periodic();
@@ -156,6 +168,7 @@ public class DriveTrain {
 		return false;
 	}
 	
+	//***************************************//
 	
 	//Move until runs into switch
 	public static boolean moveTillStall() {

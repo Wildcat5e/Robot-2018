@@ -157,7 +157,10 @@ public class Elevator /*extends PIDSubsystem*/ {
 		double distanceRemaining = Math.abs(currentHeight - targetHeight);
 		if (distanceRemaining <= 0) {
 			//Elevator.stop();
+			Robot.auto.isLifting = false;
 			return true;
+		} else {
+			Robot.auto.isLifting = true;
 		}
 		
 		double fractionRemaining = Math.abs(distanceRemaining/totalDistanceToLift);

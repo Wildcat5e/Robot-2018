@@ -42,7 +42,8 @@ public class Robot extends IterativeRobot {
 	private String gameData;
 	
 	private static final String switchAuto = "switch";
-	private static final String twoCubeAuto = "twoCube";
+	private static final String scaleSwitchAuto = "scaleSwitch";
+	private static final String doubleScaleAuto = "doubleScale";
 	private static final String baselineAuto = "baseline";
 	private static final String bestSimple = "bestSimple";
 	private static final String test = "test";
@@ -87,10 +88,11 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		System.out.println("Robot Init");
 		
-		autoChooser.addDefault("Power Cube on Switch", switchAuto);
-		autoChooser.addObject("Power Cube on Scale", twoCubeAuto);
+		autoChooser.addDefault("ONE cube on SWITCH", switchAuto);
+		autoChooser.addObject("TWO cubes - scale AND switch", scaleSwitchAuto);
+		autoChooser.addObject("TWO cubes on SCALE (only in playoffs or if teammate is doing switch)", doubleScaleAuto);
 		autoChooser.addObject("Best Simple Scoring Method", bestSimple);
-		autoChooser.addObject("Cross Baseline Only", baselineAuto);
+		autoChooser.addObject("Cross Baseline ONLY", baselineAuto);
 		autoChooser.addObject("Test Auto - Drive, Turn, Drive", test);
 		autoChooser.addObject("Super Basic Test Auto", motionProfileTest);
 		autoChooser.addObject("Stalling Test Auto", stall);
@@ -170,11 +172,19 @@ public class Robot extends IterativeRobot {
 			auto.baselineAuto();
 			break;
 			
-		case twoCubeAuto:
-			if (gameData.charAt(1) == 'L') {
-				auto.twoCubeAuto(startingPosition, 1, (gameData.charAt(0) == 'L') ? 1 : -1);
-			} else {
-				auto.twoCubeAuto(startingPosition, -1, (gameData.charAt(0) == 'L') ? 1 : -1);
+		case scaleSwitchAuto:
+			if (startingPosition == left) {
+				auto.scaleSwitchAutoLeft((gameData.charAt(1) == 'L') ? 1 : -1, (gameData.charAt(0) == 'L') ? 1 : -1);
+			} else if (startingPosition == right) {
+				auto.scaleSwitchAutoRight((gameData.charAt(1) == 'L') ? 1 : -1, (gameData.charAt(0) == 'L') ? 1 : -1);
+			}
+			break;
+			
+		case doubleScaleAuto:
+			if (startingPosition == left) {
+				auto.doubleScaleAutoLeft((gameData.charAt(1) == 'L') ? 1: -1);
+			} else if (startingPosition == right) {
+				auto.doubleScaleAutoRight((gameData.charAt(1) == 'L') ? 1: -1);
 			}
 			break;
 			

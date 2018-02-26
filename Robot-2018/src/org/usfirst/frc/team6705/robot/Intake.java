@@ -35,6 +35,7 @@ public class Intake {
 	
 	public static boolean outtakeForTime(double time, double startTime) {
 		if (Robot.timer.get() - startTime >= time) {
+			stopRollers();
 			return true;
 		}
 		outtake();
@@ -43,6 +44,7 @@ public class Intake {
 	
 	public static boolean intakeForTime(double time, double startTime) {
 		if (Robot.timer.get() - startTime >= time) {
+			stopRollers();
 			return true;
 		}
 		intake();

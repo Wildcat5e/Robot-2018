@@ -17,7 +17,7 @@ public class Constants {
 			leftIntakeSparkChannel = 2,
 			rightIntakeSparkChannel = 4,
 			elevatorSpark1 = 0,
-			elevatorSpark2 = 1
+			elevatorSpark2 = 1;
 	
 	//Solenoids
 	public static final int intakeSolenoidA = 0,

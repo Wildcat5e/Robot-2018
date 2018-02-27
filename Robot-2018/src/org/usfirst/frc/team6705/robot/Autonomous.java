@@ -66,11 +66,15 @@ public class Autonomous {
 			state = nextState(state);
 			break;
 		case 1:
-			if (DriveTrain.runMotionProfile(exampleProfile) /*&& Elevator.moveToHeightAuto(switchHeight, switchHeight - floorHeight, 1)*/) {
+			if (DriveTrain.runMotionProfile(exampleProfile) && Elevator.moveToHeightAuto(switchHeight, switchHeight - floorHeight, 1)) {
 				state = nextState(state);
 			}
 			break;
 		case 2:
+			if (DriveTrain.turnDegrees(180)) {
+				state = nextState(state);
+			}
+		case 3:
 			endAuto();
 			break;
 		}
@@ -785,15 +789,14 @@ public class Autonomous {
 				}
 				break;
 			case 3:
-				if (DriveTrain.turnDegrees(-180)) {
-					DriveTrain.startMotionProfile(profileGetCubeFromScaleRight);
+				Intake.open();
+				if (Elevator.moveToFloorAuto(previousElevatorHeight - floorHeight)) {
+					Intake.close();
 					state = nextState(state);
 				}
 				break;
 			case 4:
-				Intake.open();
-				if (DriveTrain.runMotionProfile(profileGetCubeFromScaleRight) && Elevator.moveToFloorAuto(previousElevatorHeight - floorHeight)) {
-					Intake.close();
+				if (Intake.intakeForTime(timeToRollIn, previousTime)) {
 					state = nextState(state);
 				}
 				break;

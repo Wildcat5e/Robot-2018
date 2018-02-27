@@ -5,7 +5,7 @@
 package org.usfirst.frc.team6705.robot;
 
 //import edu.wpi.first.wpilibj.Preferences;
-
+//laxxx
 public class Constants {
 	
 	//Motor Controllers
@@ -14,7 +14,8 @@ public class Constants {
 			leftIntakeSparkChannel = 2,
 			rightIntakeSparkChannel = 4,
 			elevatorSpark1 = 0,
-			elevatorSpark2 = 1;
+			elevatorSpark2 = 1
+			elevatorSpark3 = bigdog;
 	
 	//Solenoids
 	public static final int intakeSolenoidA = 0,

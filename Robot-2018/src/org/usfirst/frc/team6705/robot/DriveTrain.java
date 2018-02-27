@@ -67,6 +67,20 @@ public class DriveTrain {
 		resetEncoders();
 	}
 	
+	public static void reverseDriveTrain() {
+		leftTalon.setInverted(false);
+		rightTalon.setInverted(true);
+		leftVictor.setInverted(false);
+		rightVictor.setInverted(true);
+	}
+	
+	public static void undoReverseDriveTrain() {
+		leftTalon.setInverted(true);
+		rightTalon.setInverted(false);
+		leftVictor.setInverted(true);
+		rightVictor.setInverted(false);
+	}
+	
 	//Tank drive for teleop control
 	public static void tankDrive(double leftSpeed, double rightSpeed) {
 		leftSpeed = applyDeadband(leftSpeed);

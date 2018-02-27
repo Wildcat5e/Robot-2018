@@ -9,7 +9,7 @@ package org.usfirst.frc.team6705.robot;
 public class Constants {
 	
 	//Motor Controllers
-	public static final t
+	public static final int
 			leftTalonChannel = 0, 
 			rightTalonChannel = 1,
 			leftVictorChannel = 0,

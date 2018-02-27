@@ -26,6 +26,7 @@ public class MotionProfile {
 	private double[][] profileLeft;
 	private double[][] profileRight;
 	private int numberOfPoints;
+	private boolean reversed = false;
 	
 	private SetValueMotionProfile setValue = SetValueMotionProfile.Disable;
 
@@ -51,6 +52,18 @@ public class MotionProfile {
 		profileRight = arrayRight;
 
 		numberOfPoints = totalCount;
+	}
+	
+	public MotionProfile(WPI_TalonSRX left, WPI_TalonSRX right, double[][] arrayLeft, double[][] arrayRight, int totalCount, boolean isReverse) {
+		talonLeft = left;
+		talonRight = right;
+		
+		profileLeft = arrayLeft;
+		profileRight = arrayRight;
+
+		numberOfPoints = totalCount;
+		
+		reversed = isReverse;
 	}
 	
 	public void setup() {
@@ -100,8 +113,11 @@ public class MotionProfile {
 				//Not started yet
 				if (start) {
 					start = false;
+					if (reversed) {
+						DriveTrain.reverseDriveTrain();
+					}
 					setValue = SetValueMotionProfile.Disable;
-									
+
 					state = 1;
 					timeoutLoops = timeoutLimit;
 				}
@@ -122,6 +138,9 @@ public class MotionProfile {
 				if (status.activePointValid && status.isLast) {
 					//Motion Profile complete, load next one
 					finished = true;
+					if (reversed) {
+						DriveTrain.undoReverseDriveTrain();
+					}
 					setValue = SetValueMotionProfile.Hold;
 					state = 0;
 					timeoutLoops = -1;

@@ -73,14 +73,15 @@ public class Constants {
 				velocityTurning = 3;
 	
 	//Elevator Constants
-	public static final double elevatorConstantSpeedCube = 0.4,
-			elevatorConstantSpeedNoCube = 0.38,
+	public static final double elevatorEquilibriumSpeedWithCube = 0.32,
+			elevatorEquilibriumSpeedNoCube = 0.3,
 			elevatorMaxSpeedUp = 0.85,
-			elevatorMaxSpeedDown = 0,
+			elevatorMaxSpeedDown = 0.1,
 			elevatorMinimumSpeedUp = 0.55,
 			elevatorMinimumSpeedDown = 0.25,
 			ticksPerRotationElevator = 2048,
-			verticalInchesPerTick = 2 * (3.1 * Math.PI) / ticksPerRotationElevator,
+			pulleyDiameter = 2.1,
+			verticalInchesPerTick = 2 * (pulleyDiameter * Math.PI) / ticksPerRotationElevator,
 			elevatorTolerance = 1, //Inches
 			maximumHeight = 71,
 			floorHeight = 0.0,

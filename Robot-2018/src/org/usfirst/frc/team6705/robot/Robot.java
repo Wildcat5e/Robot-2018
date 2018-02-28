@@ -11,7 +11,7 @@
 
 package org.usfirst.frc.team6705.robot;
 
-import edu.wpi.first.wpilibj.CameraServer;
+//import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -27,7 +27,7 @@ import org.usfirst.frc.team6705.robot.Elevator;
 import org.usfirst.frc.team6705.robot.Elevator.ElevatorState;
 import org.usfirst.frc.team6705.robot.Intake.IntakeState;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
+//import com.ctre.phoenix.motorcontrol.ControlMode;
 
 
 /**
@@ -45,7 +45,7 @@ public class Robot extends IterativeRobot {
 	private static final String scaleSwitchAuto = "scaleSwitch";
 	private static final String doubleScaleAuto = "doubleScale";
 	private static final String baselineAuto = "baseline";
-	private static final String bestSimple = "bestSimple";
+	//private static final String bestSimple = "bestSimple";
 	private static final String test = "test";
 	private static final String motionProfileTest = "mp";
 	private static final String stall = "stall";
@@ -91,7 +91,7 @@ public class Robot extends IterativeRobot {
 		autoChooser.addDefault("ONE cube on SWITCH", switchAuto);
 		autoChooser.addObject("TWO cubes - scale AND switch", scaleSwitchAuto);
 		autoChooser.addObject("TWO cubes on SCALE (only in playoffs or if teammate is doing switch)", doubleScaleAuto);
-		autoChooser.addObject("Best Simple Scoring Method", bestSimple);
+		//autoChooser.addObject("Best Simple Scoring Method", bestSimple);
 		autoChooser.addObject("Cross Baseline ONLY", baselineAuto);
 		autoChooser.addObject("Test Auto - Drive, Turn, Drive", test);
 		autoChooser.addObject("Super Basic Test Auto", motionProfileTest);
@@ -187,7 +187,7 @@ public class Robot extends IterativeRobot {
 				auto.doubleScaleAutoRight((gameData.charAt(1) == 'L') ? 1: -1);
 			}
 			break;
-			
+		/*
 		case bestSimple:
 			switch(startingPosition) {
 			case left:
@@ -216,7 +216,7 @@ public class Robot extends IterativeRobot {
 				}
 				break;
 			}
-			break;
+			break;*/
 		case test:
 			System.out.println("Running test auto");
 			auto.testAuto();

@@ -314,11 +314,11 @@ public class Robot extends IterativeRobot {
 	}*/
 		
 		//Buttons - set Elevator lift to certain height - floor, switch, or scale
-		if (liftStick.getRawButton(12) || liftStick.getRawButton(11) || driveStick.getAButton()) {
+		if ((liftStick.getRawButton(12) || liftStick.getRawButton(11) || driveStick.getAButton()) && elevatorState != ElevatorState.FLOOR) {
 			moveToFloor();
-		} else if (liftStick.getRawButton(10) || liftStick.getRawButton(9) || driveStick.getBButton()) {
+		} else if ((liftStick.getRawButton(10) || liftStick.getRawButton(9) || driveStick.getBButton()) && elevatorState != ElevatorState.SWITCH) {
 			moveToSwitch();
-		} else if (liftStick.getRawButton(8) || liftStick.getRawButton(7)  || driveStick.getYButton()) {
+		} else if ((liftStick.getRawButton(8) || liftStick.getRawButton(7)  || driveStick.getYButton()) && elevatorState != ElevatorState.SCALE) {
 			moveToScale();
 		} 
 				

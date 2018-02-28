@@ -86,10 +86,12 @@ public class DriveTrain {
 		leftSpeed = applyDeadband(leftSpeed);
 		rightSpeed = applyDeadband(rightSpeed);
 		
-
 		
 		double leftTarget = Math.copySign(leftSpeed * leftSpeed * leftSpeed * -1, leftSpeed) * maxTicksPer100ms;
 		double rightTarget = Math.copySign(rightSpeed * rightSpeed * rightSpeed * -1, rightSpeed) * maxTicksPer100ms;
+		
+		System.out.print("Speed Left:" + getFPS(leftTarget));
+		System.out.println("Speed right:" + getFPS(rightTarget));
 		
 		setVelocity(leftTarget, rightTarget);
 		

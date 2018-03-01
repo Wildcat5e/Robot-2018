@@ -14,7 +14,8 @@ import edu.wpi.first.wpilibj.Notifier;
 
 public class MotionProfile {
 
-	private MotionProfileStatus status = new MotionProfileStatus();
+	private MotionProfileStatus statusLeft = new MotionProfileStatus();
+	private MotionProfileStatus statusRight = new MotionProfileStatus();
 	double pos = 0, vel = 0, heading = 0;
 	private WPI_TalonSRX talonLeft;
 	private WPI_TalonSRX talonRight;
@@ -89,9 +90,9 @@ public class MotionProfile {
 	
 	public void periodic() {
 		
-		talonLeft.getMotionProfileStatus(status);
-		talonRight.getMotionProfileStatus(status);
-		/*
+		talonLeft.getMotionProfileStatus(statusLeft);
+		talonRight.getMotionProfileStatus(statusRight);
+		
 		if (timeoutLoops < 0) {
 			System.out.println("Motion Profile Disabled");
 		} else {
@@ -100,7 +101,7 @@ public class MotionProfile {
 			} else {
 				timeoutLoops--;
 			}
-		}*/
+		}
 		
 		if (talonLeft.getControlMode() != ControlMode.MotionProfile) {
 			state = 0;
@@ -125,18 +126,18 @@ public class MotionProfile {
 			case 1:
 				//Wait for points to start filling
 				System.out.println("Waiting for points to be filled");
-				if (status.btmBufferCnt > minimumTrajectoryPoints) {
+				if (statusLeft.btmBufferCnt > minimumTrajectoryPoints && statusRight.btmBufferCnt > minimumTrajectoryPoints) {
 					setValue = SetValueMotionProfile.Enable;
 					state = 2;
 					timeoutLoops = timeoutLimit;
 				} 
 				break;
 			case 2:
-				if (!status.isUnderrun) {
+				if (!statusLeft.isUnderrun && !statusRight.isUnderrun) {
 					timeoutLoops = timeoutLimit;
 				}
 				System.out.println("Running motion profile, not finished");
-				if (status.activePointValid && status.isLast) {
+				if (statusLeft.activePointValid && statusLeft.isLast) {
 					//Motion Profile complete, load next one
 					finished = true;
 					if (!reversed) {
@@ -170,9 +171,12 @@ public class MotionProfile {
 	    TrajectoryPoint pointLeft = new TrajectoryPoint();
 		TrajectoryPoint pointRight = new TrajectoryPoint();
 		
-		if (status.hasUnderrun) {
-			System.out.println("Error: Motion Profile has underrun.");
+		if (statusLeft.hasUnderrun) {
+			System.out.println("Error: Motion Profile Left has underrun.");
 			talonLeft.clearMotionProfileHasUnderrun(0);
+		}
+		if (statusRight.hasUnderrun) {
+			System.out.println("Error: Motion Profile Right has underrun.");
 			talonRight.clearMotionProfileHasUnderrun(0);
 		}
 		
@@ -194,13 +198,16 @@ public class MotionProfile {
 			pointLeft.timeDur = getTrajectoryDuration((int)profileLeft[i][2]);
 			pointLeft.zeroPos = false;
 			
-			if (i == 0)
+			if (i == 0) {
 				pointLeft.zeroPos = true; /* set this to true on the first point */
+			}
 
 			pointLeft.isLastPoint = false;
-			if ((i + 1) == totalCount)
+			if ((i + 1) == totalCount) {
 				pointLeft.isLastPoint = true; /* set this to true on the last point  */
-
+			}
+				
+			
 			talonLeft.pushMotionProfileTrajectory(pointLeft);
 			
 			//Do the same for the Right side
@@ -215,12 +222,14 @@ public class MotionProfile {
 			pointRight.timeDur = getTrajectoryDuration((int)profileRight[i][2]);
 			pointRight.zeroPos = false;
 			
-			if (i == 0)
+			if (i == 0) {
 				pointRight.zeroPos = true;
+			}
 
 			pointRight.isLastPoint = false;
-			if ((i + 1) == totalCount)
+			if ((i + 1) == totalCount) {
 				pointRight.isLastPoint = true; /* set this to true on the last point  */
+			}
 
 			talonRight.pushMotionProfileTrajectory(pointRight);
 			

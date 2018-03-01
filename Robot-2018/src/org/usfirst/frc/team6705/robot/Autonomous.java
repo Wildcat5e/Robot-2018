@@ -184,12 +184,13 @@ public class Autonomous {
 	
 	public void switchAuto(String startingPosition, int switchSide, int scaleSide) {
 		//SwitchSide: 1 -> left, -1 -> right
-		//double horizDistance = (switchSide == 1) ? 57.5 : 54.5;
+		double horizDistance = (switchSide == 1) ? 57.5 : 54.5;
 		
-		if (!isLifting) {
+		if (!isLifting && !Elevator.isAtFloor()) {
 			Elevator.maintainHeight(previousElevatorHeight);
 		}
 		
+		/*
 		if (startingPosition == middle && switchSide == 1) { //Left switch auto 
 			switch (state) {
 			case 0:
@@ -258,8 +259,8 @@ public class Autonomous {
 			SmartDashboard.putNumber("Auto State", -1);
 			System.out.println("DON'T DO SWITCH AUTO ON THE SIDES STUPID");
 		}
+		*/
 		
-		/*
 		if ((startingPosition == left && switchSide == 1) || (startingPosition == right && switchSide == -1)) { //Same side switch auto
 			switch (state) {
 			case 0:
@@ -397,6 +398,16 @@ public class Autonomous {
 				}
 				break;
 			case 8:
+				if (DriveTrain.moveByDistance(-30, velocitySlow)) {
+					state = nextState(state);
+				}
+				break;
+			case 9:
+				if (Elevator.moveToFloorAuto(previousElevatorHeight - floorHeight)) {
+					state = nextState(state);
+				}
+				break;
+			case 10:
 				endAuto();
 				break;
 			} 
@@ -404,7 +415,7 @@ public class Autonomous {
 			//Stupid, never going to do left switch if starting on the right & vice versa
 			SmartDashboard.putNumber("Auto State", -1);
 			baselineAuto();
-		}*/
+		}
 	}
 	
 	//***************************************************************************//

@@ -126,7 +126,7 @@ public class DriveTrain {
 			return true;
 		}
 		
-		int direction = (inches > 0) ? -1 : 1;
+		int direction = (inches > 0) ? 1 : -1;
 		
 		double ticksRemaining = targetEncoderTicks - ticksSoFar;
 		double fractionRemaining = ticksRemaining/targetEncoderTicks;
@@ -151,7 +151,7 @@ public class DriveTrain {
 			scaledSpeedL = minimumSpeed  + (kP_Angle * degreeErrorLeft * direction);
 		}
 		
-		setVelocity(direction * scaledSpeedL, direction * scaledSpeedR);
+		setVelocity(direction * -scaledSpeedL, direction * -scaledSpeedR);
 		return false;
 	}
 	

@@ -46,7 +46,7 @@ public class Robot extends IterativeRobot {
 	private static final String doubleScaleAuto = "doubleScale";
 	private static final String baselineAuto = "baseline";
 	//private static final String bestSimple = "bestSimple";
-	private static final String test = "test";
+	private static final String motionProfileStraight = "test";
 	private static final String motionProfileTest = "mp";
 	private static final String stall = "stall";
 	private String autoSelected;
@@ -93,9 +93,9 @@ public class Robot extends IterativeRobot {
 		autoChooser.addObject("TWO cubes on SCALE (only in playoffs or if teammate is doing switch)", doubleScaleAuto);
 		//autoChooser.addObject("Best Simple Scoring Method", bestSimple);
 		autoChooser.addObject("Cross Baseline ONLY", baselineAuto);
-		autoChooser.addObject("Test Auto - Drive, Turn, Drive", test);
-		autoChooser.addObject("Super Basic Test Auto", motionProfileTest);
-		autoChooser.addObject("Stalling Test Auto", stall);
+		autoChooser.addObject("Straight Motion Profile", motionProfileStraight);
+		autoChooser.addObject("Motion Profile Test Auto", motionProfileTest);
+		//autoChooser.addObject("Stalling Test Auto", stall);
 		SmartDashboard.putData("Auto choices", autoChooser);
 		
 		positionChooser.addDefault("Left Starting Position", left);
@@ -217,8 +217,7 @@ public class Robot extends IterativeRobot {
 				break;
 			}
 			break;*/
-		case test:
-			System.out.println("Running test auto");
+		case motionProfileStraight:
 			auto.testAuto();
 			break;
 		case motionProfileTest:
@@ -237,7 +236,8 @@ public class Robot extends IterativeRobot {
 		
 		DriveTrain.stop();
 		Intake.stopRollers();
-		//Elevator.stop();
+		
+		DriveTrain.undoReverseDriveTrain();
 		
 		DriveTrain.leftTalon.configClosedloopRamp(rampRateTeleop, 0);
 		DriveTrain.rightTalon.configClosedloopRamp(rampRateTeleop, 0);

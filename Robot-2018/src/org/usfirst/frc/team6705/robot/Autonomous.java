@@ -87,57 +87,30 @@ public class Autonomous {
 	
 	//***************************************************************************//
 
+	MotionProfile profileStraight = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, straightTest_L, straightTest_R, straightTest_R.length);
+	
 	public void testAuto() {
 		
-		
-		if (!isLifting) {
+		if (!isLifting && !Elevator.isAtFloor()) {
 			Elevator.maintainHeight(previousElevatorHeight);
 		}
 		
 		switch (state) {
 		case 0:
 			setupAuto();
+			DriveTrain.setupMotionProfile(profileStraight);
+			DriveTrain.startMotionProfile(profileStraight);
 			state = nextState(state);
 			break;
 		case 1:
-			if (DriveTrain.moveByDistance(120, velocityMedium)) {
+			if (DriveTrain.runMotionProfile(profileStraight)) {
 				state = nextState(state);
 			}
 			break;
 		case 2:
-			if (DriveTrain.turnDegrees(90)) {
-				state = nextState(state);
-			}
-			break;
-		case 3:
-			if (DriveTrain.moveByDistance(120, velocityMedium)) {
-				state = nextState(state);
-			}
-			break;
-		case 4:
-			if (DriveTrain.turnDegrees(90)) {
-				state = nextState(state);
-			}
-			break;
-		case 5:
-			if (DriveTrain.moveByDistance(120, velocityMedium)) {
-				state = nextState(state);
-			}
-			break;
-		case 6:
-			if(DriveTrain.turnDegrees(90)) {
-				state = nextState(state);
-			}
-			break;
-		case 7:
-			if (DriveTrain.moveByDistance(120, velocityMedium)) {
-				state = nextState(state);
-			}
-			break;     
-		case 8:
 			endAuto();
-			break;
 		}
+		
 	}
 	//****************************************************************************//
 	public void testStallAuto() {

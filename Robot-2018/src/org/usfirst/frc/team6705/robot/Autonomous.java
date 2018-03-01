@@ -66,6 +66,7 @@ public class Autonomous {
 		switch (state) {
 		case 0:
 			setupAuto();
+			DriveTrain.setupMotionProfile(exampleProfile);
 			DriveTrain.startMotionProfile(exampleProfile);
 			state = nextState(state);
 			break;

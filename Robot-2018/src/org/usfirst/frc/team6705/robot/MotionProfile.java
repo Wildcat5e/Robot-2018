@@ -124,6 +124,7 @@ public class MotionProfile {
 				break;
 			case 1:
 				//Wait for points to start filling
+				System.out.println("Waiting for points to be filled");
 				if (status.btmBufferCnt > minimumTrajectoryPoints) {
 					setValue = SetValueMotionProfile.Enable;
 					state = 2;
@@ -134,7 +135,7 @@ public class MotionProfile {
 				if (!status.isUnderrun) {
 					timeoutLoops = timeoutLimit;
 				}
-				
+				System.out.println("Running motion profile, not finished");
 				if (status.activePointValid && status.isLast) {
 					//Motion Profile complete, load next one
 					finished = true;

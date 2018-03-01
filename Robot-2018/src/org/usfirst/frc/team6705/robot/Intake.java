@@ -29,6 +29,7 @@ public class Intake {
 	}
 	
 	public static void roll(double speed) {
+	    System.out.println("Rolling speed: " + speed);
 		rollersLeft.set(-speed * maxRollersSpeed);
 		rollersRight.set(speed * maxRollersSpeed);
 	}

@@ -172,11 +172,11 @@ public class DriveTrain {
 	}
 
 	public static boolean runMotionProfile(MotionProfile profile) {
-		profile.periodic();
-
+		System.out.println("Running motion profile");
 		SetValueMotionProfile setValue = profile.getSetValue();
 		leftTalon.set(ControlMode.MotionProfile, setValue.value);
 		rightTalon.set(ControlMode.MotionProfile, setValue.value);
+	    profile.periodic();
 		
 		if (profile.isMotionProfileComplete()) {
 			return true;

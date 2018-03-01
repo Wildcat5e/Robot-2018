@@ -73,20 +73,20 @@ public class Constants {
 				velocityTurning = 3;
 	
 	//Elevator Constants
-	public static final double elevatorEquilibriumSpeedWithCube = 0.32,
-			elevatorEquilibriumSpeedNoCube = 0.3,
-			elevatorMaxSpeedUp = 0.85,
-			elevatorMaxSpeedDown = 0.04,
-			elevatorMinimumSpeedUp = 0.45,
-			elevatorMinimumSpeedDown = 0.2,
+	public static final double elevatorEquilibriumSpeedWithCube = 0.31,
+			elevatorEquilibriumSpeedNoCube = 0.29,
+			elevatorMaxSpeedUp = 1,
+			elevatorMaxSpeedDown = 0,
+			elevatorMinimumSpeedUp = 0.55,
+			elevatorMinimumSpeedDown = 0.1,
 			ticksPerRotationElevator = 2048,
-			pulleyDiameter = 2.1,
+			pulleyDiameter = 2.75,
 			verticalInchesPerTick = 2 * (pulleyDiameter * Math.PI) / ticksPerRotationElevator,
 			elevatorTolerance = 1, //Inches
 			maximumHeight = 71,
 			floorHeight = 0.0,
-			switchHeight = 25,
-			scaleHeight = 66.0,
+			switchHeight = 30,
+			scaleHeight = 70.0,
 			elevatorRampTime = 0.2, //seconds
 			elevatorDecelerationDistance = 8,
 			ropeThickness = 0.065, //inches

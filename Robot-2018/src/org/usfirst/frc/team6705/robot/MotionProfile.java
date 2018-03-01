@@ -91,7 +91,7 @@ public class MotionProfile {
 		
 		talonLeft.getMotionProfileStatus(status);
 		talonRight.getMotionProfileStatus(status);
-
+		/*
 		if (timeoutLoops < 0) {
 			System.out.println("Motion Profile Disabled");
 		} else {
@@ -100,7 +100,7 @@ public class MotionProfile {
 			} else {
 				timeoutLoops--;
 			}
-		}
+		}*/
 		
 		if (talonLeft.getControlMode() != ControlMode.MotionProfile) {
 			state = 0;
@@ -117,7 +117,7 @@ public class MotionProfile {
 						DriveTrain.reverseDriveTrain();
 					}
 					setValue = SetValueMotionProfile.Disable;
-
+					System.out.println("Starting Motion Profile");
 					state = 1;
 					timeoutLoops = timeoutLimit;
 				}
@@ -128,7 +128,7 @@ public class MotionProfile {
 					setValue = SetValueMotionProfile.Enable;
 					state = 2;
 					timeoutLoops = timeoutLimit;
-				}
+				} 
 				break;
 			case 2:
 				if (!status.isUnderrun) {
@@ -141,6 +141,7 @@ public class MotionProfile {
 					if (reversed) {
 						DriveTrain.undoReverseDriveTrain();
 					}
+					System.out.println("FINISHED MOTION PROFILE");
 					setValue = SetValueMotionProfile.Hold;
 					state = 0;
 					timeoutLoops = -1;
@@ -163,7 +164,9 @@ public class MotionProfile {
 	}
 	
 	private void startFillingPoints(double[][] profileLeft, double[][] profileRight, int totalCount) {
-		TrajectoryPoint pointLeft = new TrajectoryPoint();
+		System.out.println("Starting filling MP points");
+	    
+	    TrajectoryPoint pointLeft = new TrajectoryPoint();
 		TrajectoryPoint pointRight = new TrajectoryPoint();
 		
 		if (status.hasUnderrun) {

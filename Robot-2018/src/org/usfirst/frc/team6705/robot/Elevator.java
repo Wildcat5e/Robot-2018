@@ -96,7 +96,8 @@ public class Elevator /*extends PIDSubsystem*/ {
 	    if (getCurrentPosition() < height + elevatorTolerance) {
 	        System.out.println("Trying to maintain height " + height + "Current Position is " + getCurrentPosition());
 	        double speed = (Intake.solenoid.get() == DoubleSolenoid.Value.kReverse) ? elevatorEquilibriumSpeedWithCube : elevatorEquilibriumSpeedNoCube;//elevatorMinimumSpeedUp * (height - getCurrentPosition());
-	        System.out.println("Equilibrium speed: " + speed);
+	        //speed = (height - getCurrentPosition()) * 0.1;
+	        //System.out.println("Equilibrium speed: " + speed);
 	        motor.set(speed);
 	    } /*else {
 	        motor.set(0);

@@ -70,12 +70,12 @@ public class Autonomous {
 			state = nextState(state);
 			break;
 		case 1:
-			if (DriveTrain.runMotionProfile(exampleProfile) && Elevator.moveToHeightAuto(switchHeight, switchHeight - floorHeight, 1)) {
+			if (DriveTrain.runMotionProfile(exampleProfile) /*&& Elevator.moveToHeightAuto(switchHeight, switchHeight - floorHeight, 1)*/) {
 				state = nextState(state);
 			}
 			break;
 		case 2:
-			if (DriveTrain.moveByDistance(-40, velocitySlow) && Elevator.moveToFloorAuto(previousElevatorHeight - floorHeight)) {
+			if (DriveTrain.moveByDistance(-40, velocitySlow) /*&& Elevator.moveToFloorAuto(previousElevatorHeight - floorHeight)*/) {
 				state = nextState(state);
 			}
 		case 3:

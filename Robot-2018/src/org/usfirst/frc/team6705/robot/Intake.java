@@ -14,18 +14,18 @@ public class Intake {
 	public static void setup() {
 	    solenoid.set(DoubleSolenoid.Value.kReverse);
 	    rollersRight.setInverted(false);
-	    rollersLeft.setInverted(true);
+	    rollersLeft.setInverted(false);
 	    
 	}
 	
 	public static void intake() {
-		rollersLeft.set(rollersSpeedAuto);
-		rollersRight.set(-rollersSpeedAuto);
+		rollersLeft.set(-rollersSpeedAuto);
+		rollersRight.set(rollersSpeedAuto);
 	}
 	
 	public static void outtake() {
-		rollersLeft.set(-rollersSpeedAuto);
-		rollersRight.set(rollersSpeedAuto);
+		rollersLeft.set(rollersSpeedAuto);
+		rollersRight.set(-rollersSpeedAuto);
 	}
 	
 	public static void roll(double speed) {

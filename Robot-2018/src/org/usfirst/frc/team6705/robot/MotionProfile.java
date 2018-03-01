@@ -113,7 +113,7 @@ public class MotionProfile {
 				//Not started yet
 				if (start) {
 					start = false;
-					if (reversed) {
+					if (!reversed) {
 						DriveTrain.reverseDriveTrain();
 					}
 					setValue = SetValueMotionProfile.Disable;
@@ -139,7 +139,7 @@ public class MotionProfile {
 				if (status.activePointValid && status.isLast) {
 					//Motion Profile complete, load next one
 					finished = true;
-					if (reversed) {
+					if (!reversed) {
 						DriveTrain.undoReverseDriveTrain();
 					}
 					System.out.println("FINISHED MOTION PROFILE");

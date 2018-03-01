@@ -59,7 +59,7 @@ public class Autonomous {
 	MotionProfile exampleProfile = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitch_Middle_L, leftSwitch_Middle_R, leftSwitch_Middle_L.length);
 	
 	public void motionProfileTestAuto() {
-		if (!isLifting) {
+		if (!isLifting && !Elevator.isAtFloor()) {
 			Elevator.maintainHeight(previousElevatorHeight);
 		}
 		

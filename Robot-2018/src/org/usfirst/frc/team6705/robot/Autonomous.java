@@ -393,6 +393,59 @@ public class Autonomous {
 	
 	//***************************************************************************//
 	
+	public void doubleScaleAuto(int scaleSide, String startingPosition) {
+		double angle1 = 18.65;
+		
+		if ((scaleSide == 1 && startingPosition == left) || (scaleSide == -1 && startingPosition == right)) {
+			switch (state) {
+			case 0:
+				setupAuto();
+				state = nextState(state);
+				break;
+			case 1: //Move forward part way
+				if (DriveTrain.moveByDistance(135.65, velocityFast)) {
+					state = nextState(state);
+				}
+				break;
+			case 2: //Move at angle and lift elevator
+				//Elevator.setHeight(scaleHeight);
+				if (DriveTrain.moveByDistance(137, angle1 * -scaleSide, velocityMedium) &&  Elevator.moveToHeightAuto(scaleHeight, scaleHeight - previousElevatorHeight, 1)) {
+					state = nextState(state);
+				}
+				break;
+			case 3: //Outtake
+				if (Intake.outtakeForTime(timeToRollOut, previousTime)) {
+					state = nextState(state);
+				}
+				break;
+			case 4: //Turn Around
+				if (DriveTrain.turnDegrees(-scaleSide * (175 - angle1))) {
+					state = nextState(state);	
+				}
+				break;
+			case 5: //Outtake
+				Intake.open();
+				if (DriveTrain.moveByDistance(50, velocitySlow) && Elevator.moveToFloorAuto(previousElevatorHeight - floorHeight)) {
+					Intake.close();
+					state = nextState(state);
+				}
+				break;
+			case 6:
+				if (Intake.intakeForTime(timeToRollIn, previousTime)) {
+					state = nextState(state);
+				}
+				break;
+			case 7:
+				if (DriveTrain.turnDegrees(scaleSide * (175 - angle1))) {
+					state = nextState(state);
+				}
+				break;
+			}
+		}
+
+	}
+	
+	/*
 	MotionProfile profileScaleLeft_Same = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitch_Middle_L, leftSwitch_Middle_R, leftSwitch_Middle_L.length);
 	MotionProfile profileScaleLeft_Opposite = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitch_Middle_L, leftSwitch_Middle_R, leftSwitch_Middle_L.length);
 
@@ -401,6 +454,7 @@ public class Autonomous {
 
 	MotionProfile profileCubeToScaleRight = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitch_Middle_L, leftSwitch_Middle_R, leftSwitch_Middle_L.length);
 	MotionProfile profileCubeToScaleLeft = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitch_Middle_L, leftSwitch_Middle_R, leftSwitch_Middle_L.length);
+	
 	
 	public void doubleScaleAutoLeft(int scaleSide) {
 		if (!isLifting) {
@@ -524,8 +578,6 @@ public class Autonomous {
 		}
 	}
 	
-	//***************************************************************************//
-
 	MotionProfile profileScaleRight_Same = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitch_Middle_L, leftSwitch_Middle_R, leftSwitch_Middle_L.length);
 	MotionProfile profileScaleRight_Opposite = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitch_Middle_L, leftSwitch_Middle_R, leftSwitch_Middle_L.length);
 
@@ -650,8 +702,6 @@ public class Autonomous {
 			
 		}
 	}
-
-	//***************************************************************************//
 	
 	MotionProfile profileGetCubeFromScaleLeft_Opposite = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitch_Middle_L, leftSwitch_Middle_R, leftSwitch_Middle_L.length);
 
@@ -659,6 +709,7 @@ public class Autonomous {
 	MotionProfile profileBackAwayFromSwitchCube_Left = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitch_Middle_L, leftSwitch_Middle_R, leftSwitch_Middle_L.length, true);
 	
 	MotionProfile profileCrossFieldToScaleLeftToRight = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitch_Middle_L, leftSwitch_Middle_R, leftSwitch_Middle_L.length);
+	*/
 	
 	public void scaleSwitchAuto(int scaleSide, int switchSide, String startingPosition) {
 		if (!isLifting && !Elevator.isAtFloor()) {
@@ -706,6 +757,7 @@ public class Autonomous {
 				if (Intake.intakeForTime(timeToRollIn, previousTime)) {
 					state = nextState(state);
 				}
+				break;
 			case 7:
 				if (Elevator.moveToHeightAuto(switchHeight, switchHeight - previousElevatorHeight, 1)) {
 					state = nextState(state);

@@ -180,11 +180,7 @@ public class Robot extends IterativeRobot {
 			break;
 			
 		case doubleScaleAuto:
-			if (startingPosition == left) {
-				auto.doubleScaleAutoLeft((gameData.charAt(1) == 'L') ? 1: -1);
-			} else if (startingPosition == right) {
-				auto.doubleScaleAutoRight((gameData.charAt(1) == 'L') ? 1: -1);
-			}
+			auto.doubleScaleAuto((gameData.charAt(1) == 'L') ? 1: -1, startingPosition);
 			break;
 		/*
 		case bestSimple:
@@ -338,7 +334,7 @@ public class Robot extends IterativeRobot {
 			triggerIntervalsCounted = 0;
 			Elevator.stop();
 		} else {
-			Elevator.maintainHeight(previousHeight);
+			//Elevator.maintainHeight(previousHeight);
 		}
 		
 		

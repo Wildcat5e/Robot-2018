@@ -295,7 +295,10 @@ public class Robot extends IterativeRobot {
             System.out.println("Bumper right, pick up");
 		} else if (driveStick.getBumper(GenericHID.Hand.kLeft)) {
 			dropCube();
-		} else {
+		} else if (liftStick.getRawButton(1)) {
+			Intake.intake();
+		}
+		else {
 			Intake.stopRollers();
 		}
 		
@@ -317,7 +320,7 @@ public class Robot extends IterativeRobot {
 			moveToScale();
 		} 
 				
-		//Triggers - lift and lower Elevator
+		//Operator Joystick - lift and lower Elevator
 		
 		double joystickValue = -liftStick.getRawAxis(1);
 		//double netTrigger = driveStick.getTriggerAxis(GenericHID.Hand.kRight) - driveStick.getTriggerAxis(GenericHID.Hand.kLeft);
@@ -330,11 +333,8 @@ public class Robot extends IterativeRobot {
 		} else if (elevatorState == ElevatorState.MANUAL && !Elevator.isAtFloor()) {
 			triggerIntervalsCounted = 0;
 			Elevator.maintainHeight(previousHeight);
-		} else if (Elevator.getCurrentPosition() < 10) {
-			triggerIntervalsCounted = 0;
-			Elevator.stop();
 		} else {
-			//Elevator.maintainHeight(previousHeight);
+			triggerIntervalsCounted = 0;
 		}
 		
 		

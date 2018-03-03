@@ -76,8 +76,8 @@ public class Constants {
 	public static final double elevatorEquilibriumSpeedWithCube = 0.31,
 			elevatorEquilibriumSpeedNoCube = 0.29,
 			elevatorMaxSpeedUp = 1,
-			elevatorMaxSpeedDown = 0.01,
-			elevatorMinimumSpeedUp = 0.55,
+			elevatorMaxSpeedDown = 0.02,
+			elevatorMinimumSpeedUp = 0.45,
 			elevatorMinimumSpeedDown = 0.13,
 			ticksPerRotationElevator = 2048,
 			pulleyDiameter = 2.75,
@@ -86,9 +86,8 @@ public class Constants {
 			maximumHeight = 71,
 			floorHeight = 0.0,
 			switchHeight = 30,
-			scaleHeight = 70.0,
+			scaleHeight = 70.0, 
 			elevatorRampTime = 0.2, //seconds
-			elevatorDecelerationDistance = 8,
 			ropeThickness = 0.065, //inches
 	        maxElevatorTicks = 6500;
 	

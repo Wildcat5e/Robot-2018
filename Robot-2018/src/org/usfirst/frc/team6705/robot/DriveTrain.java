@@ -223,7 +223,7 @@ public class DriveTrain {
 		if (scaledSpeed < minimumTurningSpeed) {
 			scaledSpeed = minimumTurningSpeed;
 		}
-		setVelocity(turnMultiplier * scaledSpeed, -1 * turnMultiplier * scaledSpeed);
+		setVelocity(-1 * turnMultiplier * scaledSpeed, turnMultiplier * scaledSpeed);
 		return false;
 	}
 	

@@ -157,6 +157,9 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {
 		updateSmartDashboard();
+		if (Elevator.isAtFloor()) {
+			Elevator.encoder.reset();
+		}
 		
 		switch (autoSelected) {
 		case switchAuto:
@@ -173,11 +176,7 @@ public class Robot extends IterativeRobot {
 			break;
 			
 		case scaleSwitchAuto:
-			if (startingPosition == left) {
-				auto.scaleSwitchAutoLeft((gameData.charAt(1) == 'L') ? 1 : -1, (gameData.charAt(0) == 'L') ? 1 : -1);
-			} else if (startingPosition == right) {
-				auto.scaleSwitchAutoRight((gameData.charAt(1) == 'L') ? 1 : -1, (gameData.charAt(0) == 'L') ? 1 : -1);
-			}
+			auto.scaleSwitchAuto((gameData.charAt(1) == 'L') ? 1 : -1, (gameData.charAt(0) == 'L') ? 1 : -1, startingPosition);
 			break;
 			
 		case doubleScaleAuto:

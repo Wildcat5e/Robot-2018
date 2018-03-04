@@ -54,50 +54,54 @@ public class Constants {
 	public static final double wheelRadius = 3.0, //inches
 			ticksPerRevolution = 256 * 4, //encoder ticks, multiplied by 4 because quadrature encoders do 4 pulses per count
 			distancePerTick = (wheelRadius * 2.0 * Math.PI)/ticksPerRevolution, //inches per tick
-			turningTolerance = 2.5, //Degrees
+			turningTolerance = 3, //Degrees
 			deadband = 0.08, //-1 to 1
 			rampRateAuto = 1, //Seconds to ramp from 0 to full
 			rampRateTeleop = 0.25,
 			stallCurrent = 60, // TODO  This number needs to be defined in testing (estimate);
-			maxTicksPer100ms = 750,//This is the max speed in native units per 100 ms of the motors (percent output 100%)
+			maxTicksPer100ms = 825,//This is the max speed in native units per 100 ms of the motors (percent output 100%)
 			maxError = 400,
-			minimumSpeed = 900,//ticks per 100 ms
-			minimumTurningSpeed = 950,
-			kP_Angle = 70;
+			minimumSpeed = 100,//ticks per 100 ms
+			minimumTurningSpeedLeft = 370,
+			minimumTurningSpeedRight = 280,
+			kP_Angle = 50;
 	
 	//Driving Speeds in Feet Per Second (FPS)
 		public static final double velocityMax = getFPS(maxTicksPer100ms),
-				velocityFast = 9,
-				velocityMedium = 6,
-				velocitySlow = 3,
-				velocityTurning = 3;
+				velocityFast = 9.5,
+				velocityMedium = 7,
+				velocitySlow = 5.5,
+				velocityTurningLeft = 6,
+				velocityTurningRight = 6,
+				velocityVerySlow = 1.5;
 	
 	//Elevator Constants
 	public static final double elevatorEquilibriumSpeedWithCube = 0.31,
 			elevatorEquilibriumSpeedNoCube = 0.29,
 			elevatorMaxSpeedUp = 1,
-			elevatorMaxSpeedDown = 0.02,
+			elevatorMaxSpeedDown = -0.25,
 			elevatorMinimumSpeedUp = 0.45,
-			elevatorMinimumSpeedDown = 0.13,
+			elevatorMinimumSpeedDown = 0.15,
 			ticksPerRotationElevator = 2048,
 			pulleyDiameter = 2.75,
 			verticalInchesPerTick = 2 * (pulleyDiameter * Math.PI) / ticksPerRotationElevator,
-			elevatorTolerance = 1, //Inches
-			maximumHeight = 71,
+			elevatorTolerance = 2, //Inches
+			maximumHeight = 69.5,
 			floorHeight = 0.0,
+			autoDriveHeight = 5,
 			switchHeight = 30,
-			scaleHeight = 70.0, 
+			scaleHeight = 69.0, 
 			elevatorRampTime = 0.2, //seconds
 			ropeThickness = 0.065, //inches
 	        maxElevatorTicks = 6500;
 	
 	//PID for DriveTrain
-	public static double kP_L = (1023 * 0.05)/240,//-(1023 * 0.1)/maxError,
-	        kP_R = (1023 * 0.05)/200,
-			kD = kP_L = 0,//kP * 10,//1023.0/maxError,
+	public static double kP_L = (1023 * 0.05)/225,//-(1023 * 0.1)/maxError,
+	        kP_R = (1023 * 0.05)/225,
+			kD = 0,//kP * 10,//1023.0/maxError,
 			kI = 0,//1.023/maxError,
-			kF_R = 1023/854,
-			kF_L = 1023/764;
+			kF_R = 1023/825,
+			kF_L = 1023/825;
 	
 	//PID for Elevator
 	public static double kP_Lift = 0.1,

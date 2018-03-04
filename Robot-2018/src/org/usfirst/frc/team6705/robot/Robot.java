@@ -46,9 +46,10 @@ public class Robot extends IterativeRobot {
 	private static final String doubleScaleAuto = "doubleScale";
 	private static final String baselineAuto = "baseline";
 	//private static final String bestSimple = "bestSimple";
-	private static final String motionProfileStraight = "test";
-	private static final String motionProfileTest = "mp";
+	private static final String motionProfileStraight = "mp";
+	private static final String test = "test";
 	private static final String stall = "stall";
+	private static final String singleScale = "singleScale";
 	private String autoSelected;
 	
 	private String startingPosition;
@@ -89,12 +90,13 @@ public class Robot extends IterativeRobot {
 		System.out.println("Robot Init");
 		
 		autoChooser.addDefault("ONE cube on SWITCH", switchAuto);
+		autoChooser.addObject("ONE cube on SCALE", singleScale);
 		autoChooser.addObject("TWO cubes - scale AND switch", scaleSwitchAuto);
 		autoChooser.addObject("TWO cubes on SCALE (only in playoffs or if teammate is doing switch)", doubleScaleAuto);
 		//autoChooser.addObject("Best Simple Scoring Method", bestSimple);
 		autoChooser.addObject("Cross Baseline ONLY", baselineAuto);
 		autoChooser.addObject("Straight Motion Profile", motionProfileStraight);
-		autoChooser.addObject("Motion Profile Test Auto", motionProfileTest);
+		autoChooser.addObject("Test Auto", test);
 		//autoChooser.addObject("Stalling Test Auto", stall);
 		SmartDashboard.putData("Auto choices", autoChooser);
 		
@@ -156,6 +158,11 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
+		
+		
+		if (gameData.length() == 0 || gameData == null) {
+			gameData = DriverStation.getInstance().getGameSpecificMessage();
+		}
 		updateSmartDashboard();
 		if (Elevator.isAtFloor()) {
 			Elevator.encoder.reset();
@@ -169,7 +176,9 @@ public class Robot extends IterativeRobot {
 				auto.switchAuto(startingPosition, -1, (gameData.charAt(1) == 'L') ? 1 : -1);
 			}
 			break;
-			
+		case singleScale:
+			auto.singleScaleAuto((gameData.charAt(1) == 'L') ? 1 : -1, startingPosition);
+			break;
 		case baselineAuto:
 			System.out.print("Baseline Auto Periodic");
 			auto.baselineAuto();
@@ -213,10 +222,10 @@ public class Robot extends IterativeRobot {
 			}
 			break;*/
 		case motionProfileStraight:
-			auto.testAuto();
+			auto.straightMotionProfile();
 			break;
-		case motionProfileTest:
-			auto.motionProfileTestAuto();
+		case test:
+			auto.testAuto();
 			break;
 		case stall:
 		    auto.testStallAuto();
@@ -312,20 +321,22 @@ public class Robot extends IterativeRobot {
 	}*/
 		
 		//Buttons - set Elevator lift to certain height - floor, switch, or scale
-		if ((liftStick.getRawButton(12) || liftStick.getRawButton(11) || driveStick.getAButton()) && elevatorState != ElevatorState.FLOOR) {
+		if (((liftStick.getRawButton(12) || liftStick.getRawButton(11) || driveStick.getAButton()) && elevatorState != ElevatorState.FLOOR) && timer.get() < 145) {
 			moveToFloor();
-		} else if ((liftStick.getRawButton(10) || liftStick.getRawButton(9) || driveStick.getBButton()) && elevatorState != ElevatorState.SWITCH) {
+		} else if (((liftStick.getRawButton(10) || liftStick.getRawButton(9) || driveStick.getBButton()) && elevatorState != ElevatorState.SWITCH) && timer.get() < 145) {
 			moveToSwitch();
-		} else if ((liftStick.getRawButton(8) || liftStick.getRawButton(7)  || driveStick.getYButton()) && elevatorState != ElevatorState.SCALE) {
+		} else if (((liftStick.getRawButton(8) || liftStick.getRawButton(7)  || driveStick.getYButton()) && elevatorState != ElevatorState.SCALE) && timer.get() < 145) {
 			moveToScale();
-		} 
+		} else if (timer.get() > 145 && elevatorState != ElevatorState.FLOOR) {
+			moveToFloor();
+		}
 				
 		//Operator Joystick - lift and lower Elevator
 		
 		double joystickValue = -liftStick.getRawAxis(1);
 		//double netTrigger = driveStick.getTriggerAxis(GenericHID.Hand.kRight) - driveStick.getTriggerAxis(GenericHID.Hand.kLeft);
 		//System.out.println("Net Trigger: " + netTrigger);
-		if (Math.abs(joystickValue) >= 0.1) {
+		if (Math.abs(joystickValue) >= 0.15 && timer.get() < 145) {
 			triggerIntervalsCounted += 1;
 	        previousHeight = Elevator.getCurrentPosition();
 			Elevator.setTeleop(joystickValue, triggerIntervalsCounted);

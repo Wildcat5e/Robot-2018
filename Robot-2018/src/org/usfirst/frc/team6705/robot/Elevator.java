@@ -156,9 +156,12 @@ public class Elevator /*extends PIDSubsystem*/ {
 		//int direction = (currentHeight > targetHeight) ? -1 : 1;
 		
 		double distanceRemaining = Math.abs(currentHeight - targetHeight);
-		if (distanceRemaining <= 0) {
+		System.out.println("Curent height: " + currentHeight);
+		System.out.println("Target height: " + targetHeight);
+		if (currentHeight < targetHeight + elevatorTolerance && currentHeight > targetHeight - elevatorTolerance) {
 			//Elevator.stop();
 			Robot.auto.isLifting = false;
+			System.out.println("Auto elevator move DONE");
 			return true;
 		} else {
 			Robot.auto.isLifting = true;
@@ -194,7 +197,10 @@ public class Elevator /*extends PIDSubsystem*/ {
 		if (Elevator.isAtFloor()) {
 			encoder.reset();
 			//Elevator.stop();
+			Robot.auto.isLifting = false;
 			return true;
+		} else {
+			Robot.auto.isLifting = true;
 		}
 		
 		double fractionRemaining = Math.abs(distanceRemaining/totalDistanceToLift);
@@ -224,7 +230,7 @@ public class Elevator /*extends PIDSubsystem*/ {
 	
 	
 	public static enum ElevatorState {
-		MANUAL, FLOOR, SWITCH, SCALE;
+		MANUAL, FLOOR, SWITCH, SCALE, TEST;
 	}
 	
 	/*

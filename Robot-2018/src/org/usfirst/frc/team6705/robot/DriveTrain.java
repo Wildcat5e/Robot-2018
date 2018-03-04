@@ -95,10 +95,9 @@ public class DriveTrain {
 		
 		setVelocity(leftTarget, rightTarget);
 		
-		/* Percent Output Mode
-		leftTalon.set(ControlMode.PercentOutput, Math.copySign(leftSpeed * leftSpeed, leftSpeed));
-		rightTalon.set(ControlMode.PercentOutput, Math.copySign(rightSpeed * rightSpeed, rightSpeed));
-		*/
+		//Percent Output Mode
+		//setSpeed(leftSpeed * leftSpeed * leftSpeed, rightSpeed * rightSpeed * rightSpeed);
+		
 		
 	}
 	
@@ -117,7 +116,7 @@ public class DriveTrain {
 	public static boolean moveByDistance(double inches, double degrees, double velocity) {
 		System.out.print("Move By Distance ");
 		double targetEncoderTicks = Math.abs(convertInchesToTicks(inches));
-		double ticksSoFar = Math.abs(leftTalon.getSelectedSensorPosition(0));
+		double ticksSoFar = Math.abs((leftTalon.getSelectedSensorPosition(0) + rightTalon.getSelectedSensorPosition(0))/2);
 		double maxVelocity = convertVelocity(velocity);
 		
 		if (ticksSoFar >= targetEncoderTicks) {
@@ -152,6 +151,7 @@ public class DriveTrain {
 		}
 		
 		setVelocity(direction * -scaledSpeedL, direction * -scaledSpeedR);
+		//setSpeed(direction * -scaledSpeedL, direction * -scaledSpeedR);
 		return false;
 	}
 	
@@ -199,12 +199,15 @@ public class DriveTrain {
 	//Autonomous turn method
 	public static boolean turnDegrees(double degrees) {
 		//Positive degrees -> counterclockwise; negative degrees -> clockwise
-		System.out.println("Starting gyro angle: " + gyro.getAngle());
+		System.out.println("Starting gyro angle: " + getGyro());
+		double velocityTurning = (degrees > 0) ? velocityTurningLeft : velocityTurningRight;
 		double maxVelocity = convertVelocity(velocityTurning);
+		double minimumTurningSpeed = (degrees > 0) ? minimumTurningSpeedLeft : minimumTurningSpeedRight;
+		
 		int turnMultiplier = (degrees < 0) ? 1 : -1;
 		double currentAngle = getGyro();
 		
-		if (currentAngle < degrees + turningTolerance && currentAngle > degrees - turningTolerance) {
+		if (Math.abs(currentAngle) >= Math.abs(degrees) - turningTolerance) {
 			System.out.println("Attempting to stop at gyro angle: " + getGyro());
 			gyro.reset();
 			DriveTrain.stop();
@@ -213,7 +216,7 @@ public class DriveTrain {
 		
 		double degreesRemaining = Math.abs(degrees) - Math.abs(currentAngle);
 		double fractionRemaining = Math.abs(degreesRemaining/degrees);
-		double scaledFraction = fractionRemaining * 1.5; //Uncomment the * 2 to decelerate halfway through the turn
+		double scaledFraction = fractionRemaining * 1; //Uncomment the * 2 to decelerate halfway through the turn
 		if (scaledFraction > 1) {
 			scaledFraction = 1;
 		} 
@@ -224,6 +227,7 @@ public class DriveTrain {
 			scaledSpeed = minimumTurningSpeed;
 		}
 		setVelocity(-1 * turnMultiplier * scaledSpeed, turnMultiplier * scaledSpeed);
+		//setSpeed(-1 * turnMultiplier * scaledSpeed, turnMultiplier * scaledSpeed);
 		return false;
 	}
 	
@@ -240,12 +244,23 @@ public class DriveTrain {
 		leftTalon.set(ControlMode.Velocity, left * scale);
 		rightTalon.set(ControlMode.Velocity, right * scale);
 		
-		//System.out.println("Setting velocities L: " + left + " R: " + right);
-		//System.out.println("Actual speed L: " + leftTalon.getSelectedSensorVelocity(0) + " R: " + rightTalon.getSelectedSensorVelocity(0));
+		System.out.println("Setting velocities L: " + left + " R: " + right);
+		System.out.println("Actual speed L: " + leftTalon.getSelectedSensorVelocity(0) + " R: " + rightTalon.getSelectedSensorVelocity(0));
 		//System.out.println("Error L: " + (Math.abs(leftTalon.getSelectedSensorVelocity(0)) - Math.abs(left)) + " R: " + (Math.abs(rightTalon.getSelectedSensorVelocity(0)) - Math.abs(right)));
 		//System.out.println("kF Left: " + (1023  * left/maxTicksPer100ms));
 		//System.out.println("kF Right: " + (1023  * right/maxTicksPer100ms));
 		//System.out.println("L-R Difference: " + (leftTalon.getSelectedSensorVelocity(0) - rightTalon.getSelectedSensorVelocity(0)));
+	}
+	
+	public static void setSpeed(double left, double right) {
+		double elevatorHeight = Elevator.encoder.get();
+		double scale = 1;
+		if (elevatorHeight > 3000) {
+	       scale = 1 - (elevatorHeight/(maxElevatorTicks * 2));
+	    }
+		
+		leftTalon.set(ControlMode.PercentOutput, left * scale);
+		rightTalon.set(ControlMode.PercentOutput, right * scale);
 	}
 	
 	public static void stop() {

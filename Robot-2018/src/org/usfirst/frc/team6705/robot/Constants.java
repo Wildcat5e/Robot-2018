@@ -61,10 +61,16 @@ public class Constants {
 			stallCurrent = 60, // TODO  This number needs to be defined in testing (estimate);
 			maxTicksPer100ms = 825,//This is the max speed in native units per 100 ms of the motors (percent output 100%)
 			maxError = 400,
-			minimumSpeed = 100,//ticks per 100 ms
+			minimumSpeed = 75,//ticks per 100 ms
 			minimumTurningSpeedLeft = 335,
 			minimumTurningSpeedRight = 308,
-			kP_Angle = 50;
+			kP_Angle = 50,
+			minimumSteadyTurningIterations = 15,
+			kP_Turning = 0.008,
+			kD_Turning = 0,
+			kI_Turning = 0,
+			maxTurningOutput = 1.0,
+			minimumTurningOutput = 0.1;
 	
 	//Driving Speeds in Feet Per Second (FPS)
 		public static final double velocityMax = getFPS(maxTicksPer100ms),

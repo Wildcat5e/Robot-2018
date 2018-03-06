@@ -139,6 +139,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		autoSelected = autoChooser.getSelected();
+		auto.resetAuto();
 		//autoSelected = test;
 		startingPosition = positionChooser.getSelected();
 		System.out.print("Autonomous Init");
@@ -227,9 +228,6 @@ public class Robot extends IterativeRobot {
 		case test:
 			auto.testAuto();
 			break;
-		case stall:
-		    auto.testStallAuto();
-		    break;
 		}
 		
 

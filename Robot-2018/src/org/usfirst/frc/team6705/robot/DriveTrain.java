@@ -20,6 +20,10 @@ public class DriveTrain {
 	static WPI_VictorSPX rightVictor = new WPI_VictorSPX(rightVictorChannel);
 	
 	static ADXRS450_Gyro gyro = new ADXRS450_Gyro();
+
+	private static int turningStableTicks = 0;
+	private static double previousTurningError = 0;
+	private static double turningSum = 0;
 	
 	public static void setup() {
 		leftVictor.follow(leftTalon);
@@ -122,6 +126,7 @@ public class DriveTrain {
 		if (ticksSoFar >= targetEncoderTicks) {
 			DriveTrain.stop();
 			resetEncoders();
+			gyro.reset();
 			return true;
 		}
 		
@@ -154,11 +159,65 @@ public class DriveTrain {
 		//setSpeed(direction * -scaledSpeedL, direction * -scaledSpeedR);
 		return false;
 	}
+
 	
 	public static boolean moveByDistance(double inches, double velocity) {
 		return moveByDistance(inches, 0, velocity);
 	}
 	
+
+	//Autonomous turn method
+	public static boolean turnDegrees(double degrees) {
+		//Positive degrees -> counterclockwise; negative degrees -> clockwise
+		System.out.println("Turning with current gyro angle " + getGyro() + " and target " + degrees);
+		
+		int turnMultiplier = (degrees < 0) ? 1 : -1;
+
+		double currentAngle = getGyro();
+		double error = degrees - currentAngle;
+		double absoluteError = Math.abs(error);
+		if (previousTurningError == 0) {
+			previousTurningError = degrees;
+		}
+		
+		if (absoluteError <= turningTolerance) {
+			turningStableTicks++;
+			if (turningStableTicks >= minimumSteadyTurningIterations) {
+				System.out.println("Attempting to stop at gyro angle: " + getGyro());
+
+				DriveTrain.stop();
+				gyro.reset();
+		
+				turningStableTicks = 0;
+				previousTurningError = 0;
+				turningSum = 0;
+
+				return true;
+			}	
+		} else {
+			turningStableTicks = 0;
+		}
+
+		double output = error * kP_Turning + (error - previousTurningError) * kD_Turning;
+		if (absoluteError < 5) {
+			turningSum += error;
+			output += turningSum * kI_Turning;
+		} else {
+			turningSum = 0;
+		}
+
+		previousTurningError = error;
+
+		if (output > maxTurningOutput) {
+			output = maxTurningOutput;
+		} else if (output < minimumTurningOutput) {
+			output = minimumTurningOutput;
+		}
+		System.out.println("Setting turning speed: " + output);
+		setSpeed(-1 * turnMultiplier * output, turnMultiplier * output);
+		return false;
+	}
+
 	//***************************************//
 	
 	public static void setupMotionProfile(MotionProfile profile) {
@@ -175,7 +234,7 @@ public class DriveTrain {
 		SetValueMotionProfile setValue = profile.getSetValue();
 		leftTalon.set(ControlMode.MotionProfile, setValue.value);
 		rightTalon.set(ControlMode.MotionProfile, setValue.value);
-	    profile.periodic();
+		profile.periodic();
 		
 		if (profile.isMotionProfileComplete()) {
 			return true;
@@ -185,60 +244,11 @@ public class DriveTrain {
 	
 	//***************************************//
 	
-	//Move until runs into switch
-	public static boolean moveTillStall() {
-		if (leftTalon.getOutputCurrent() > stallCurrent || rightTalon.getOutputCurrent() > stallCurrent) {
-			return true;
-		}
-		
-		double velocity = convertVelocity(velocitySlow);
-		setVelocity(-velocity, -velocity);
-		return false;
-	}
-	
-	//Autonomous turn method
-	public static boolean turnDegrees(double degrees) {
-		//Positive degrees -> counterclockwise; negative degrees -> clockwise
-		System.out.println("Starting gyro angle: " + getGyro());
-		double velocityTurning = (degrees > 0) ? velocityTurningLeft : velocityTurningRight;
-		double maxVelocity = convertVelocity(velocityTurning);
-		double minimumTurningSpeed = (degrees > 0) ? minimumTurningSpeedLeft : minimumTurningSpeedRight;
-		
-		int turnMultiplier = (degrees < 0) ? 1 : -1;
-		double currentAngle = getGyro();
-		
-		if (Math.abs(currentAngle) >= Math.abs(degrees) - turningTolerance) {
-			System.out.println("Attempting to stop at gyro angle: " + getGyro());
-			gyro.reset();
-			DriveTrain.stop();
-			return true;
-		}
-		
-		double degreesRemaining = Math.abs(degrees) - Math.abs(currentAngle);
-		double fractionRemaining = Math.abs(degreesRemaining/degrees);
-		double scaledFraction = fractionRemaining * 1; //Uncomment the * 2 to decelerate halfway through the turn
-		if (scaledFraction > 1) {
-			scaledFraction = 1;
-		} 
-		
-		System.out.println("Scaled Fraction: " + scaledFraction);
-		double scaledSpeed = maxVelocity * scaledFraction;
-		if (scaledSpeed < minimumTurningSpeed) {
-			scaledSpeed = minimumTurningSpeed;
-		}
-		setVelocity(-1 * turnMultiplier * scaledSpeed, turnMultiplier * scaledSpeed);
-		//setSpeed(-1 * turnMultiplier * scaledSpeed, turnMultiplier * scaledSpeed);
-		return false;
-	}
-	
-	
 	public static void setVelocity(double left, double right) {
-		//leftTalon.config_kF(0,  1023  * left/maxTicksPer100ms, 0);
-		//rightTalon.config_kF(0, 1023 * right/maxTicksPer100ms, 0);
 	    double elevatorHeight = Elevator.encoder.get();
-	    double scale = 1;
+	    double scale = 1; 
 	    if (elevatorHeight > 3000) {
-	        scale = 1 - (elevatorHeight/(maxElevatorTicks * 2));
+	        scale = 1 - (elevatorHeight/(maxElevatorTicks * 3.25));
 	    }
 		
 		leftTalon.set(ControlMode.Velocity, left * scale);
@@ -246,26 +256,18 @@ public class DriveTrain {
 		
 		System.out.println("Setting velocities L: " + left + " R: " + right);
 		System.out.println("Actual speed L: " + leftTalon.getSelectedSensorVelocity(0) + " R: " + rightTalon.getSelectedSensorVelocity(0));
-		//System.out.println("Error L: " + (Math.abs(leftTalon.getSelectedSensorVelocity(0)) - Math.abs(left)) + " R: " + (Math.abs(rightTalon.getSelectedSensorVelocity(0)) - Math.abs(right)));
-		//System.out.println("kF Left: " + (1023  * left/maxTicksPer100ms));
-		//System.out.println("kF Right: " + (1023  * right/maxTicksPer100ms));
-		//System.out.println("L-R Difference: " + (leftTalon.getSelectedSensorVelocity(0) - rightTalon.getSelectedSensorVelocity(0)));
 	}
 	
 	public static void setSpeed(double left, double right) {
-		double elevatorHeight = Elevator.encoder.get();
-		double scale = 1;
-		if (elevatorHeight > 3000) {
-	       scale = 1 - (elevatorHeight/(maxElevatorTicks * 2));
-	    }
-		
-		leftTalon.set(ControlMode.PercentOutput, left * scale);
-		rightTalon.set(ControlMode.PercentOutput, right * scale);
+		leftTalon.set(ControlMode.PercentOutput, left);
+		rightTalon.set(ControlMode.PercentOutput, right);
 	}
 	
 	public static void stop() {
 		leftTalon.set(ControlMode.PercentOutput, 0);
 		rightTalon.set(ControlMode.PercentOutput, 0);
+		leftVictor.set(ControlMode.PercentOutput, 0);
+		rightVictor.set(ControlMode.PercentOutput, 0);
 	}
 	
 	

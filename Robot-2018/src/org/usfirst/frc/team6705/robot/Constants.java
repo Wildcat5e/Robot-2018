@@ -62,8 +62,8 @@ public class Constants {
 			maxTicksPer100ms = 825,//This is the max speed in native units per 100 ms of the motors (percent output 100%)
 			maxError = 400,
 			minimumSpeed = 100,//ticks per 100 ms
-			minimumTurningSpeedLeft = 370,
-			minimumTurningSpeedRight = 280,
+			minimumTurningSpeedLeft = 335,
+			minimumTurningSpeedRight = 308,
 			kP_Angle = 50;
 	
 	//Driving Speeds in Feet Per Second (FPS)
@@ -72,7 +72,7 @@ public class Constants {
 				velocityMedium = 7,
 				velocitySlow = 5.5,
 				velocityTurningLeft = 6,
-				velocityTurningRight = 6,
+				velocityTurningRight = 6.3,
 				velocityVerySlow = 1.5;
 	
 	//Elevator Constants

@@ -181,7 +181,7 @@ public class Robot extends IterativeRobot {
 			break;
 		case baselineAuto:
 			System.out.print("Baseline Auto Periodic");
-			auto.baselineAuto();
+			auto.baselineAuto((gameData.charAt(1) == 'L') ? 1 : -1, startingPosition);
 			break;
 			
 		case scaleSwitchAuto:

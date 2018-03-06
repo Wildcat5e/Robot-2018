@@ -198,6 +198,8 @@ public class MotionProfile {
 			pointLeft.timeDur = getTrajectoryDuration((int)profileLeft[i][2]);
 			pointLeft.zeroPos = false;
 			
+			System.out.println("");
+			
 			if (i == 0) {
 				pointLeft.zeroPos = true; /* set this to true on the first point */
 			}

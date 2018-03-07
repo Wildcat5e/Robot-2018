@@ -105,7 +105,6 @@ public class Robot extends IterativeRobot {
 		positionChooser.addObject("Right Starting Position", right);
 		SmartDashboard.putData("Starting position", positionChooser);
 		
-		Constants.setup();
 		DriveTrain.setup();
 		Elevator.setup();
 		Intake.setup();
@@ -138,15 +137,16 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		autoSelected = autoChooser.getSelected();
+		
 		auto.resetAuto();
-		//autoSelected = test;
+		Constants.getPreferences();
+		
 		startingPosition = positionChooser.getSelected();
 		System.out.print("Autonomous Init");
 		System.out.print(autoSelected);
 		
 		SmartDashboard.putNumber("Auto State", 0);
 		
-		//gameData = "LLL";
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 
 		timer.start();
@@ -491,13 +491,13 @@ public class Robot extends IterativeRobot {
 	}
 	
 	public void updateSmartDashboard() {
-		SmartDashboard.putNumber("Encoder Count Left", DriveTrain.leftTalon.getSelectedSensorPosition(0));
-		SmartDashboard.putNumber("Encoder Count Right", DriveTrain.rightTalon.getSelectedSensorPosition(0));
+		SmartDashboard.putNumber("Encoder Position Left", DriveTrain.leftTalon.getSelectedSensorPosition(0));
+		SmartDashboard.putNumber("Encoder Position Right", DriveTrain.rightTalon.getSelectedSensorPosition(0));
+		SmartDashboard.putNumber("Motor Output Left", DriveTrain.leftTalon.getMotorOutputPercent());
+		SmartDashboard.putNumber("Motor Output Right", DriveTrain.rightTalon.getMotorOutputPercent());
 		SmartDashboard.putNumber("Motor Speed Left", DriveTrain.leftTalon.getSelectedSensorVelocity(0));
 		SmartDashboard.putNumber("Motor Speed Right", DriveTrain.rightTalon.getSelectedSensorVelocity(0));
 		SmartDashboard.putNumber("Gyro Value", DriveTrain.getGyro());
-		SmartDashboard.putNumber("Left Talon Current", DriveTrain.leftTalon.getOutputCurrent());
-		SmartDashboard.putNumber("Right Talon Current", DriveTrain.rightTalon.getOutputCurrent());
 		SmartDashboard.putNumber("Elevator Encoder Count", Elevator.encoder.get());
 		SmartDashboard.putNumber("Elevator Current Height From Ground", Elevator.getCurrentPosition());
 		SmartDashboard.putBoolean("Is At Floor Limit Switch?", Elevator.isAtFloor());

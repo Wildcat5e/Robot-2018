@@ -24,6 +24,7 @@ public class DriveTrain {
 	private static int turningStableTicks = 0;
 	private static double previousTurningError = 0;
 	private static double turningIntegral = 0;
+	private static int endMoveTicks = 0;
 	
 	public static void setup() {
 		leftVictor.follow(leftTalon);
@@ -117,47 +118,55 @@ public class DriveTrain {
 
 	//Autonomous move method
 	public static boolean moveByDistance(double inches, double degrees, double velocity) {
-		System.out.print("Move By Distance ");
 		double targetEncoderTicks = Math.abs(convertInchesToTicks(inches));
 		double ticksSoFar = Math.abs((leftTalon.getSelectedSensorPosition(0) + rightTalon.getSelectedSensorPosition(0))/2);
 		double maxVelocity = convertVelocity(velocity);
-		
+				
 		if (ticksSoFar >= targetEncoderTicks) {
 			System.out.println("DONE WITH MOVE BY DISTANCE");
+			endMoveTicks++;
 			DriveTrain.stop();
-			resetEncoders();
-			gyro.reset();
-			return true;
+			
+			if (endMoveTicks > 5) { //Pause very briefly after the move
+				resetEncoders();
+				gyro.reset();
+				Robot.auto.previousFinalTurningError = 0;
+				endMoveTicks = 0;
+				return true;
+			} else {
+				return false;
+			}
 		}
 		
 		int direction = (inches > 0) ? 1 : -1;
 		
 		double ticksRemaining = targetEncoderTicks - ticksSoFar;
-		System.out.println("Ticks Remaining: " + ticksRemaining);
+		//System.out.println("Ticks Remaining: " + ticksRemaining);
 		double fractionRemaining = ticksRemaining/targetEncoderTicks;
 		double scaledFraction = fractionRemaining * 3; //Start slowing down 2/3 of the way there
 		if (scaledFraction > 1) {
 			scaledFraction = 1;
 		}
 		
-		double degreeErrorLeft = (getGyro() - degrees > 0) ? getGyro() - degrees : 0;
-		double degreeErrorRight = (getGyro() - degrees < 0) ? degrees - getGyro() : 0;
+		double correctedHeading = degrees + Robot.auto.previousFinalTurningError;
+		
+		double degreeErrorLeft = (getGyro() - correctedHeading > 0) ? getGyro() - correctedHeading : 0;
+		double degreeErrorRight = (getGyro() - correctedHeading < 0) ? correctedHeading - getGyro() : 0;
 
-		double velocityLeft = maxVelocity + (kP_Angle * degreeErrorLeft * direction);
-		double velocityRight = maxVelocity + (kP_Angle * degreeErrorRight * direction);
+		double velocityLeft = maxVelocity + (kP_StraightDriving * degreeErrorLeft * direction);
+		double velocityRight = maxVelocity + (kP_StraightDriving * degreeErrorRight * direction);
 		
 		double scaledSpeedR = scaledFraction * velocityRight;
 		double scaledSpeedL = scaledFraction * velocityLeft;
 		
-		if (scaledSpeedR < minimumSpeed + (kP_Angle * degreeErrorRight * direction)) {
-			scaledSpeedR = minimumSpeed + + (kP_Angle * degreeErrorRight * direction);
+		if (scaledSpeedR < minimumSpeed + (kP_StraightDriving * degreeErrorRight * direction)) {
+			scaledSpeedR = minimumSpeed + + (kP_StraightDriving * degreeErrorRight * direction);
 		}
-		if (scaledSpeedL < minimumSpeed + (kP_Angle * degreeErrorLeft * direction)) {
-			scaledSpeedL = minimumSpeed  + (kP_Angle * degreeErrorLeft * direction);
+		if (scaledSpeedL < minimumSpeed + (kP_StraightDriving * degreeErrorLeft * direction)) {
+			scaledSpeedL = minimumSpeed  + (kP_StraightDriving * degreeErrorLeft * direction);
 		}
 		
 		setVelocity(direction * -scaledSpeedL, direction * -scaledSpeedR);
-		//setSpeed(direction * -scaledSpeedL, direction * -scaledSpeedR);
 		return false;
 	}
 
@@ -184,9 +193,12 @@ public class DriveTrain {
 		
 		if (absoluteError <= turningTolerance) {
 			turningStableTicks++;
-			if (turningStableTicks >= minimumSteadyTurningIterations) {
-				System.out.println("Attempting to stop at gyro angle: " + getGyro());
+			System.out.println("Has been stable for " + turningStableTicks + " ticks");
+			if (turningStableTicks >= steadyTurningIterations) {
+				System.out.println("STOP TURNING AT ANGLE: " + getGyro() + " with absolute error " + absoluteError);
 
+				Robot.auto.previousFinalTurningError = error;
+				
 				DriveTrain.stop();
 				gyro.reset();
 		
@@ -200,25 +212,32 @@ public class DriveTrain {
 			turningStableTicks = 0;
 		}
 
-		double output = (minimumTurningOutput * turnMultiplier) + (error * kP_Turning) + ((error - previousTurningError) * kD_Turning);
-		if (absoluteError < 5) {
+		double bias = minimumTurningOutput * turnMultiplier;
+		double proportional = error * kP_Turning;
+		double derivative = (error - previousTurningError) * kD_Turning;
+		
+		previousTurningError = error; //Reset previous error
+		
+		double output =  bias + proportional + derivative;
+		if (absoluteError < iZone) {
 			turningIntegral += error;
 			output += turningIntegral * kI_Turning;
 		} else {
 			turningIntegral = 0;
 		}
 		
+		System.out.println("Bias: " + bias + " proportional: " + proportional + " integral: " + turningIntegral + " derivative: " + derivative);
+		
 		if (Elevator.getCurrentPosition() > 50) {
 			output = output * (1 - (Elevator.getCurrentPosition()/(3.5 * scaleHeight)));
 		}
 
-		previousTurningError = error;
 
 		if (Math.abs(output) > maxTurningOutput) {
 			output = maxTurningOutput * turnMultiplier;
 		} 
 		
-		System.out.println("Setting turning speed: " + output);
+		System.out.println("Setting turning speed: " + output + " with direction " + turnMultiplier);
 		setSpeed(output, -1 * output);
 		return false;
 	}

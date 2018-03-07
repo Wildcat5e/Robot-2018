@@ -4,6 +4,8 @@
 
 package org.usfirst.frc.team6705.robot;
 
+import edu.wpi.first.wpilibj.Preferences;
+
 //import edu.wpi.first.wpilibj.Preferences;
 
 public class Constants {
@@ -60,18 +62,21 @@ public class Constants {
 			maxTicksPer100ms = 825,//This is the max speed in native units per 100 ms of the motors (percent output 100%)
 			maxError = 400,
 			minimumSpeed = 75,//ticks per 100 ms
-			kP_Angle = 50,
-			minimumSteadyTurningIterations = 5,
-			turningTolerance = 3, //Degrees
-			kP_Turning = 0.01,
+			kP_StraightDriving = 50;
+	
+	//Turning PID
+	public static double kP_Turning = 0.01,
 			kD_Turning = 0,
 			kI_Turning = 0,
+			iZone = 5, //Degree range in which I-gain applies
+			turningTolerance = 4, //Degrees
+			steadyTurningIterations = 5, //Iterations to exit turning PID loops
 			maxTurningOutput = 0.9,
 			minimumTurningOutput = 0.25;
 	
 	//Driving Speeds in Feet Per Second (FPS)
 		public static final double velocityMax = getFPS(maxTicksPer100ms),
-				velocityFast = 9.5,
+				velocityFast = 10,
 				velocityMedium = 7,
 				velocitySlow = 5.5,
 				velocityTurningLeft = 6,
@@ -104,17 +109,16 @@ public class Constants {
 			kF_R = 1023/825,
 			kF_L = 1023/825;
 	
-	public static void setup() {
-		/*Preferences prefs = Preferences.getInstance();
-		kP = prefs.getDouble("kP_R", 0.0001);
-		kD = prefs.getDouble("kD", 0);
-		kI = prefs.getDouble("kI", 0);
-		kF_L = prefs.getDouble("kF_L", 0.1);
-		kF_R = prefs.getDouble("kF_R", 0.1);
-		kP_Lift = prefs.getDouble("kP_Lift", 0);
-		kI_Lift = prefs.getDouble("kI_Lift", 0);
-		kD_Lift= prefs.getDouble("kD_LIft", 0);
-		kF_Lift = prefs.getDouble("kF_LIft", 0);*/
+	public static void getPreferences() {
+		Preferences prefs = Preferences.getInstance();
+		kP_Turning = prefs.getDouble("kP_Turning", kP_Turning);
+		kI_Turning = prefs.getDouble("kI_Turning", kI_Turning);
+		kD_Turning = prefs.getDouble("kD_Turning", kD_Turning);
+		iZone = prefs.getDouble("iZone", iZone); //Degree range in which I-gain applies
+		turningTolerance = prefs.getDouble("turningTolerance", turningTolerance); //Degrees
+		steadyTurningIterations = prefs.getDouble("steadyTurningIterations", steadyTurningIterations); //Iterations to exit turning PID loops
+		maxTurningOutput = prefs.getDouble("maxTurningOutput", maxTurningOutput);
+		minimumTurningOutput = prefs.getDouble("minimumTurningOutput", minimumTurningOutput);
 	}
 	
 	public static double convertInchesToTicks(double inches) {

@@ -13,6 +13,7 @@ public class Autonomous {
 	public int state = 0;
 	private double previousTime = 0;
 	private double previousElevatorHeight = floorHeight;
+	public double previousFinalTurningError = 0;
 	public boolean isLifting = false;
 	/*
 	 * 	Note: Distance from alliance wall to front of switch = 140 in
@@ -42,6 +43,7 @@ public class Autonomous {
 		state = 0;
 		previousTime = 0;
 		previousElevatorHeight = floorHeight;
+		previousFinalTurningError = 0;
 		isLifting = false;
 	}
 	

@@ -180,11 +180,13 @@ public class DriveTrain {
 	public static boolean turnDegrees(double degrees) {
 		//Positive degrees -> counterclockwise; negative degrees -> clockwise
 		
-		int turnMultiplier = (degrees < 0) ? -1 : 1;
 
 		double currentAngle = getGyro();
 		double error = degrees - currentAngle;
 		double absoluteError = Math.abs(error);
+		
+		int turnMultiplier = (error < 0) ? -1 : 1;
+		
 		if (previousTurningError == 0) {
 			previousTurningError = degrees;
 		}
@@ -193,7 +195,7 @@ public class DriveTrain {
 		
 		if (absoluteError <= turningTolerance) {
 			turningStableTicks++;
-			System.out.println("Has been stable for " + turningStableTicks + " ticks");
+			System.out.println("Has been stable within target's tolerance for " + turningStableTicks + " iterations");
 			if (turningStableTicks >= steadyTurningIterations) {
 				System.out.println("STOP TURNING AT ANGLE: " + getGyro() + " with absolute error " + absoluteError);
 
@@ -212,13 +214,13 @@ public class DriveTrain {
 			turningStableTicks = 0;
 		}
 
-		double bias = minimumTurningOutput * turnMultiplier;
+		//double bias = minimumTurningOutput * turnMultiplier;
 		double proportional = error * kP_Turning;
 		double derivative = (error - previousTurningError) * kD_Turning;
 		
 		previousTurningError = error; //Reset previous error
 		
-		double output =  bias + proportional + derivative;
+		double output =  proportional + derivative /* + bias */;
 		if (absoluteError < iZone) {
 			turningIntegral += error;
 			output += turningIntegral * kI_Turning;
@@ -226,16 +228,17 @@ public class DriveTrain {
 			turningIntegral = 0;
 		}
 		
-		System.out.println("Bias: " + bias + " proportional: " + proportional + " integral: " + turningIntegral + " derivative: " + derivative);
+		System.out.println("Proportional: " + proportional + " integral: " + turningIntegral + " derivative: " + derivative);
 		
 		if (Elevator.getCurrentPosition() > 50) {
 			output = output * (1 - (Elevator.getCurrentPosition()/(3.5 * scaleHeight)));
 		}
 
-
 		if (Math.abs(output) > maxTurningOutput) {
 			output = maxTurningOutput * turnMultiplier;
-		} 
+		} else if (Math.abs(output) < minimumTurningOutput) {
+			output = minimumTurningOutput * turnMultiplier;
+		}
 		
 		System.out.println("Setting turning speed: " + output + " with direction " + turnMultiplier);
 		setSpeed(output, -1 * output);

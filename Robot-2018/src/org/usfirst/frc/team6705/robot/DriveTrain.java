@@ -23,7 +23,7 @@ public class DriveTrain {
 
 	private static int turningStableTicks = 0;
 	private static double previousTurningError = 0;
-	private static double turningSum = 0;
+	private static double turningIntegral = 0;
 	
 	public static void setup() {
 		leftVictor.follow(leftTalon);
@@ -101,8 +101,7 @@ public class DriveTrain {
 		
 		//Percent Output Mode
 		//setSpeed(leftSpeed * leftSpeed * leftSpeed, rightSpeed * rightSpeed * rightSpeed);
-		
-		
+
 	}
 	
 	public static double applyDeadband(double speed) {
@@ -193,7 +192,7 @@ public class DriveTrain {
 		
 				turningStableTicks = 0;
 				previousTurningError = 0;
-				turningSum = 0;
+				turningIntegral = 0;
 
 				return true;
 			}	
@@ -201,12 +200,12 @@ public class DriveTrain {
 			turningStableTicks = 0;
 		}
 
-		double output = error * kP_Turning + (error - previousTurningError) * kD_Turning;
+		double output = (minimumTurningOutput * turnMultiplier) + (error * kP_Turning) + ((error - previousTurningError) * kD_Turning);
 		if (absoluteError < 5) {
-			turningSum += error;
-			output += turningSum * kI_Turning;
+			turningIntegral += error;
+			output += turningIntegral * kI_Turning;
 		} else {
-			turningSum = 0;
+			turningIntegral = 0;
 		}
 		
 		if (Elevator.getCurrentPosition() > 50) {
@@ -217,11 +216,9 @@ public class DriveTrain {
 
 		if (Math.abs(output) > maxTurningOutput) {
 			output = maxTurningOutput * turnMultiplier;
-		} else if (Math.abs(output) < minimumTurningOutput) {
-			output = minimumTurningOutput * turnMultiplier;
-		}
+		} 
+		
 		System.out.println("Setting turning speed: " + output);
-		System.out.println("Turn multiplier " + turnMultiplier);
 		setSpeed(output, -1 * output);
 		return false;
 	}

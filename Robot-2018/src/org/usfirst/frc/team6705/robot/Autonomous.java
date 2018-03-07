@@ -308,7 +308,6 @@ public class Autonomous {
 	//***************************************************************************//
 
 	public void singleScaleAuto(int scaleSide, String startingPosition) {
-		double angle1 = 15;
 		
 		if (!isLifting && !Elevator.isAtFloor()) {
 			Elevator.maintainHeight(previousElevatorHeight);

@@ -104,7 +104,6 @@ public class Robot extends IterativeRobot {
 		positionChooser.addObject("Middle Starting Position", middle);
 		positionChooser.addObject("Right Starting Position", right);
 		SmartDashboard.putData("Starting position", positionChooser);
-		SmartDashboard.putNumber("Stall Amps", Constants.stallCurrent);
 		
 		Constants.setup();
 		DriveTrain.setup();

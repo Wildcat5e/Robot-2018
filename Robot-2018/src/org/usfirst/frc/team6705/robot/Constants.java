@@ -54,21 +54,18 @@ public class Constants {
 	public static final double wheelRadius = 3.0, //inches
 			ticksPerRevolution = 256 * 4, //encoder ticks, multiplied by 4 because quadrature encoders do 4 pulses per count
 			distancePerTick = (wheelRadius * 2.0 * Math.PI)/ticksPerRevolution, //inches per tick
-			turningTolerance = 3, //Degrees
 			deadband = 0.08, //-1 to 1
 			rampRateAuto = 1, //Seconds to ramp from 0 to full
 			rampRateTeleop = 0.25,
-			stallCurrent = 60, // TODO  This number needs to be defined in testing (estimate);
 			maxTicksPer100ms = 825,//This is the max speed in native units per 100 ms of the motors (percent output 100%)
 			maxError = 400,
 			minimumSpeed = 75,//ticks per 100 ms
-			minimumTurningSpeedLeft = 335,
-			minimumTurningSpeedRight = 308,
 			kP_Angle = 50,
 			minimumSteadyTurningIterations = 5,
+			turningTolerance = 3, //Degrees
 			kP_Turning = 0.01,
-			kD_Turning = 0.006,//.03,
-			kI_Turning = 0.001,//0.001,
+			kD_Turning = 0,
+			kI_Turning = 0,
 			maxTurningOutput = 0.9,
 			minimumTurningOutput = 0.25;
 	
@@ -97,9 +94,7 @@ public class Constants {
 			autoDriveHeight = 5,
 			switchHeight = 30,
 			scaleHeight = 70.5, 
-			elevatorRampTime = 0.2, //seconds
-			ropeThickness = 0.065, //inches
-	        maxElevatorTicks = 6500;
+			elevatorRampTime = 0.2; //seconds
 	
 	//PID for DriveTrain
 	public static double kP_L = (1023 * 0.05)/225,//-(1023 * 0.1)/maxError,
@@ -108,12 +103,6 @@ public class Constants {
 			kI = 0,//1.023/maxError,
 			kF_R = 1023/825,
 			kF_L = 1023/825;
-	
-	//PID for Elevator
-	public static double kP_Lift = 0.1,
-		kD_Lift = 0.01,
-		kI_Lift = 0.01,
-		kF_Lift = 0.1;
 	
 	public static void setup() {
 		/*Preferences prefs = Preferences.getInstance();

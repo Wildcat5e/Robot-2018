@@ -124,6 +124,7 @@ public class DriveTrain {
 		double maxVelocity = convertVelocity(velocity);
 		
 		if (ticksSoFar >= targetEncoderTicks) {
+			System.out.println("DONE WITH MOVE BY DISTANCE");
 			DriveTrain.stop();
 			resetEncoders();
 			gyro.reset();
@@ -133,6 +134,7 @@ public class DriveTrain {
 		int direction = (inches > 0) ? 1 : -1;
 		
 		double ticksRemaining = targetEncoderTicks - ticksSoFar;
+		System.out.println("Ticks Remaining: " + ticksRemaining);
 		double fractionRemaining = ticksRemaining/targetEncoderTicks;
 		double scaledFraction = fractionRemaining * 3; //Start slowing down 2/3 of the way there
 		if (scaledFraction > 1) {
@@ -169,9 +171,8 @@ public class DriveTrain {
 	//Autonomous turn method
 	public static boolean turnDegrees(double degrees) {
 		//Positive degrees -> counterclockwise; negative degrees -> clockwise
-		System.out.println("Turning with current gyro angle " + getGyro() + " and target " + degrees);
 		
-		int turnMultiplier = (degrees < 0) ? 1 : -1;
+		int turnMultiplier = (degrees < 0) ? -1 : 1;
 
 		double currentAngle = getGyro();
 		double error = degrees - currentAngle;
@@ -179,6 +180,8 @@ public class DriveTrain {
 		if (previousTurningError == 0) {
 			previousTurningError = degrees;
 		}
+		
+		System.out.println("Turning with current gyro angle " + getGyro() + " and target " + degrees + " and error " + error + " and previous error " + previousTurningError);
 		
 		if (absoluteError <= turningTolerance) {
 			turningStableTicks++;
@@ -205,16 +208,21 @@ public class DriveTrain {
 		} else {
 			turningSum = 0;
 		}
+		
+		if (Elevator.getCurrentPosition() > 50) {
+			output = output * (1 - (Elevator.getCurrentPosition()/(3.5 * scaleHeight)));
+		}
 
 		previousTurningError = error;
 
-		if (output > maxTurningOutput) {
-			output = maxTurningOutput;
-		} else if (output < minimumTurningOutput) {
-			output = minimumTurningOutput;
+		if (Math.abs(output) > maxTurningOutput) {
+			output = maxTurningOutput * turnMultiplier;
+		} else if (Math.abs(output) < minimumTurningOutput) {
+			output = minimumTurningOutput * turnMultiplier;
 		}
 		System.out.println("Setting turning speed: " + output);
-		setSpeed(-1 * turnMultiplier * output, turnMultiplier * output);
+		System.out.println("Turn multiplier " + turnMultiplier);
+		setSpeed(output, -1 * output);
 		return false;
 	}
 
@@ -247,8 +255,8 @@ public class DriveTrain {
 	public static void setVelocity(double left, double right) {
 	    double elevatorHeight = Elevator.encoder.get();
 	    double scale = 1; 
-	    if (elevatorHeight > 3000) {
-	        scale = 1 - (elevatorHeight/(maxElevatorTicks * 3.25));
+	    if (Elevator.getCurrentPosition() > 40) {
+	        scale = 1 - (Elevator.getCurrentPosition()/(maximumHeight * 3.25));
 	    }
 		
 		leftTalon.set(ControlMode.Velocity, left * scale);
@@ -266,8 +274,8 @@ public class DriveTrain {
 	public static void stop() {
 		leftTalon.set(ControlMode.PercentOutput, 0);
 		rightTalon.set(ControlMode.PercentOutput, 0);
-		leftVictor.set(ControlMode.PercentOutput, 0);
-		rightVictor.set(ControlMode.PercentOutput, 0);
+		//leftVictor.set(ControlMode.PercentOutput, 0);
+		//rightVictor.set(ControlMode.PercentOutput, 0);
 	}
 	
 	

@@ -64,6 +64,7 @@ public class Autonomous {
 			Elevator.maintainHeight(previousElevatorHeight);
 		}
 		
+		System.out.println("Test Auto");
 		switch (state) {
 		case 0:
 			setupAuto();
@@ -75,7 +76,7 @@ public class Autonomous {
 			}
 			break;
 		case 2:
-			if (DriveTrain.wait(1, previousTime)) {
+			if (Intake.outtakeForTime(timeToRollOut, previousTime)) {
 				state = nextState(state);
 			}
 			break;
@@ -237,7 +238,7 @@ public class Autonomous {
 			System.out.println("DON'T DO SWITCH AUTO ON THE SIDES STUPID");
 		}
 		*/
-		double diagnonalDistance = (switchSide == 1) ? 48 : 40;/*58 : 50;*/
+		double diagnonalDistance = (switchSide == 1) ? 52 : 44;/*58 : 50;*/
 		
 		if ((startingPosition == left && switchSide == 1) || (startingPosition == right && switchSide == -1)) { //Same side switch auto
 			
@@ -274,7 +275,7 @@ public class Autonomous {
 				}
 				break;
 			case 6: //Move forward rest of distance
-				if (DriveTrain.moveByDistance(20, velocitySlow)) {
+				if (DriveTrain.moveByDistance(30, velocitySlow)) {
 					state = nextState(state);
 				}
 				break;
@@ -312,50 +313,51 @@ public class Autonomous {
 		if (!isLifting && !Elevator.isAtFloor()) {
 			Elevator.maintainHeight(previousElevatorHeight);
 		}
-		
+		System.out.println("Scale side " + scaleSide + "Starting pos " + startingPosition);
 		if ((scaleSide == 1 && startingPosition == left) || (scaleSide == -1 && startingPosition == right)) { //Same side
+		//System.out.println("Single scale auto, state is " + state);
+
 			switch (state) {
 			case 0:
 				setupAuto();
 				state = nextState(state);
 				break;
 			case 1: //Move forward part way
-				if (DriveTrain.moveByDistance(240, velocityFast)) {
+				if (DriveTrain.moveByDistance(280, velocityFast)) {
 					state = nextState(state);
 				}
 				break;
-			case 3:
+			case 2:
 				if (Elevator.moveToHeightAuto(scaleHeight, scaleHeight, 1)) {
 					state = nextState(state);
 				}
 				break;
-			case 4:
+			case 3:
 				if (DriveTrain.turnDegrees(90 * -scaleSide)) {
 					state = nextState(state);
 				}
 				break;
-			case 5: //Move at angle and lift elevator
-				//Elevator.setHeight(scaleHeight);
+			case 4:
 				if (DriveTrain.moveByDistance(10, velocitySlow)) {
 					state = nextState(state);
 				}
 				break;
-			case 6: //Outtake
+			case 5: //Outtake
 				if (Intake.outtakeForTime(timeToRollOut, previousTime)) {
 					state = nextState(state);
 				}
 				break;
-			case 7:
+			case 6:
 				if (DriveTrain.moveByDistance(-15, velocitySlow)) {
 					state = nextState(state);
 				}
 				break;
-			case 8:
+			case 7:
 				if (Elevator.moveToFloorAuto(previousElevatorHeight)) {
 					state = nextState(state);
 				}
 				break;
-			case 9:
+			case 8:
 				endAuto();
 				break;
 			}
@@ -366,51 +368,51 @@ public class Autonomous {
 				state = nextState(state);
 				break;
 			case 1:
-				if (DriveTrain.moveByDistance(210, velocityFast)) {
+				if (DriveTrain.moveByDistance(190, velocityFast)) {
 					state = nextState(state);
 				}
 				break;
-			case 3:
+			case 2:
 				if (DriveTrain.turnDegrees(scaleSide * 90)) {
 					state = nextState(state);
 				}
 				break;
-			case 5:
-				if (DriveTrain.moveByDistance(188, velocityMedium)) {
+			case 3:
+				if (DriveTrain.moveByDistance(194, velocityMedium)) {
 					state = nextState(state);
 				}
 				break;
-			case 7:
+			case 4:
 				if (DriveTrain.turnDegrees(-scaleSide * 90)) {
 					state = nextState(state);
 				}
 				break;
-			case 8:
+			case 5:
 				if (Elevator.moveToHeightAuto(scaleHeight, scaleHeight - previousElevatorHeight, 1)) {
 					state = nextState(state);
 				}
 				break;
-			case 9:
-				if (DriveTrain.moveByDistance(70, velocityMedium)) {
+			case 6:
+				if (DriveTrain.moveByDistance(50, velocityMedium)) {
 					state = nextState(state);
 				}
 				break;
-			case 10:
+			case 7:
 				if (Intake.outtakeForTime(timeToRollOut, previousTime)) {
 					state = nextState(state);
 				}
 				break;
-			case 11:
-				if (DriveTrain.moveByDistance(-15, velocitySlow)) {
+			case 8:
+				if (DriveTrain.moveByDistance(-20, velocitySlow)) {
 					state = nextState(state);
 				}
 				break;
-			case 12:
+			case 9:
 				if (Elevator.moveToFloorAuto(previousElevatorHeight)) {
 					state = nextState(state);
 				}
 				break;
-			case 13:
+			case 10:
 				endAuto();
 				break;
 			}

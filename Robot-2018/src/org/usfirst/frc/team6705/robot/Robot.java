@@ -147,7 +147,7 @@ public class Robot extends IterativeRobot {
 		
 		SmartDashboard.putNumber("Auto State", 0);
 		
-		gameData = "LLL";
+		//gameData = "LLL";
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 
 		timer.start();

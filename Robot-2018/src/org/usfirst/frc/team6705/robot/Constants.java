@@ -65,12 +65,12 @@ public class Constants {
 			minimumTurningSpeedLeft = 335,
 			minimumTurningSpeedRight = 308,
 			kP_Angle = 50,
-			minimumSteadyTurningIterations = 15,
-			kP_Turning = 0.008,
-			kD_Turning = 0,
-			kI_Turning = 0,
-			maxTurningOutput = 1.0,
-			minimumTurningOutput = 0.1;
+			minimumSteadyTurningIterations = 5,
+			kP_Turning = 0.01,
+			kD_Turning = 0.006,//.03,
+			kI_Turning = 0.001,//0.001,
+			maxTurningOutput = 0.9,
+			minimumTurningOutput = 0.25;
 	
 	//Driving Speeds in Feet Per Second (FPS)
 		public static final double velocityMax = getFPS(maxTicksPer100ms),
@@ -92,11 +92,11 @@ public class Constants {
 			pulleyDiameter = 2.75,
 			verticalInchesPerTick = 2 * (pulleyDiameter * Math.PI) / ticksPerRotationElevator,
 			elevatorTolerance = 2, //Inches
-			maximumHeight = 69.5,
+			maximumHeight = 70.8,
 			floorHeight = 0.0,
 			autoDriveHeight = 5,
 			switchHeight = 30,
-			scaleHeight = 69.0, 
+			scaleHeight = 70.5, 
 			elevatorRampTime = 0.2, //seconds
 			ropeThickness = 0.065, //inches
 	        maxElevatorTicks = 6500;

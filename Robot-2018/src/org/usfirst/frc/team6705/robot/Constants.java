@@ -47,9 +47,9 @@ public class Constants {
 	
 	//Rollers
 	public static final double timeToRollIn = 0.5, //seconds
-		timeToRollOut = 1.5, //seconds
-		maxRollersSpeed = 0.6,
-		rollersSpeedAuto = 0.5;//[-1, 1]
+		timeToRollOut = 1, //seconds
+		maxRollersSpeed = 0.7,
+		rollersSpeedAuto = 0.7;//[-1, 1]
 		
 	
 	//Drive Train

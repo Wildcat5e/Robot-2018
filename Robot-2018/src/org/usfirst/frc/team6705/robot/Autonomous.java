@@ -73,7 +73,7 @@ public class Autonomous {
 			state = nextState(state);
 			break;
 		case 1:
-			if (DriveTrain.turnDegrees(90)) {
+			if (DriveTrain.turnDegrees(90) & Elevator.moveToHeightAuto(switchHeight, switchHeight, 1)) {
 				state = nextState(state);
 			}
 			break;
@@ -83,7 +83,7 @@ public class Autonomous {
 			}
 			break;
 		case 3:
-			if (DriveTrain.turnDegrees(-90)) {
+			if (DriveTrain.turnDegrees(-90) & Elevator.moveToFloorAuto(previousElevatorHeight)) {
 				state = nextState(state);
 			}
 			break;
@@ -423,14 +423,13 @@ public class Autonomous {
 	//***************************************************************************//
 	
 	public void doubleScaleAuto(int scaleSide, String startingPosition) {
-		double angle1 = 18.65;
-		double angle2 = 5;
+		double angle1 = 15;
 		
 		if (!isLifting && !Elevator.isAtFloor()) {
 			Elevator.maintainHeight(previousElevatorHeight);
 		}
 		
-		if ((scaleSide == 1 && startingPosition == left) || (scaleSide == -1 && startingPosition == right)) {
+		if ((scaleSide == 1 && startingPosition == left) || (scaleSide == -1 && startingPosition == right)) { //Same side
 			switch (state) {
 			case 0:
 				setupAuto();
@@ -443,7 +442,7 @@ public class Autonomous {
 				break;
 			case 2: //Move at angle and lift elevator
 				//Elevator.setHeight(scaleHeight);
-				if (DriveTrain.moveByDistance(137, angle1 * -scaleSide, velocityMedium) &&  Elevator.moveToHeightAuto(scaleHeight, scaleHeight - previousElevatorHeight, 1)) {
+				if (DriveTrain.moveByDistance(137, angle1 * -scaleSide, velocityMedium) & Elevator.moveToHeightAuto(scaleHeight, scaleHeight - previousElevatorHeight, 1)) {
 					state = nextState(state);
 				}
 				break;
@@ -453,13 +452,13 @@ public class Autonomous {
 				}
 				break;
 			case 4: //Turn Around
-				if (DriveTrain.turnDegrees(-scaleSide * (175 - angle1))) {
+				if (DriveTrain.turnDegrees(scaleSide * (190 + angle1)) & Elevator.moveToFloorAuto(previousElevatorHeight)) {
 					state = nextState(state);	
 				}
 				break;
 			case 5: //Outtake
 				Intake.open();
-				if (DriveTrain.moveByDistance(50, velocitySlow) && Elevator.moveToFloorAuto(previousElevatorHeight - floorHeight)) {
+				if (DriveTrain.moveByDistance(50, velocitySlow)) {
 					Intake.close();
 					state = nextState(state);
 				}
@@ -470,12 +469,12 @@ public class Autonomous {
 				}
 				break;
 			case 7:
-				if (DriveTrain.turnDegrees(scaleSide * (175 - angle1))) {
+				if (DriveTrain.moveByDistance(-50, velocitySlow) & Elevator.moveToHeightAuto(scaleHeight, scaleHeight - previousElevatorHeight, 1)) {
 					state = nextState(state);
 				}
 				break;
 			case 8:
-				if (DriveTrain.moveByDistance(50, velocitySlow) && Elevator.moveToHeightAuto(scaleHeight, scaleHeight - previousElevatorHeight, 1)) {
+				if (DriveTrain.turnDegrees(-scaleSide * (190 + angle1))) {
 					state = nextState(state);
 				}
 				break;
@@ -497,14 +496,14 @@ public class Autonomous {
 			case 12:
 				endAuto();
 			}
-		} else if ((scaleSide == 1 && startingPosition == right) || (scaleSide == -1 && startingPosition == left)) {
+		} else if ((scaleSide == 1 && startingPosition == right) || (scaleSide == -1 && startingPosition == left)) { //Opposite side
 			switch (state) {
 			case 0:
 				setupAuto();
 				state = nextState(state);
 				break;
 			case 1:
-				if (DriveTrain.moveByDistance(209.5, velocityFast)) {
+				if (DriveTrain.moveByDistance(190, velocityFast)) {
 					state = nextState(state);
 				}
 				break;
@@ -514,17 +513,17 @@ public class Autonomous {
 				}
 				break;
 			case 3:
-				if (DriveTrain.moveByDistance(188, velocityFast)) {
+				if (DriveTrain.moveByDistance(194, velocityMedium)) {
 					state = nextState(state);
 				}
 				break;
 			case 4:
-				if (DriveTrain.turnDegrees(-scaleSide * 90)) {
+				if (DriveTrain.turnDegrees(-scaleSide * 90) & Elevator.moveToHeightAuto(scaleHeight, scaleHeight - previousElevatorHeight, 1)) {
 					state = nextState(state);
 				}
 				break;
 			case 5:
-				if (DriveTrain.moveByDistance(70, velocityMedium)) {
+				if (DriveTrain.moveByDistance(50, velocityMedium)) {
 					state = nextState(state);
 				}
 				break;
@@ -534,13 +533,13 @@ public class Autonomous {
 				}
 				break;
 			case 7:
-				if (DriveTrain.turnDegrees(scaleSide * (180 + angle2))) {
+				if (DriveTrain.turnDegrees(scaleSide * 190) & Elevator.moveToFloorAuto(previousElevatorHeight)) {
 					state = nextState(state);
 				}
 				break;
 			case 8:
 				Intake.open();
-				if (DriveTrain.moveByDistance(40, velocitySlow) && Elevator.moveToFloorAuto(previousElevatorHeight - floorHeight)) {
+				if (DriveTrain.moveByDistance(45, velocitySlow)) {
 					Intake.close();
 					state = nextState(state);
 				}
@@ -551,12 +550,12 @@ public class Autonomous {
 				}
 				break;
 			case 10:
-				if (DriveTrain.turnDegrees(scaleSide * 180)) {
+				if (DriveTrain.moveByDistance(-45, velocitySlow) & Elevator.moveToHeightAuto(scaleHeight, scaleHeight, 1)) {
 					state = nextState(state);
 				}
 				break;
 			case 11:
-				if (DriveTrain.moveByDistance(40, velocitySlow) && Elevator.moveToHeightAuto(scaleHeight, scaleHeight - previousElevatorHeight, 1)) {
+				if (DriveTrain.turnDegrees(-scaleSide * 190)) {
 					state = nextState(state);
 				}
 				break;
@@ -566,7 +565,7 @@ public class Autonomous {
 				}
 				break;
 			case 13:
-				if (DriveTrain.moveByDistance(-15, velocitySlow)) {
+				if (DriveTrain.moveByDistance(-20, velocitySlow)) {
 					state = nextState(state);
 				}
 				break;
@@ -577,6 +576,7 @@ public class Autonomous {
 				break;
 			case 15:
 				endAuto();
+				break;
 			}
 		}
 

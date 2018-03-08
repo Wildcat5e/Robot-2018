@@ -195,6 +195,7 @@ public class DriveTrain {
 		
 		if (absoluteError <= turningTolerance) {
 			turningStableTicks++;
+			DriveTrain.stop();
 			System.out.println("Has been stable within target's tolerance for " + turningStableTicks + " iterations");
 			if (turningStableTicks >= steadyTurningIterations) {
 				System.out.println("STOP TURNING AT ANGLE: " + getGyro() + " with absolute error " + absoluteError);
@@ -214,13 +215,13 @@ public class DriveTrain {
 			turningStableTicks = 0;
 		}
 
-		//double bias = minimumTurningOutput * turnMultiplier;
+		double bias = minimumTurningOutput * turnMultiplier;
 		double proportional = error * kP_Turning;
 		double derivative = (error - previousTurningError) * kD_Turning;
 		
 		previousTurningError = error; //Reset previous error
 		
-		double output =  proportional + derivative /* + bias */;
+		double output =  proportional + derivative + bias;
 		if (absoluteError < iZone) {
 			turningIntegral += error;
 			output += turningIntegral * kI_Turning;
@@ -236,9 +237,9 @@ public class DriveTrain {
 
 		if (Math.abs(output) > maxTurningOutput) {
 			output = maxTurningOutput * turnMultiplier;
-		} else if (Math.abs(output) < minimumTurningOutput) {
+		} /*else if (Math.abs(output) < minimumTurningOutput) {
 			output = minimumTurningOutput * turnMultiplier;
-		}
+		}*/
 		
 		System.out.println("Setting turning speed: " + output + " with direction " + turnMultiplier);
 		setSpeed(output, -1 * output);

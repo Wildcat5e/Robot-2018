@@ -72,7 +72,7 @@ public class Constants {
 			turningTolerance = 4, //Degrees
 			steadyTurningIterations = 5, //Iterations to exit turning PID loops
 			maxTurningOutput = 0.9,
-			minimumTurningOutput = 0.25;
+			minimumTurningOutput = 0;
 	
 	//Driving Speeds in Feet Per Second (FPS)
 		public static final double velocityMax = getFPS(maxTicksPer100ms),

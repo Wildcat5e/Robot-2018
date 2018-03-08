@@ -68,7 +68,7 @@ public class Constants {
 	public static double kP_Turning = 0.01,
 			kD_Turning = 0,
 			kI_Turning = 0,
-			iZone = 5, //Degree range in which I-gain applies
+			iZone = 8, //Degree range in which I-gain applies
 			turningTolerance = 4, //Degrees
 			steadyTurningIterations = 5, //Iterations to exit turning PID loops
 			maxTurningOutput = 0.9,

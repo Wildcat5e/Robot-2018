@@ -184,6 +184,7 @@ public class DriveTrain {
 		double currentAngle = getGyro();
 		double error = degrees - currentAngle;
 		double absoluteError = Math.abs(error);
+		boolean inTolerance = false;
 		
 		int turnMultiplier = (error < 0) ? -1 : 1;
 		
@@ -196,8 +197,12 @@ public class DriveTrain {
 		if (absoluteError <= turningTolerance) {
 			turningStableTicks++;
 			DriveTrain.stop();
-			System.out.println("Has been stable within target's tolerance for " + turningStableTicks + " iterations");
-			if (turningStableTicks >= steadyTurningIterations) {
+			inTolerance = true;
+			
+			//System.out.println("Has been stable within target's tolerance for " + turningStableTicks + " iterations");
+			System.out.println("Within tolerance with velocities L: " + leftTalon.getSelectedSensorVelocity(0) + " and R: " + rightTalon.getSelectedSensorPosition(0));
+			
+			if (leftTalon.getSelectedSensorVelocity(0) < 75 && rightTalon.getSelectedSensorPosition(0) < 75) {
 				System.out.println("STOP TURNING AT ANGLE: " + getGyro() + " with absolute error " + absoluteError);
 
 				Robot.auto.previousFinalTurningError = error;
@@ -214,12 +219,16 @@ public class DriveTrain {
 		} else {
 			turningStableTicks = 0;
 		}
+		
+		if (absoluteError < 1) {
+			turningIntegral = 0; //Reset the integral to 0 if we are overshooting
+		}
 
 		double bias = minimumTurningOutput * turnMultiplier;
 		double proportional = error * kP_Turning;
 		double derivative = (error - previousTurningError) * kD_Turning;
 		
-		previousTurningError = error; //Reset previous error
+		previousTurningError = error; //Reset previous error to current error
 		
 		double output =  proportional + derivative + bias;
 		if (absoluteError < iZone) {
@@ -232,7 +241,7 @@ public class DriveTrain {
 		System.out.println("Proportional: " + proportional + " integral: " + turningIntegral + " derivative: " + derivative);
 		
 		if (Elevator.getCurrentPosition() > 50) {
-			output = output * (1 - (Elevator.getCurrentPosition()/(3.5 * scaleHeight)));
+			output *= (1 - (Elevator.getCurrentPosition()/(3.5 * scaleHeight))); //Reduce output with elevator at high heights
 		}
 
 		if (Math.abs(output) > maxTurningOutput) {
@@ -241,8 +250,13 @@ public class DriveTrain {
 			output = minimumTurningOutput * turnMultiplier;
 		}*/
 		
-		System.out.println("Setting turning speed: " + output + " with direction " + turnMultiplier);
-		setSpeed(output, -1 * output);
+		if (!inTolerance) {
+			System.out.println("Setting turning speed: " + output + " with direction " + turnMultiplier);
+			setSpeed(output, -1 * output);
+		} else {
+			System.out.println("Within tolerance, but velocity is too high. Stopping motors");
+			stop();
+		}
 		return false;
 	}
 

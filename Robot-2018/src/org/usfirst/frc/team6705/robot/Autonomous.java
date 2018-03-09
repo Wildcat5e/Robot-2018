@@ -49,7 +49,7 @@ public class Autonomous {
 	
 	private int nextState(int current) {
 		DriveTrain.resetEncoders();
-		//DriveTrain.gyro.reset();
+		DriveTrain.gyro.reset();
 		previousTime = Robot.timer.get();
 		previousElevatorHeight = Elevator.getCurrentPosition();
 		SmartDashboard.putNumber("Auto State", current + 1);

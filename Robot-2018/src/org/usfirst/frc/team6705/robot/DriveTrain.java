@@ -128,8 +128,8 @@ public class DriveTrain {
 			DriveTrain.stop();
 			
 			if (endMoveTicks > 5) { //Pause very briefly after the move
-				resetEncoders();
-				gyro.reset();
+				//resetEncoders();
+				//gyro.reset();
 				Robot.auto.previousFinalTurningError = 0;
 				endMoveTicks = 0;
 				return true;
@@ -208,7 +208,7 @@ public class DriveTrain {
 				Robot.auto.previousFinalTurningError = error;
 				
 				DriveTrain.stop();
-				gyro.reset();
+				//gyro.reset();
 		
 				turningStableTicks = 0;
 				previousTurningError = 0;

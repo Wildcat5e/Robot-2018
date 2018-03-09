@@ -11,6 +11,7 @@
 
 package org.usfirst.frc.team6705.robot;
 
+import edu.wpi.first.wpilibj.CameraServer;
 //import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -89,6 +90,7 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		System.out.println("Robot Init");
 		
+		CameraServer.getInstance().startAutomaticCapture();
 		autoChooser.addDefault("ONE cube on SWITCH", switchAuto);
 		autoChooser.addObject("ONE cube on SCALE", singleScale);
 		autoChooser.addObject("TWO cubes - scale AND switch", scaleSwitchAuto);
@@ -111,7 +113,6 @@ public class Robot extends IterativeRobot {
 		Elevator.setup();
 		Intake.setup();
 		
-		//CameraServer.getInstance().startAutomaticCapture();
 		
 		//compressor.setClosedLoopControl(true);
 		//compressor.start();

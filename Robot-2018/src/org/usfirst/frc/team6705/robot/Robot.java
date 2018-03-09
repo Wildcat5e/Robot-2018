@@ -11,8 +11,8 @@
 
 package org.usfirst.frc.team6705.robot;
 
+import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
-//import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -49,7 +49,6 @@ public class Robot extends IterativeRobot {
 	//private static final String bestSimple = "bestSimple";
 	private static final String motionProfileStraight = "mp";
 	private static final String test = "test";
-	private static final String stall = "stall";
 	private static final String singleScale = "singleScale";
 	private String autoSelected;
 	
@@ -90,7 +89,9 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		System.out.println("Robot Init");
 		
-		CameraServer.getInstance().startAutomaticCapture();
+		UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+		camera.setResolution(640, 480);
+		
 		autoChooser.addDefault("ONE cube on SWITCH", switchAuto);
 		autoChooser.addObject("ONE cube on SCALE", singleScale);
 		autoChooser.addObject("TWO cubes - scale AND switch", scaleSwitchAuto);

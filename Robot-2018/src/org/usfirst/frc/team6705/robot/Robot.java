@@ -11,6 +11,7 @@
 
 package org.usfirst.frc.team6705.robot;
 
+import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 //import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -90,7 +91,9 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		System.out.println("Robot Init");
 		
-		CameraServer.getInstance().startAutomaticCapture();
+		UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+		camera.setResolution(640, 480);
+		
 		autoChooser.addDefault("ONE cube on SWITCH", switchAuto);
 		autoChooser.addObject("ONE cube on SCALE", singleScale);
 		autoChooser.addObject("TWO cubes - scale AND switch", scaleSwitchAuto);

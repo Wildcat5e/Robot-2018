@@ -4,6 +4,8 @@
 
 package org.usfirst.frc.team6705.robot;
 
+import edu.wpi.first.wpilibj.Preferences;
+
 //import edu.wpi.first.wpilibj.Preferences;
 
 public class Constants {
@@ -45,36 +47,36 @@ public class Constants {
 	
 	//Rollers
 	public static final double timeToRollIn = 0.5, //seconds
-		timeToRollOut = 1.5, //seconds
-		maxRollersSpeed = 0.6,
-		rollersSpeedAuto = 0.5;//[-1, 1]
+		timeToRollOut = 1, //seconds
+		maxRollersSpeed = 0.7,
+		rollersSpeedAuto = 0.7;//[-1, 1]
 		
 	
 	//Drive Train
 	public static final double wheelRadius = 3.0, //inches
 			ticksPerRevolution = 256 * 4, //encoder ticks, multiplied by 4 because quadrature encoders do 4 pulses per count
 			distancePerTick = (wheelRadius * 2.0 * Math.PI)/ticksPerRevolution, //inches per tick
-			turningTolerance = 3, //Degrees
 			deadband = 0.08, //-1 to 1
 			rampRateAuto = 1, //Seconds to ramp from 0 to full
 			rampRateTeleop = 0.25,
-			stallCurrent = 60, // TODO  This number needs to be defined in testing (estimate);
 			maxTicksPer100ms = 825,//This is the max speed in native units per 100 ms of the motors (percent output 100%)
 			maxError = 400,
 			minimumSpeed = 75,//ticks per 100 ms
-			minimumTurningSpeedLeft = 335,
-			minimumTurningSpeedRight = 308,
-			kP_Angle = 50,
-			minimumSteadyTurningIterations = 5,
-			kP_Turning = 0.01,
-			kD_Turning = 0.006,//.03,
-			kI_Turning = 0.001,//0.001,
+			kP_StraightDriving = 50;
+	
+	//Turning PID
+	public static double kP_Turning = 0.01,
+			kD_Turning = 0,
+			kI_Turning = 0,
+			iZone = 8, //Degree range in which I-gain applies
+			turningTolerance = 4, //Degrees
+			steadyTurningIterations = 5, //Iterations to exit turning PID loops
 			maxTurningOutput = 0.9,
-			minimumTurningOutput = 0.25;
+			minimumTurningOutput = 0;
 	
 	//Driving Speeds in Feet Per Second (FPS)
 		public static final double velocityMax = getFPS(maxTicksPer100ms),
-				velocityFast = 9.5,
+				velocityFast = 10,
 				velocityMedium = 7,
 				velocitySlow = 5.5,
 				velocityTurningLeft = 6,
@@ -97,9 +99,7 @@ public class Constants {
 			autoDriveHeight = 5,
 			switchHeight = 30,
 			scaleHeight = 70.5, 
-			elevatorRampTime = 0.2, //seconds
-			ropeThickness = 0.065, //inches
-	        maxElevatorTicks = 6500;
+			elevatorRampTime = 0.2; //seconds
 	
 	//PID for DriveTrain
 	public static double kP_L = (1023 * 0.05)/225,//-(1023 * 0.1)/maxError,
@@ -109,23 +109,16 @@ public class Constants {
 			kF_R = 1023/825,
 			kF_L = 1023/825;
 	
-	//PID for Elevator
-	public static double kP_Lift = 0.1,
-		kD_Lift = 0.01,
-		kI_Lift = 0.01,
-		kF_Lift = 0.1;
-	
-	public static void setup() {
-		/*Preferences prefs = Preferences.getInstance();
-		kP = prefs.getDouble("kP_R", 0.0001);
-		kD = prefs.getDouble("kD", 0);
-		kI = prefs.getDouble("kI", 0);
-		kF_L = prefs.getDouble("kF_L", 0.1);
-		kF_R = prefs.getDouble("kF_R", 0.1);
-		kP_Lift = prefs.getDouble("kP_Lift", 0);
-		kI_Lift = prefs.getDouble("kI_Lift", 0);
-		kD_Lift= prefs.getDouble("kD_LIft", 0);
-		kF_Lift = prefs.getDouble("kF_LIft", 0);*/
+	public static void getPreferences() {
+		Preferences prefs = Preferences.getInstance();
+		kP_Turning = prefs.getDouble("kP_Turning", kP_Turning);
+		kI_Turning = prefs.getDouble("kI_Turning", kI_Turning);
+		kD_Turning = prefs.getDouble("kD_Turning", kD_Turning);
+		iZone = prefs.getDouble("iZone", iZone); //Degree range in which I-gain applies
+		turningTolerance = prefs.getDouble("turningTolerance", turningTolerance); //Degrees
+		steadyTurningIterations = prefs.getDouble("steadyTurningIterations", steadyTurningIterations); //Iterations to exit turning PID loops
+		maxTurningOutput = prefs.getDouble("maxTurningOutput", maxTurningOutput);
+		minimumTurningOutput = prefs.getDouble("minimumTurningOutput", minimumTurningOutput);
 	}
 	
 	public static double convertInchesToTicks(double inches) {

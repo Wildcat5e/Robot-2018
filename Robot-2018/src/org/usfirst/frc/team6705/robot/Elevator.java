@@ -22,6 +22,8 @@ public class Elevator /*extends PIDSubsystem*/ {
 	
 	static DigitalInput limitSwitch = new DigitalInput(elevatorLimitSwitchDIO);
 	
+	public static boolean hasCompletedLift = false;
+	
 	//static PIDController pid = new PIDController(kP_Lift, kI_Lift, kD_Lift, kF_Lift, encoder, motor);
 	
 	//static PIDMotor motor1;
@@ -158,9 +160,11 @@ public class Elevator /*extends PIDSubsystem*/ {
 		double distanceRemaining = currentHeight - targetHeight;
 		double absDistance = Math.abs(distanceRemaining);
 		System.out.println("Move to height auto");
-		if (currentHeight < targetHeight + elevatorTolerance && currentHeight > targetHeight - elevatorTolerance) {
+		if ((currentHeight < targetHeight + elevatorTolerance && currentHeight > targetHeight - elevatorTolerance) || hasCompletedLift) {
 			//Elevator.stop();
+			hasCompletedLift = true;
 			Robot.auto.isLifting = false;
+			Robot.auto.previousElevatorHeight = getCurrentPosition();
 			System.out.println("AUTO ELEVATOR MOVE DONE");
 			return true;
 		} else {

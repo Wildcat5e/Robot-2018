@@ -189,7 +189,7 @@ public class Autonomous {
 				}
 				break;
 			case 6: //Move forward rest of distance
-				if (DriveTrain.moveByDistance(21, velocitySlow)) {
+				if (DriveTrain.moveByDistance(29, 0, velocitySlow, 2)) {
 					state = nextState(state);
 				}
 				break;
@@ -199,7 +199,7 @@ public class Autonomous {
 				}
 				break;
 			case 8:
-				if (DriveTrain.moveByDistance(-20, velocitySlow)) {
+				if (DriveTrain.moveByDistance(-29, velocitySlow)) {
 					state = nextState(state);
 				}
 				break;

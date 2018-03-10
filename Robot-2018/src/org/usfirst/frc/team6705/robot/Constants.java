@@ -65,14 +65,14 @@ public class Constants {
 			kP_StraightDriving = 50;
 	
 	//Turning PID
-	public static double kP_Turning = 0.01,
-			kD_Turning = 0,
+	public static double kP_Turning = 0.013,
+			kD_Turning = 0.025,
 			kI_Turning = 0,
 			iZone = 8, //Degree range in which I-gain applies
 			turningTolerance = 4, //Degrees
 			steadyTurningIterations = 5, //Iterations to exit turning PID loops
 			maxTurningOutput = 0.9,
-			minimumTurningOutput = 0;
+			minimumTurningOutput = 0.25;
 	
 	//Driving Speeds in Feet Per Second (FPS)
 		public static final double velocityMax = getFPS(maxTicksPer100ms),
@@ -98,7 +98,7 @@ public class Constants {
 			floorHeight = 0.0,
 			autoDriveHeight = 5,
 			switchHeight = 30,
-			scaleHeight = 70.5, 
+			scaleHeight = 69, 
 			elevatorRampTime = 0.2; //seconds
 	
 	//PID for DriveTrain

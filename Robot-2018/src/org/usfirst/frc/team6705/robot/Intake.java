@@ -19,18 +19,18 @@ public class Intake {
 	}
 	
 	public static void intake() {
-		rollersLeft.set(-rollersSpeedAuto);
+		rollersLeft.set(rollersSpeedAuto);
 		rollersRight.set(rollersSpeedAuto);
 	}
 	
 	public static void outtake() {
-		rollersLeft.set(rollersSpeedAuto);
+		rollersLeft.set(-rollersSpeedAuto);
 		rollersRight.set(-rollersSpeedAuto);
 	}
 	
 	public static void roll(double speed) {
 	    System.out.println("Rolling speed: " + speed);
-		rollersLeft.set(-speed * maxRollersSpeed);
+		rollersLeft.set(speed * maxRollersSpeed);
 		rollersRight.set(speed * maxRollersSpeed);
 	}
 	

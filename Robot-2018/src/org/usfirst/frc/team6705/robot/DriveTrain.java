@@ -25,6 +25,7 @@ public class DriveTrain {
 	private static double previousTurningError = 0;
 	private static double turningIntegral = 0;
 	private static int endMoveTicks = 0;
+	private static int timeOutTicks = 0;
 	
 	public static void setup() {
 		leftVictor.follow(leftTalon);
@@ -117,7 +118,7 @@ public class DriveTrain {
 	}
 
 	//Autonomous move method
-	public static boolean moveByDistance(double inches, double degrees, double velocity) {
+	public static boolean moveByDistance(double inches, double degrees, double velocity, double timeOutSeconds) {
 		double targetEncoderTicks = Math.abs(convertInchesToTicks(inches));
 		double ticksSoFar = Math.abs((leftTalon.getSelectedSensorPosition(0) + rightTalon.getSelectedSensorPosition(0))/2);
 		double maxVelocity = convertVelocity(velocity);
@@ -136,6 +137,17 @@ public class DriveTrain {
 			} else {
 				return false;
 			}
+		} else if (leftTalon.getSelectedSensorVelocity(0) < 10 && rightTalon.getSelectedSensorVelocity(0) < 10 && timeOutSeconds > 0) {
+			timeOutTicks++;
+			if (timeOutTicks > timeOutSeconds * 50) {
+				DriveTrain.stop();
+				Robot.auto.previousFinalTurningError = 0;
+				endMoveTicks = 0;
+				timeOutTicks = 0;
+				return true;
+			}
+		} else {
+			timeOutTicks = 0;
 		}
 		
 		int direction = (inches > 0) ? 1 : -1;
@@ -169,10 +181,14 @@ public class DriveTrain {
 		setVelocity(direction * -scaledSpeedL, direction * -scaledSpeedR);
 		return false;
 	}
+	
+	public static boolean moveByDistance(double inches, double heading, double velocity) {
+		return moveByDistance(inches, heading, velocity, 0);
+	}
 
 	
 	public static boolean moveByDistance(double inches, double velocity) {
-		return moveByDistance(inches, 0, velocity);
+		return moveByDistance(inches, 0, velocity, 0);
 	}
 	
 

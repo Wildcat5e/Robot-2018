@@ -189,13 +189,13 @@ public class Elevator /*extends PIDSubsystem*/ {
 			scaledFraction = 1;
 		}
         
-        if (distanceRemaining > 0 && direction == 1) {
+        /*if (distanceRemaining > 0 && direction == 1) {
         	System.out.println("ABOVE TARGET HEIGHT");
 	        double speed = (Intake.solenoid.get() == DoubleSolenoid.Value.kReverse) ? elevatorEquilibriumSpeedWithCube : elevatorEquilibriumSpeedNoCube;//elevatorMinimumSpeedUp * (height - getCurrentPosition());
 	        motor.set(speed);
-        } else {
+        } else {*/
         	Elevator.set(direction * scaledFraction);
-        }
+        //}
 		return false;
 	}
 	

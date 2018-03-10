@@ -160,7 +160,7 @@ public class DriveTrain {
 		double scaledSpeedL = scaledFraction * velocityLeft;
 		
 		if (scaledSpeedR < minimumSpeed + (kP_StraightDriving * degreeErrorRight * direction)) {
-			scaledSpeedR = minimumSpeed + + (kP_StraightDriving * degreeErrorRight * direction);
+			scaledSpeedR = minimumSpeed + (kP_StraightDriving * degreeErrorRight * direction);
 		}
 		if (scaledSpeedL < minimumSpeed + (kP_StraightDriving * degreeErrorLeft * direction)) {
 			scaledSpeedL = minimumSpeed  + (kP_StraightDriving * degreeErrorLeft * direction);
@@ -177,7 +177,7 @@ public class DriveTrain {
 	
 
 	//Autonomous turn method
-	public static boolean turnDegrees(double degrees) {
+	public static boolean turnDegrees(double degrees, double timeOutDegreeTolerance) {
 		//Positive degrees -> counterclockwise; negative degrees -> clockwise
 		
 
@@ -195,14 +195,13 @@ public class DriveTrain {
 		System.out.println("Turning with current gyro angle " + getGyro() + " and target " + degrees + " and error " + error + " and previous error " + previousTurningError);
 		
 		if (absoluteError <= turningTolerance) {
-			turningStableTicks++;
 			DriveTrain.stop();
 			inTolerance = true;
 			
 			//System.out.println("Has been stable within target's tolerance for " + turningStableTicks + " iterations");
 			System.out.println("Within tolerance with velocities L: " + leftTalon.getSelectedSensorVelocity(0) + " and R: " + rightTalon.getSelectedSensorPosition(0));
 			
-			if (leftTalon.getSelectedSensorVelocity(0) < 75 && rightTalon.getSelectedSensorPosition(0) < 75) {
+			if (leftTalon.getSelectedSensorVelocity(0) < 75 && rightTalon.getSelectedSensorVelocity(0) < 75) {
 				System.out.println("STOP TURNING AT ANGLE: " + getGyro() + " with absolute error " + absoluteError);
 
 				Robot.auto.previousFinalTurningError = error;
@@ -215,7 +214,19 @@ public class DriveTrain {
 				turningIntegral = 0;
 
 				return true;
-			}	
+			}
+		} else if (leftTalon.getSelectedSensorVelocity(0) < 25 && rightTalon.getSelectedSensorVelocity(0) < 25 && absoluteError < timeOutDegreeTolerance && timeOutDegreeTolerance != 0) {
+			turningStableTicks++;
+			if (turningStableTicks > 100) { 
+				turningStableTicks = 0;
+				previousTurningError = 0;
+				turningIntegral = 0;
+				
+				Robot.auto.previousFinalTurningError = error;
+				
+				DriveTrain.stop();
+				return true;
+			}
 		} else {
 			turningStableTicks = 0;
 		}
@@ -259,6 +270,10 @@ public class DriveTrain {
 		}
 		return false;
 	}
+	
+	public static boolean turnDegrees(double degrees) {
+		return turnDegrees(degrees, 0);
+	}
 
 	//***************************************//
 	
@@ -290,7 +305,7 @@ public class DriveTrain {
 	    double elevatorHeight = Elevator.encoder.get();
 	    double scale = 1; 
 	    if (Elevator.getCurrentPosition() > 40) {
-	        scale = 1 - (Elevator.getCurrentPosition()/(maximumHeight * 3.25));
+	        scale = 1 - (Elevator.getCurrentPosition()/(maximumHeight * 2.7));
 	    }
 		
 		leftTalon.set(ControlMode.Velocity, left * scale);

@@ -155,7 +155,8 @@ public class Elevator /*extends PIDSubsystem*/ {
 		double currentHeight = getCurrentPosition();
 		//int direction = (currentHeight > targetHeight) ? -1 : 1;
 		
-		double distanceRemaining = Math.abs(currentHeight - targetHeight);
+		double distanceRemaining = currentHeight - targetHeight;
+		double absDistance = Math.abs(distanceRemaining);
 		System.out.println("Move to height auto");
 		if (currentHeight < targetHeight + elevatorTolerance && currentHeight > targetHeight - elevatorTolerance) {
 			//Elevator.stop();
@@ -166,7 +167,7 @@ public class Elevator /*extends PIDSubsystem*/ {
 			Robot.auto.isLifting = true;
 		}
 		
-		double fractionRemaining = Math.abs(distanceRemaining/totalDistanceToLift);
+		double fractionRemaining = Math.abs(absDistance/totalDistanceToLift);
 		if (fractionRemaining > 1) {
 			fractionRemaining = 1;
 		}
@@ -184,7 +185,13 @@ public class Elevator /*extends PIDSubsystem*/ {
 			scaledFraction = 1;
 		}
         
-		Elevator.set(direction * scaledFraction);
+        if (distanceRemaining > 0 && direction == 1) {
+        	System.out.println("ABOVE TARGET HEIGHT");
+	        double speed = (Intake.solenoid.get() == DoubleSolenoid.Value.kReverse) ? elevatorEquilibriumSpeedWithCube : elevatorEquilibriumSpeedNoCube;//elevatorMinimumSpeedUp * (height - getCurrentPosition());
+	        motor.set(speed);
+        } else {
+        	Elevator.set(direction * scaledFraction);
+        }
 		return false;
 	}
 	

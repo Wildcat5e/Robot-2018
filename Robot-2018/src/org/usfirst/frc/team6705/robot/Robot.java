@@ -78,7 +78,7 @@ public class Robot extends IterativeRobot {
 	//Compressor compressor = new Compressor();
 	StringBuilder sbL = new StringBuilder();
 	StringBuilder sbR  = new StringBuilder();
-	
+		
 	int loops = 0;
 	
 	/**
@@ -89,8 +89,13 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		System.out.println("Robot Init");
 		
+		Constants.getPreferences();
+		/*
 		UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-		camera.setResolution(640, 480);
+		camera.setResolution(320, 240);
+		camera.setFPS(20);
+		camera.setExposureManual(35);
+		camera.setBrightness(50);*/
 		
 		autoChooser.addDefault("ONE cube on SWITCH", switchAuto);
 		autoChooser.addObject("ONE cube on SCALE", singleScale);
@@ -142,6 +147,7 @@ public class Robot extends IterativeRobot {
 		
 		auto.resetAuto();
 		Constants.getPreferences();
+		System.out.println("D value: " + kD_Turning);
 		
 		startingPosition = positionChooser.getSelected();
 		System.out.print("Autonomous Init");
@@ -285,6 +291,9 @@ public class Robot extends IterativeRobot {
 		DriveTrain.tankDrive(driveStick.getY(GenericHID.Hand.kLeft), driveStick.getY(GenericHID.Hand.kRight));
 		//DriveTrain.tankDrive(0.8, 0.8);
 		
+		//double brightness = liftStick.getRawAxis(3);
+		//System.out.println("Brightness " + brightness);
+		
 		//Back button - reset encoders and gyro
 		if (driveStick.getBackButton()) {
 			DriveTrain.resetEncoders();
@@ -321,6 +330,7 @@ public class Robot extends IterativeRobot {
 		
 		//Buttons - set Elevator lift to certain height - floor, switch, or scale
 		if (((liftStick.getRawButton(12) || liftStick.getRawButton(11) || driveStick.getAButton()) && elevatorState != ElevatorState.FLOOR) && timer.get() < 145) {
+			System.out.println("Move to floor button pressed");
 			moveToFloor();
 		} else if (((liftStick.getRawButton(10) || liftStick.getRawButton(9) || driveStick.getBButton()) && elevatorState != ElevatorState.SWITCH) && timer.get() < 145) {
 			moveToSwitch();
@@ -340,12 +350,19 @@ public class Robot extends IterativeRobot {
 	        previousHeight = Elevator.getCurrentPosition();
 			Elevator.setTeleop(joystickValue, triggerIntervalsCounted);
 			elevatorState = ElevatorState.MANUAL;
+		} else if (driveStick.getXButton() && liftStick.getRawButton(2)) {
+			elevatorState = ElevatorState.MANUAL;
+			Elevator.motor.set(-0.9);
 		} else if (elevatorState == ElevatorState.MANUAL && !Elevator.isAtFloor()) {
 			triggerIntervalsCounted = 0;
 			Elevator.maintainHeight(previousHeight);
+		} else if (elevatorState == ElevatorState.MANUAL) {
+			triggerIntervalsCounted = 0;
+			Elevator.stop();
 		} else {
 			triggerIntervalsCounted = 0;
 		}
+
 		
 		
 		//Start button - deploy ramps at end of game

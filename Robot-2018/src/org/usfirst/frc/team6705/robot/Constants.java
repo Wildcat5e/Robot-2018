@@ -87,7 +87,7 @@ public class Constants {
 	public static final double elevatorEquilibriumSpeedWithCube = 0.31,
 			elevatorEquilibriumSpeedNoCube = 0.29,
 			elevatorMaxSpeedUp = 1,
-			elevatorMaxSpeedDown = -0.3,
+			elevatorMaxSpeedDown = -0.4,
 			elevatorMinimumSpeedUp = 0.45,
 			elevatorMinimumSpeedDown = 0.15,
 			ticksPerRotationElevator = 2048,

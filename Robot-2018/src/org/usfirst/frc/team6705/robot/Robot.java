@@ -147,6 +147,8 @@ public class Robot extends IterativeRobot {
 		
 		auto.resetAuto();
 		Constants.getPreferences();
+		DriveTrain.configPID();
+		
 		System.out.println("D value: " + kD_Turning);
 		
 		startingPosition = positionChooser.getSelected();
@@ -257,6 +259,8 @@ public class Robot extends IterativeRobot {
 		} else if (Intake.solenoid.get() == DoubleSolenoid.Value.kReverse) {
 			intakeOpen = false;
 		}
+		
+		DriveTrain.setSpeed(0, 0);
 		
 	}
 

@@ -193,7 +193,7 @@ public class MotionProfile {
 			pointLeft.position = 12 * positionFeetLeft/(2 * Math.PI * wheelRadius) * ticksPerRevolution; //Convert Revolutions to Units
 			pointLeft.velocity = 12 * 60 * velocityFPSLeft/(2 * Math.PI * wheelRadius) * ticksPerRevolution / 600.0; //Convert RPM to Units/100ms
 			pointLeft.headingDeg = 0; /* future feature - not used in this example*/
-			pointLeft.profileSlotSelect0 = 0; /* which set of gains would you like to use [0,3]? */
+			pointLeft.profileSlotSelect0 = 1; /* which set of gains would you like to use [0,3]? */
 			pointLeft.profileSlotSelect1 = 0; /* future feature  - not used in this example - cascaded PID [0,1], leave zero */
 			pointLeft.timeDur = getTrajectoryDuration((int)profileLeft[i][2]);
 			pointLeft.zeroPos = false;
@@ -219,7 +219,7 @@ public class MotionProfile {
 			pointRight.position = 12 * positionFeetRight/(2 * Math.PI * wheelRadius) * ticksPerRevolution;
 			pointRight.velocity = 12 * 60 * velocityFPSRight/(2 * Math.PI * wheelRadius) * ticksPerRevolution / 600.0; 
 			pointRight.headingDeg = 0; 
-			pointRight.profileSlotSelect0 = 0; 
+			pointRight.profileSlotSelect0 = 1; 
 			pointRight.profileSlotSelect1 = 0; 
 			pointRight.timeDur = getTrajectoryDuration((int)profileRight[i][2]);
 			pointRight.zeroPos = false;

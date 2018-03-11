@@ -109,6 +109,12 @@ public class Constants {
 			kF_R = 1023/825,
 			kF_L = 1023/825;
 	
+	//PID for Motion profile
+	public static double kP_MP = 0.1,
+			kD_MP = 0,
+			kI_MP = 0,
+			kF_MP = 1023/825;
+	
 	public static void getPreferences() {
 		Preferences prefs = Preferences.getInstance();
 		kP_Turning = prefs.getDouble("kP_Turning", kP_Turning);
@@ -116,9 +122,14 @@ public class Constants {
 		kD_Turning = prefs.getDouble("kD_Turning", kD_Turning);
 		iZone = prefs.getDouble("iZone", iZone); //Degree range in which I-gain applies
 		turningTolerance = prefs.getDouble("turningTolerance", turningTolerance); //Degrees
-		steadyTurningIterations = prefs.getDouble("steadyTurningIterations", steadyTurningIterations); //Iterations to exit turning PID loops
 		maxTurningOutput = prefs.getDouble("maxTurningOutput", maxTurningOutput);
 		minimumTurningOutput = prefs.getDouble("minimumTurningOutput", minimumTurningOutput);
+		
+		kP_MP = prefs.getDouble("kP_MP", kP_MP);
+		kD_MP = prefs.getDouble("kD_MP", kD_MP);
+		kI_MP = prefs.getDouble("kI_MP", kI_MP);
+		kF_MP = prefs.getDouble("kF_MP", kF_MP);
+
 	}
 	
 	public static double convertInchesToTicks(double inches) {

@@ -55,6 +55,19 @@ public class DriveTrain {
 		leftTalon.setSensorPhase(true);
 		rightTalon.setSensorPhase(true);
 		
+		configPID();
+		
+		rightTalon.configMotionProfileTrajectoryPeriod(10, 0);
+		leftTalon.configMotionProfileTrajectoryPeriod(10, 0);
+		rightTalon.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 0);
+		leftTalon.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 0);
+		
+		gyro.reset();
+		resetEncoders();
+	}
+	
+	public static void configPID() {
+		//Velocity PID in slot 0
 		leftTalon.config_kP(0, kP_L, 0);
 		leftTalon.config_kI(0, kI, 0);
 		leftTalon.config_kD(0, kD, 0);
@@ -64,13 +77,15 @@ public class DriveTrain {
 		rightTalon.config_kD(0, kD, 0);
 		rightTalon.config_kF(0, kF_R, 0);
 		
-		rightTalon.configMotionProfileTrajectoryPeriod(10, 0);
-		leftTalon.configMotionProfileTrajectoryPeriod(10, 0);
-		rightTalon.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 0);
-		leftTalon.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 0);
-		
-		gyro.reset();
-		resetEncoders();
+		//Motion profile PID in slot 1
+		leftTalon.config_kP(1, kP_MP, 0);
+		leftTalon.config_kI(1, kI_MP, 0);
+		leftTalon.config_kD(1, kD_MP, 0);
+		leftTalon.config_kF(1, kF_MP, 0);
+		rightTalon.config_kP(1, kP_MP, 0);
+		rightTalon.config_kI(1, kI_MP, 0);
+		rightTalon.config_kD(1, kD_MP, 0);
+		rightTalon.config_kF(1, kF_MP, 0);
 	}
 	
 	public static void reverseDriveTrain() {
@@ -85,6 +100,16 @@ public class DriveTrain {
 		rightTalon.setInverted(false);
 		leftVictor.setInverted(true);
 		rightVictor.setInverted(false);
+	}
+	
+	public static void switchToVelocityMode() {
+		leftTalon.selectProfileSlot(0, 0);
+		rightTalon.selectProfileSlot(0, 0);
+	}
+	
+	public static void switchToMotionProfile() {
+		leftTalon.selectProfileSlot(1, 0);
+		rightTalon.selectProfileSlot(1, 0);
 	}
 	
 	//Tank drive for teleop control

@@ -11,6 +11,7 @@ import static org.usfirst.frc.team6705.robot.Constants.*;
 
 
 import edu.wpi.first.wpilibj.Notifier;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class MotionProfile {
 
@@ -136,8 +137,15 @@ public class MotionProfile {
 				if (!statusLeft.isUnderrun && !statusRight.isUnderrun) {
 					timeoutLoops = timeoutLimit;
 				}
-				System.out.println("Running motion profile, not finished");
-				if (statusLeft.activePointValid && statusLeft.isLast) {
+				
+				System.out.println("Running MP, has not finished");
+				
+				SmartDashboard.putNumber("Right MP position target", talonRight.getActiveTrajectoryPosition());
+				SmartDashboard.putNumber("Left MP position target", talonLeft.getActiveTrajectoryPosition());
+				SmartDashboard.putNumber("Right MP velocity target", talonLeft.getActiveTrajectoryVelocity());
+				SmartDashboard.putNumber("Left MP velocity target", talonRight.getActiveTrajectoryVelocity());
+				
+				if (statusLeft.activePointValid && statusLeft.isLast && statusRight.activePointValid && statusRight.isLast) {
 					//Motion Profile complete, load next one
 					finished = true;
 					if (!reversed) {

@@ -50,6 +50,9 @@ public class Robot extends IterativeRobot {
 	private static final String motionProfileStraight = "mp";
 	private static final String test = "test";
 	private static final String singleScale = "singleScale";
+	private static final String scaleAutoMP = "scaleMP";
+	private static final String switchAutoMP = "switchMP";
+	private static final String switchScaleAutoMP = "switchScaleMP";
 	private String autoSelected;
 	
 	private String startingPosition;
@@ -105,6 +108,9 @@ public class Robot extends IterativeRobot {
 		autoChooser.addObject("Cross Baseline ONLY", baselineAuto);
 		autoChooser.addObject("Straight Motion Profile", motionProfileStraight);
 		autoChooser.addObject("Test Auto", test);
+		autoChooser.addObject("Double Scale with Motion Profiling", scaleAutoMP);
+		autoChooser.addObject("Double Switch with Motion Profiling", switchAutoMP);
+		autoChooser.addObject("Switch AND Scale with Motion Profiling", switchScaleAutoMP);
 		//autoChooser.addObject("Stalling Test Auto", stall);
 		SmartDashboard.putData("Auto choices", autoChooser);
 		
@@ -201,42 +207,60 @@ public class Robot extends IterativeRobot {
 		case doubleScaleAuto:
 			auto.doubleScaleAuto((gameData.charAt(1) == 'L') ? 1: -1, startingPosition);
 			break;
-		/*
-		case bestSimple:
-			switch(startingPosition) {
-			case left:
-				if(gameData.charAt(1) == 'L') {
-					auto.scaleAuto(startingPosition, 1, (gameData.charAt(0) == 'L') ? 1 : -1);
-				} else if(gameData.charAt(0) == 'L'){
-					auto.switchAuto(startingPosition, 1, (gameData.charAt(1) == 'L') ? 1 : -1);
-				} else {
-					auto.baselineAuto();
-				}
-				break;
-			case middle:
-				if(gameData.charAt(0) == 'L') {
-					auto.switchAuto(startingPosition, 1, (gameData.charAt(1) == 'L') ? 1 : -1);
-				} else {
-					auto.switchAuto(startingPosition, -1, (gameData.charAt(1) == 'L') ? 1 : -1);
-				}
-				break;
-			case right:
-				if(gameData.charAt(1) == 'R') {
-					auto.scaleAuto(startingPosition, -1, (gameData.charAt(0) == 'L') ? 1 : -1);
-				} else if(gameData.charAt(0) == 'R') {
-					auto.switchAuto(startingPosition, -1,  (gameData.charAt(1) == 'L') ? 1 : -1);
-				} else {
-					auto.baselineAuto();
-				}
-				break;
-			}
-			break;*/
 		case motionProfileStraight:
 			auto.straightMotionProfile();
+			break;
+		case scaleAutoMP:
+			if (startingPosition == left) {
+				auto.scaleAutoMPLeft((gameData.charAt(1) == 'L') ? 1: -1);
+			} else if (startingPosition == right) {
+				auto.scaleAutoMPRight((gameData.charAt(1) == 'L') ? 1: -1);
+			}
+			break;
+		case switchAutoMP:
+			auto.switchAutoMP(startingPosition, (gameData.charAt(0) == 'L') ? 1: -1);
+			break;
+		case switchScaleAutoMP:
+			if (startingPosition == left) {
+				auto.scaleSwitchAutoLeftMP((gameData.charAt(1) == 'L') ? 1: -1, (gameData.charAt(0) == 'L') ? 1: -1);
+			} else if (startingPosition == right) {
+				auto.scaleSwitchAutoRightMP((gameData.charAt(1) == 'L') ? 1: -1, (gameData.charAt(0) == 'L') ? 1: -1);
+			}
 			break;
 		case test:
 			auto.testAuto();
 			break;
+			
+			/*
+			case bestSimple:
+				switch(startingPosition) {
+				case left:
+					if(gameData.charAt(1) == 'L') {
+						auto.scaleAuto(startingPosition, 1, (gameData.charAt(0) == 'L') ? 1 : -1);
+					} else if(gameData.charAt(0) == 'L'){
+						auto.switchAuto(startingPosition, 1, (gameData.charAt(1) == 'L') ? 1 : -1);
+					} else {
+						auto.baselineAuto();
+					}
+					break;
+				case middle:
+					if(gameData.charAt(0) == 'L') {
+						auto.switchAuto(startingPosition, 1, (gameData.charAt(1) == 'L') ? 1 : -1);
+					} else {
+						auto.switchAuto(startingPosition, -1, (gameData.charAt(1) == 'L') ? 1 : -1);
+					}
+					break;
+				case right:
+					if(gameData.charAt(1) == 'R') {
+						auto.scaleAuto(startingPosition, -1, (gameData.charAt(0) == 'L') ? 1 : -1);
+					} else if(gameData.charAt(0) == 'R') {
+						auto.switchAuto(startingPosition, -1,  (gameData.charAt(1) == 'L') ? 1 : -1);
+					} else {
+						auto.baselineAuto();
+					}
+					break;
+				}
+				break;*/
 		}
 		
 

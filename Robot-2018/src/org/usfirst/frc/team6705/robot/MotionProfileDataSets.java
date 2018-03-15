@@ -1,7 +1,7 @@
 package org.usfirst.frc.team6705.robot;
 
 public class MotionProfileDataSets {
-
+	
 	static final double [][]leftSwitch_Middle_L = new double[][]{
 		//Feet   Feet/sec  Duration
 		{ 3.0E-5, 0.00597, 10.0, },

@@ -240,6 +240,21 @@ public class Elevator /*extends PIDSubsystem*/ {
 		
 	}
 	
+	public static boolean moveToHeightAfterDriving(double targetHeight, double totalDistanceToLift, int direction, double distanceInches) {
+		double leftDistance = DriveTrain.leftTalon.getSelectedSensorPosition(0);
+		double rightDistance = DriveTrain.rightTalon.getSelectedSensorPosition(0);
+		double averageDistance = (leftDistance + rightDistance)/2;
+		
+		if (averageDistance < convertInchesToTicks(distanceInches)) {
+			System.out.println("Has only driven " + averageDistance + " ticks, so not yet lifting elevator");
+			Robot.auto.isLifting = false;
+			return false;
+		} else {
+			System.out.println("Has driven at least " + convertInchesToTicks(distanceInches) + " ticks, so now lifting elevator"); 
+			return moveToHeightAuto(targetHeight, totalDistanceToLift, direction);
+		}
+	}
+	
 	
 	public static enum ElevatorState {
 		MANUAL, FLOOR, SWITCH, SCALE, TEST;

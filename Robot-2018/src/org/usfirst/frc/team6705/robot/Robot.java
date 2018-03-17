@@ -28,6 +28,8 @@ import org.usfirst.frc.team6705.robot.Elevator;
 import org.usfirst.frc.team6705.robot.Elevator.ElevatorState;
 import org.usfirst.frc.team6705.robot.Intake.IntakeState;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 //import com.ctre.phoenix.motorcontrol.ControlMode;
 
 
@@ -538,12 +540,20 @@ public class Robot extends IterativeRobot {
 	}
 	
 	public void updateSmartDashboard() {
-		SmartDashboard.putNumber("Encoder Position Left", DriveTrain.leftTalon.getSelectedSensorPosition(0));
-		SmartDashboard.putNumber("Encoder Position Right", DriveTrain.rightTalon.getSelectedSensorPosition(0));
+		SmartDashboard.putNumber("Encoder position left", DriveTrain.leftTalon.getSelectedSensorPosition(0));
+		SmartDashboard.putNumber("Encoder position right", DriveTrain.rightTalon.getSelectedSensorPosition(0));
+		
 		SmartDashboard.putNumber("Motor Output Left", DriveTrain.leftTalon.getMotorOutputPercent());
 		SmartDashboard.putNumber("Motor Output Right", DriveTrain.rightTalon.getMotorOutputPercent());
-		SmartDashboard.putNumber("Motor Speed Left", DriveTrain.leftTalon.getSelectedSensorVelocity(0));
-		SmartDashboard.putNumber("Motor Speed Right", DriveTrain.rightTalon.getSelectedSensorVelocity(0));
+		
+		SmartDashboard.putNumber("Right MP position target", DriveTrain.rightTalon.getActiveTrajectoryPosition());
+		SmartDashboard.putNumber("Left MP position target", DriveTrain.leftTalon.getActiveTrajectoryPosition());
+		SmartDashboard.putNumber("Right MP velocity target", DriveTrain.leftTalon.getActiveTrajectoryVelocity());
+		SmartDashboard.putNumber("Left MP velocity target", DriveTrain.rightTalon.getActiveTrajectoryVelocity());
+		
+		SmartDashboard.putNumber("Motor velocity left", DriveTrain.leftTalon.getSelectedSensorVelocity(0));
+		SmartDashboard.putNumber("Motor velocity right", DriveTrain.rightTalon.getSelectedSensorVelocity(0));
+		
 		SmartDashboard.putNumber("Gyro Value", DriveTrain.getGyro());
 		SmartDashboard.putNumber("Elevator Encoder Count", Elevator.encoder.get());
 		SmartDashboard.putNumber("Elevator Current Height From Ground", Elevator.getCurrentPosition());
@@ -591,7 +601,7 @@ public class Robot extends IterativeRobot {
 	}
 	
 	public void testDriveTrain() {
-		/*
+		
 		double leftYStick = driveStick.getY(GenericHID.Hand.kLeft);
 		if (leftYStick < -0.93)  {
 			leftYStick = -1.0;
@@ -636,7 +646,7 @@ public class Robot extends IterativeRobot {
 		}
 		
 		sbL.setLength(0);
-		sbR.setLength(0);*/
+		sbR.setLength(0);
 	}
 	
 }

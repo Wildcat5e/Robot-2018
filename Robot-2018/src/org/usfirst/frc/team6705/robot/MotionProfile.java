@@ -140,11 +140,6 @@ public class MotionProfile {
 				
 				System.out.println("Running MP, has not finished");
 				
-				SmartDashboard.putNumber("Right MP position target", talonRight.getActiveTrajectoryPosition());
-				SmartDashboard.putNumber("Left MP position target", talonLeft.getActiveTrajectoryPosition());
-				SmartDashboard.putNumber("Right MP velocity target", talonLeft.getActiveTrajectoryVelocity());
-				SmartDashboard.putNumber("Left MP velocity target", talonRight.getActiveTrajectoryVelocity());
-				
 				if (statusLeft.activePointValid && statusLeft.isLast && statusRight.activePointValid && statusRight.isLast) {
 					//Motion Profile complete, load next one
 					finished = true;

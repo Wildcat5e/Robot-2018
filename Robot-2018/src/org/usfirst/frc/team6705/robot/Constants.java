@@ -89,7 +89,7 @@ public class Constants {
 			elevatorMaxSpeedUp = 1,
 			elevatorMaxSpeedDown = -0.4,
 			elevatorMinimumSpeedUp = 0.45,
-			elevatorMinimumSpeedDown = 0.15,
+			elevatorMinimumSpeedDown = 0.1,
 			ticksPerRotationElevator = 2048,
 			pulleyDiameter = 2.75,
 			verticalInchesPerTick = 2 * (pulleyDiameter * Math.PI) / ticksPerRotationElevator,

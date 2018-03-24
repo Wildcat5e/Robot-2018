@@ -162,7 +162,7 @@ public class Robot extends IterativeRobot {
 		Constants.getPreferences();
 		DriveTrain.configPID();
 		
-		System.out.println("D value: " + kD_Turning);
+		//autoDataLogger.reset();
 		
 		startingPosition = positionChooser.getSelected();
 		System.out.print("Autonomous Init");
@@ -296,6 +296,8 @@ public class Robot extends IterativeRobot {
 		Intake.stopRollers();
 		
 		DriveTrain.undoReverseDriveTrain();
+		
+		//teleopDataLogger.reset();
 		
 		DriveTrain.leftTalon.configClosedloopRamp(rampRateTeleop, 0);
 		DriveTrain.rightTalon.configClosedloopRamp(rampRateTeleop, 0);

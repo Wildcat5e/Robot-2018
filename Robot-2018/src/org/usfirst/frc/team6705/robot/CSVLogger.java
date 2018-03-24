@@ -48,6 +48,14 @@ public class CSVLogger {
 		
 	}
 	
+	public void reset() {
+		if(file.exists()){
+			//file.delete();
+			//file.createNewFile();
+			writeLine(new String[]{"INIT"});
+		}
+	}
+	
 	public void writeLine(String[] line) {
 		try {
 			

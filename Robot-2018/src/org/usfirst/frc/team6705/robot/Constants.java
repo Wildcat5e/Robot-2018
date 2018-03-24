@@ -136,6 +136,14 @@ public class Constants {
 		return (inches/(2 * Math.PI * wheelRadius)) * ticksPerRevolution;
 	}
 	
+	public static double convertTicksToInches(int ticks) {
+		return (ticks/ticksPerRevolution) * 2 * Math.PI * wheelRadius;
+	}
+	
+	public static double convertTicksToFeet(int ticks) {
+		return convertTicksToInches(ticks) / 12;
+	}
+	
 	public static double convertVelocity(double FPS) {
 		double rpm = (60 * 12 * FPS)/(wheelRadius * 2 * Math.PI);
 		return (rpm * ticksPerRevolution) / 600.0; // Rev/Min * Ticks/Rev * Min/100ms -> Ticks/100ms

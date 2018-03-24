@@ -771,14 +771,14 @@ public class Autonomous {
 	//************   SCALE AUTO LEFT MOTION PROFILING   **************//
 
 	
-	MotionProfile profileScaleLeft_Same = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitch_Middle_L, leftSwitch_Middle_R, leftSwitch_Middle_L.length);
-	MotionProfile profileScaleLeft_Opposite = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitch_Middle_L, leftSwitch_Middle_R, leftSwitch_Middle_L.length);
+	MotionProfile profileScaleLeft_Same = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R.length);
+	MotionProfile profileScaleLeft_Opposite = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R.length);
 
-	MotionProfile profileGetCubeFromScaleRight = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitch_Middle_L, leftSwitch_Middle_R, leftSwitch_Middle_L.length);
-	MotionProfile profileGetCubeFromScaleLeft = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitch_Middle_L, leftSwitch_Middle_R, leftSwitch_Middle_L.length);
+	MotionProfile profileGetCubeFromScaleRight = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R.length);
+	MotionProfile profileGetCubeFromScaleLeft = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R.length);
 
-	MotionProfile profileCubeToScaleRight = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitch_Middle_L, leftSwitch_Middle_R, leftSwitch_Middle_L.length);
-	MotionProfile profileCubeToScaleLeft = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitch_Middle_L, leftSwitch_Middle_R, leftSwitch_Middle_L.length);
+	MotionProfile profileCubeToScaleRight = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R.length);
+	MotionProfile profileCubeToScaleLeft = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R.length);
 	
 	
 	public void scaleAutoMPLeft(int scaleSide) {
@@ -911,8 +911,8 @@ public class Autonomous {
 	
 	//************   SCALE AUTO RIGHT MOTION PROFILING   **************//
 	
-	MotionProfile profileScaleRight_Same = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitch_Middle_L, leftSwitch_Middle_R, leftSwitch_Middle_L.length);
-	MotionProfile profileScaleRight_Opposite = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitch_Middle_L, leftSwitch_Middle_R, leftSwitch_Middle_L.length);
+	MotionProfile profileScaleRight_Same = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R.length);
+	MotionProfile profileScaleRight_Opposite = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R.length);
 
 	public void scaleAutoMPRight(int scaleSide) {
 		if (!Elevator.isAtFloor() && !isLifting) {
@@ -1044,11 +1044,11 @@ public class Autonomous {
 	
 	//************   SWITCH AUTO MOTION PROFILING   **************//
 	
-	MotionProfile profileSwitchLeft = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitch_Middle_L, leftSwitch_Middle_R, leftSwitch_Middle_L.length);
-	MotionProfile profileSwitchRight = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitch_Middle_L, leftSwitch_Middle_R, leftSwitch_Middle_L.length);
+	MotionProfile profileSwitchLeft = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitchMiddleStart_L, leftSwitchMiddleStart_R, leftSwitchMiddleStart_L.length);
+	MotionProfile profileSwitchRight = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitchMiddleStart_L, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R.length);
 	
-	MotionProfile profileResetFromSwitchLeft = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitch_Middle_R, leftSwitch_Middle_L, leftSwitch_Middle_L.length, true);
-	MotionProfile profileResetFromSwitchRight = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitch_Middle_R, leftSwitch_Middle_L, leftSwitch_Middle_L.length, true);
+	MotionProfile profileResetFromSwitchLeft = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitchMiddleStart_R, leftSwitchMiddleStart_L, leftSwitchMiddleStart_R.length, true);
+	MotionProfile profileResetFromSwitchRight = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitchMiddleStart_R, leftSwitchMiddleStart_L, leftSwitchMiddleStart_R.length, true);
 
 	
 	//SWITCH MOTION PROFILE AUTO 
@@ -1123,12 +1123,12 @@ public class Autonomous {
 	
 	//************   SCALE-SWITCH AUTO LEFT MOTION PROFILING   **************//
 
-	MotionProfile profileGetCubeFromScaleLeft_Opposite = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitch_Middle_L, leftSwitch_Middle_R, leftSwitch_Middle_L.length);
+	MotionProfile profileGetCubeFromScaleLeft_Opposite = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, straightTest_L, straightTest_L, straightTest_L.length);
 
-	MotionProfile profileSwitchLeft_Side = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitch_Middle_L, leftSwitch_Middle_R, leftSwitch_Middle_L.length);
-	MotionProfile profileBackAwayFromSwitchCube_Left = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitch_Middle_L, leftSwitch_Middle_R, leftSwitch_Middle_L.length, true);
+	MotionProfile profileSwitchLeft_Side = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, straightTest_L, straightTest_L, straightTest_L.length);
+	MotionProfile profileBackAwayFromSwitchCube_Left = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, straightTest_L, straightTest_L, straightTest_L.length, true);
 	
-	MotionProfile profileCrossFieldToScaleLeftToRight = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitch_Middle_L, leftSwitch_Middle_R, leftSwitch_Middle_L.length);
+	MotionProfile profileCrossFieldToScaleLeftToRight = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, straightTest_L, straightTest_L, straightTest_L.length);
 	
 	
 	public void scaleSwitchAutoLeftMP(int scaleSide, int switchSide) {
@@ -1368,12 +1368,12 @@ public class Autonomous {
 	//************   SCALE-SWITCH AUTO RIGHT MOTION PROFILING   **************//
 	
 	
-	MotionProfile profileGetCubeFromScaleRight_Opposite = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitch_Middle_L, leftSwitch_Middle_R, leftSwitch_Middle_L.length);
+	MotionProfile profileGetCubeFromScaleRight_Opposite = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, straightTest_L, straightTest_L, straightTest_L.length);
 	
-	MotionProfile profileSwitchRight_Side = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitch_Middle_L, leftSwitch_Middle_R, leftSwitch_Middle_L.length);
-	MotionProfile profileBackAwayFromSwitchCube_Right = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitch_Middle_L, leftSwitch_Middle_R, leftSwitch_Middle_L.length, true);
+	MotionProfile profileSwitchRight_Side = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, straightTest_L, straightTest_L, straightTest_L.length);
+	MotionProfile profileBackAwayFromSwitchCube_Right = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, straightTest_L, straightTest_L, straightTest_L.length, true);
 	
-	MotionProfile profileCrossFieldToScaleRightToLeft = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitch_Middle_L, leftSwitch_Middle_R, leftSwitch_Middle_L.length);
+	MotionProfile profileCrossFieldToScaleRightToLeft = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, straightTest_L, straightTest_L, straightTest_L.length);
 	
 	public void scaleSwitchAutoRightMP(int scaleSide, int switchSide) {
 		if (!Elevator.isAtFloor() && !isLifting) {

@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -63,7 +64,6 @@ public class Robot extends IterativeRobot {
 	private SendableChooser<String> positionChooser = new SendableChooser<>();
 	
 	public static Autonomous auto = new Autonomous();
-	//public static Elevator Elevator = new Elevator();
 	
 	boolean intakeOpen = false; 
 	IntakeState intakeState = IntakeState.MANUAL;
@@ -80,10 +80,15 @@ public class Robot extends IterativeRobot {
 	XboxController driveStick = new XboxController(driveStickChannel);
 	Joystick liftStick = new Joystick(liftStickChannel);
 	
-	//Compressor compressor = new Compressor();
+	//Used for testing left and right sides of drive train
 	StringBuilder sbL = new StringBuilder();
 	StringBuilder sbR  = new StringBuilder();
-		
+	
+	//Used for logging data during testing or matches onto USB stick
+	String[] dataColumns = {"Timestamp (s)", "Left Position (Ft)", "Right Position (Ft)", "Left Velocity (Ft/s)", "Right Velocity (Ft/s)", "Battery Voltage (V)"};
+	CSVLogger autoDataLogger = new CSVLogger("autoData", dataColumns);
+	CSVLogger teleopDataLogger = new CSVLogger("teleopData", dataColumns);
+	
 	int loops = 0;
 	
 	/**
@@ -167,6 +172,7 @@ public class Robot extends IterativeRobot {
 		
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 
+		timer.reset();
 		timer.start();
 		//DriveTrain.gyro.setPIDSourceType(PIDSourceType.kDisplacement);//Remove this line if it causes issues
 	}
@@ -177,15 +183,30 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {
 		
-		
+		//Continue trying to get game data if it didn't show up immediately
 		if (gameData.length() == 0 || gameData == null) {
 			gameData = DriverStation.getInstance().getGameSpecificMessage();
 		}
+		
 		updateSmartDashboard();
+		
+		//Log data to a .csv for analysis
+		double timeStamp = timer.get();
+		double leftPos = convertTicksToFeet(DriveTrain.leftTalon.getSelectedSensorPosition(0));
+		double rightPos = convertTicksToFeet(DriveTrain.rightTalon.getSelectedSensorPosition(0));
+		double leftVel = getFPS(DriveTrain.leftTalon.getSelectedSensorVelocity(0));
+		double rightVel = getFPS(DriveTrain.rightTalon.getSelectedSensorVelocity(0));
+		double voltage = RobotController.getBatteryVoltage();
+		
+		String[] data = {"" + timeStamp, "" + leftPos,"" + rightPos, "" + leftVel, "" + rightVel, "" + voltage};
+		autoDataLogger.writeLine(data);
+		
+		//Reset encoder if at floor
 		if (Elevator.isAtFloor()) {
 			Elevator.encoder.reset();
 		}
 		
+		//Run state machine based on selected auto and starting position
 		switch (autoSelected) {
 		case switchAuto:
 			if (gameData.charAt(0) == 'L') {
@@ -297,6 +318,17 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		
 		operatorControl();
+		
+		//Log data to a .csv for analysis
+		double timeStamp = timer.get();
+		double leftPos = convertTicksToFeet(DriveTrain.leftTalon.getSelectedSensorPosition(0));
+		double rightPos = convertTicksToFeet(DriveTrain.rightTalon.getSelectedSensorPosition(0));
+		double leftVel = getFPS(DriveTrain.leftTalon.getSelectedSensorVelocity(0));
+		double rightVel = getFPS(DriveTrain.rightTalon.getSelectedSensorVelocity(0));
+		double voltage = RobotController.getBatteryVoltage();
+		
+		String[] data = {"" + timeStamp, "" + leftPos,"" + rightPos, "" + leftVel, "" + rightVel, "" + voltage};
+		teleopDataLogger.writeLine(data);
 	}
 
 	/**
@@ -610,18 +642,18 @@ public class Robot extends IterativeRobot {
 		double motorOutputLeft = DriveTrain.leftTalon.getMotorOutputPercent();
 		double motorOutputRight = DriveTrain.rightTalon.getMotorOutputPercent();
 		
-		sbL.append("LOut:");
-		sbR.append("ROut:");
+		sbL.append("LOut: ");
+		sbR.append("ROut: ");
 		sbL.append(motorOutputLeft);
 		sbR.append(motorOutputRight);
 		
-		sbL.append("LSpd:");
-		sbR.append("RSpd");
+		sbL.append("LSpd: ");
+		sbR.append("RSpd: ");
 		sbL.append(DriveTrain.leftTalon.getSelectedSensorVelocity(0));
 		sbR.append(DriveTrain.rightTalon.getSelectedSensorVelocity(0));
 		
 		if (driveStick.getAButton()) {
-			double targetVelocity  = leftYStick * 350 * 1024 / 600;
+			double targetVelocity  = leftYStick * convertVelocity(11);
 			DriveTrain.leftTalon.set(ControlMode.Velocity, targetVelocity);
 			DriveTrain.rightTalon.set(ControlMode.Velocity, targetVelocity);
 			

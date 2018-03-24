@@ -586,6 +586,9 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Motor velocity left", DriveTrain.leftTalon.getSelectedSensorVelocity(0));
 		SmartDashboard.putNumber("Motor velocity right", DriveTrain.rightTalon.getSelectedSensorVelocity(0));
 		
+		SmartDashboard.putNumber("Left closed loop error", DriveTrain.leftTalon.getClosedLoopError(0));
+		SmartDashboard.putNumber("Right closed loop error", DriveTrain.rightTalon.getClosedLoopError(0));
+		
 		SmartDashboard.putNumber("Gyro Value", DriveTrain.getGyro());
 		SmartDashboard.putNumber("Elevator Encoder Count", Elevator.encoder.get());
 		SmartDashboard.putNumber("Elevator Current Height From Ground", Elevator.getCurrentPosition());

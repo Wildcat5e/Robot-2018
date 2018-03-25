@@ -10,6 +10,8 @@ public class Intake {
 	static Spark rollersRight = new Spark(rightIntakeSparkChannel);
 	
 	static DoubleSolenoid solenoid = new DoubleSolenoid(intakeSolenoidA, intakeSolenoidB);
+	static DoubleSolenoid actuator1 = new DoubleSolenoid(intakeActuatorSolenoidA, intakeActuatorSolenoidB);
+	static DoubleSolenoid actuator2 = new DoubleSolenoid(intakeActuatorSolenoidA, intakeActuatorSolenoidB);
 
 	public static void setup() {
 	    solenoid.set(DoubleSolenoid.Value.kReverse);
@@ -64,10 +66,24 @@ public class Intake {
 		
 	}
 	
-	
 	public static void close() {
 	    System.out.println("Close Pneumatics");
 		solenoid.set(DoubleSolenoid.Value.kReverse);
+	}
+	
+	public static void angleUp() {
+		actuator1.set(DoubleSolenoid.Value.kReverse);
+		actuator2.set(DoubleSolenoid.Value.kOff);
+	}
+	
+	public static void angleDiagonal() {
+		actuator1.set(DoubleSolenoid.Value.kReverse);
+		actuator1.set(DoubleSolenoid.Value.kForward);
+	}
+	
+	public static void angleDown() {
+		actuator1.set(DoubleSolenoid.Value.kOff);
+		actuator1.set(DoubleSolenoid.Value.kReverse);
 	}
 	
 	public static enum IntakeState {

@@ -26,8 +26,10 @@ public class Constants {
 			intakeSolenoidB = 1,
 			leftRampSolenoidA = 2,
 			leftRampSolenoidB = 3,
-			rightRampSolenoidA = 4,
-			rightRampSolenoidB = 5;
+			intakeActuatorSolenoidA = 4,
+			intakeActuatorSolenoidB = 5,
+			rightRampSolenoidA = 8,
+			rightRampSolenoidB = 9;
 	
 	//Joysticks
 	public static final int driveStickChannel = 0,

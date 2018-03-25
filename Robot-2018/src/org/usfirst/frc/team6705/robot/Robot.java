@@ -50,7 +50,7 @@ public class Robot extends IterativeRobot {
 	private static final String doubleScaleAuto = "doubleScale";
 	private static final String baselineAuto = "baseline";
 	//private static final String bestSimple = "bestSimple";
-	private static final String motionProfileStraight = "mp";
+	private static final String motionProfileTest = "mp";
 	private static final String test = "test";
 	private static final String singleScale = "singleScale";
 	private static final String scaleAutoMP = "scaleMP";
@@ -113,7 +113,7 @@ public class Robot extends IterativeRobot {
 		autoChooser.addObject("TWO cubes on SCALE (only in playoffs or if teammate is doing switch)", doubleScaleAuto);
 		//autoChooser.addObject("Best Simple Scoring Method", bestSimple);
 		autoChooser.addObject("Cross Baseline ONLY", baselineAuto);
-		autoChooser.addObject("Straight Motion Profile", motionProfileStraight);
+		autoChooser.addObject("Straight Motion Profile", motionProfileTest);
 		autoChooser.addObject("Test Auto", test);
 		autoChooser.addObject("Double Scale with Motion Profiling", scaleAutoMP);
 		autoChooser.addObject("Double Switch with Motion Profiling", switchAutoMP);
@@ -230,8 +230,8 @@ public class Robot extends IterativeRobot {
 		case doubleScaleAuto:
 			auto.doubleScaleAuto((gameData.charAt(1) == 'L') ? 1: -1, startingPosition);
 			break;
-		case motionProfileStraight:
-			auto.straightMotionProfile();
+		case motionProfileTest:
+			auto.motionProfileTest();
 			break;
 		case scaleAutoMP:
 			if (startingPosition == left) {
@@ -393,15 +393,24 @@ public class Robot extends IterativeRobot {
 	}*/
 		
 		//Buttons - set Elevator lift to certain height - floor, switch, or scale
-		if (((liftStick.getRawButton(12) || liftStick.getRawButton(11) || driveStick.getAButton()) && elevatorState != ElevatorState.FLOOR) && timer.get() < 145) {
+		if ((driveStick.getAButton() && elevatorState != ElevatorState.FLOOR) && timer.get() < 145) {
 			System.out.println("Move to floor button pressed");
 			moveToFloor();
-		} else if (((liftStick.getRawButton(10) || liftStick.getRawButton(9) || driveStick.getBButton()) && elevatorState != ElevatorState.SWITCH) && timer.get() < 145) {
+		} else if ((driveStick.getBButton() && elevatorState != ElevatorState.SWITCH) && timer.get() < 145) {
 			moveToSwitch();
-		} else if (((liftStick.getRawButton(8) || liftStick.getRawButton(7)  || driveStick.getYButton()) && elevatorState != ElevatorState.SCALE) && timer.get() < 145) {
+		} else if ((driveStick.getYButton() && elevatorState != ElevatorState.SCALE) && timer.get() < 145) {
 			moveToScale();
 		} else if (timer.get() > 145 && elevatorState != ElevatorState.FLOOR) {
 			moveToFloor();
+		}
+		
+		//Control Intake Angle
+		if (liftStick.getRawButton(11) || liftStick.getRawButton(12)) {
+			Intake.angleDown();
+		} else if (liftStick.getRawButton(10) || liftStick.getRawButton(9)) {
+			Intake.angleDiagonal();
+		} else if (liftStick.getRawButton(8) || liftStick.getRawButton(7)) {
+			Intake.angleUp();
 		}
 				
 		//Operator Joystick - lift and lower Elevator

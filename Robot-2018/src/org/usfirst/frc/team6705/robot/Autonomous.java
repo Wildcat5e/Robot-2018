@@ -86,7 +86,7 @@ public class Autonomous {
 				state = nextState(state);
 			}
 			break;
-		/*case 4: 
+		/*case 1: 
 			if (DriveTrain.moveByDistance(100, velocitySlow) & Elevator.moveToHeightAfterDriving(switchHeight, switchHeight, 1, 50)) {
 				state = nextState(state);
 			}
@@ -101,7 +101,7 @@ public class Autonomous {
 
 	MotionProfile profileStraight = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, straightTest_L, straightTest_R, straightTest_R.length);
 	
-	public void straightMotionProfile() {
+	public void motionProfileTest() {
 		
 		if (!isLifting && !Elevator.isAtFloor()) {
 			Elevator.maintainHeight(previousElevatorHeight);
@@ -116,11 +116,18 @@ public class Autonomous {
 			break;
 		case 1:
 			if (DriveTrain.runMotionProfile(profileStraight)) {
+				//DriveTrain.setupMotionProfile(profileGetCubeFromScaleLeft);
 				state = nextState(state);
 			}
 			break;
+		/*case 3:
+			if (DriveTrain.runMotionProfile(profileGetCubeFromScaleLeft)) {
+				state = nextState(state);
+			}
+			break;*/
 		case 2:
 			endAuto();
+			break;
 		}
 		
 	}
@@ -764,21 +771,19 @@ public class Autonomous {
 			}
 		}
 		
-		//************   COMMENTED OUT CODE IS BROKEN MOTION PROFILING   **************//
-		
 	}
 	
 	//************   SCALE AUTO LEFT MOTION PROFILING   **************//
 
 	
-	MotionProfile profileScaleLeft_Same = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R.length);
-	MotionProfile profileScaleLeft_Opposite = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R.length);
+	MotionProfile profileLeftScaleLeftStart = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R.length);
+	MotionProfile profileLeftScaleRightStart = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R.length);
 
 	MotionProfile profileGetCubeFromScaleRight = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R.length);
 	MotionProfile profileGetCubeFromScaleLeft = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R.length);
 
-	MotionProfile profileCubeToScaleRight = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R.length);
-	MotionProfile profileCubeToScaleLeft = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R.length);
+	//MotionProfile profileCubeToScaleRight = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R.length);
+	//MotionProfile profileCubeToScaleLeft = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R.length);
 	
 	
 	public void scaleAutoMPLeft(int scaleSide) {
@@ -791,12 +796,12 @@ public class Autonomous {
 			switch (state) {
 			case 0:
 				setupAuto();
-				DriveTrain.setupMotionProfile(profileScaleLeft_Same);
-				DriveTrain.startMotionProfile(profileScaleLeft_Same);
+				DriveTrain.setupMotionProfile(profileLeftScaleLeftStart);
+				DriveTrain.startMotionProfile(profileLeftScaleLeftStart);
 				state = nextState(state);
 				break;
 			case 1:
-				if (DriveTrain.runMotionProfile(profileScaleLeft_Same) & Elevator.moveToHeightAfterDriving(scaleHeight, scaleHeight - floorHeight, 1, 117)) {
+				if (DriveTrain.runMotionProfile(profileLeftScaleLeftStart) & Elevator.moveToHeightAfterDriving(scaleHeight, scaleHeight - floorHeight, 1, 117)) {
 					DriveTrain.setupMotionProfile(profileGetCubeFromScaleLeft);
 					state = nextState(state);
 				}
@@ -816,7 +821,6 @@ public class Autonomous {
 				Intake.open();
 				if (DriveTrain.runMotionProfile(profileGetCubeFromScaleLeft)) {
 					Intake.close();
-					DriveTrain.setupMotionProfile(profileCubeToScaleLeft);
 					state = nextState(state);
 				}
 				break;
@@ -827,7 +831,6 @@ public class Autonomous {
 				break;
 			case 6:
 				if (DriveTrain.moveByDistance(-50, velocitySlow) & Elevator.moveToHeightAuto(scaleHeight, scaleHeight - previousElevatorHeight, 1)) {
-					DriveTrain.startMotionProfile(profileCubeToScaleLeft);
 					state = nextState(state);
 				}
 				break;
@@ -842,6 +845,11 @@ public class Autonomous {
 				}
 				break;
 			case 9:
+				if (DriveTrain.moveByDistance(-20, velocitySlow) & Elevator.moveToFloorAuto(previousElevatorHeight)) {
+					state = nextState(state);
+				}
+				break;
+			case 10:
 				endAuto();
 				break;
 			}
@@ -851,12 +859,12 @@ public class Autonomous {
 			switch (state) {
 			case 0:
 				setupAuto();
-				DriveTrain.setupMotionProfile(profileScaleLeft_Opposite);
-				DriveTrain.startMotionProfile(profileScaleLeft_Opposite);
+				DriveTrain.setupMotionProfile(profileLeftScaleRightStart);
+				DriveTrain.startMotionProfile(profileLeftScaleRightStart);
 				state = nextState(state);
 				break;
 			case 1:
-				if (DriveTrain.runMotionProfile(profileScaleLeft_Opposite) & Elevator.moveToHeightAfterDriving(scaleHeight, scaleHeight - floorHeight, 1, 200)) {
+				if (DriveTrain.runMotionProfile(profileLeftScaleRightStart) & Elevator.moveToHeightAfterDriving(scaleHeight, scaleHeight - floorHeight, 1, 200)) {
 					DriveTrain.setupMotionProfile(profileGetCubeFromScaleRight);
 					state = nextState(state);
 				}
@@ -876,7 +884,6 @@ public class Autonomous {
 				Intake.open();
 				if (DriveTrain.runMotionProfile(profileGetCubeFromScaleRight)) {
 					Intake.close();
-					DriveTrain.setupMotionProfile(profileCubeToScaleRight);
 					state = nextState(state);
 				}
 				break;
@@ -887,7 +894,6 @@ public class Autonomous {
 				break;
 			case 6:
 				if (DriveTrain.moveByDistance(-50, velocitySlow) & Elevator.moveToHeightAuto(scaleHeight, scaleHeight - previousElevatorHeight, 1)) {
-					DriveTrain.startMotionProfile(profileCubeToScaleLeft);
 					state = nextState(state);
 				}
 				break;
@@ -902,6 +908,11 @@ public class Autonomous {
 				}
 				break;
 			case 9:
+				if (DriveTrain.moveByDistance(-20, velocitySlow) & Elevator.moveToFloorAuto(previousElevatorHeight)) {
+					state = nextState(state);
+				}
+				break;
+			case 10:
 				endAuto();
 				break;
 			}
@@ -911,8 +922,8 @@ public class Autonomous {
 	
 	//************   SCALE AUTO RIGHT MOTION PROFILING   **************//
 	
-	MotionProfile profileScaleRight_Same = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R.length);
-	MotionProfile profileScaleRight_Opposite = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R.length);
+	MotionProfile profileRightScaleRightStart = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R.length);
+	MotionProfile profileRightScaleLeftStart = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R.length);
 
 	public void scaleAutoMPRight(int scaleSide) {
 		if (!Elevator.isAtFloor() && !isLifting) {
@@ -924,12 +935,12 @@ public class Autonomous {
 			switch (state) {
 			case 0:
 				setupAuto();
-				DriveTrain.setupMotionProfile(profileScaleRight_Same);
-				DriveTrain.startMotionProfile(profileScaleRight_Same);
+				DriveTrain.setupMotionProfile(profileRightScaleRightStart);
+				DriveTrain.startMotionProfile(profileRightScaleRightStart);
 				state = nextState(state);
 				break;
 			case 1:
-				if (DriveTrain.runMotionProfile(profileScaleRight_Same) & Elevator.moveToHeightAfterDriving(scaleHeight, scaleHeight - floorHeight, 1, 117)) {
+				if (DriveTrain.runMotionProfile(profileRightScaleRightStart) & Elevator.moveToHeightAfterDriving(scaleHeight, scaleHeight - floorHeight, 1, 117)) {
 					DriveTrain.setupMotionProfile(profileGetCubeFromScaleRight);
 					state = nextState(state);
 				}
@@ -949,7 +960,6 @@ public class Autonomous {
 				Intake.open();
 				if (DriveTrain.runMotionProfile(profileGetCubeFromScaleRight)) {
 					Intake.close();
-					DriveTrain.setupMotionProfile(profileCubeToScaleRight);
 					state = nextState(state);
 				}
 				break;
@@ -960,7 +970,6 @@ public class Autonomous {
 				break;
 			case 6:
 				if (DriveTrain.moveByDistance(-50, velocitySlow) & Elevator.moveToHeightAuto(scaleHeight, scaleHeight - previousElevatorHeight, 1)) {
-					DriveTrain.startMotionProfile(profileCubeToScaleLeft);
 					state = nextState(state);
 				}
 				break;
@@ -975,6 +984,11 @@ public class Autonomous {
 				}
 				break;
 			case 9:
+				if (DriveTrain.moveByDistance(-20, velocitySlow) & Elevator.moveToFloorAuto(previousElevatorHeight)) {
+					state = nextState(state);
+				}
+				break;
+			case 10:
 				endAuto();
 				break;
 			}
@@ -984,12 +998,12 @@ public class Autonomous {
 			switch (state) {
 			case 0:
 				setupAuto();
-				DriveTrain.setupMotionProfile(profileScaleRight_Opposite);
-				DriveTrain.startMotionProfile(profileScaleRight_Opposite);
+				DriveTrain.setupMotionProfile(profileRightScaleLeftStart);
+				DriveTrain.startMotionProfile(profileRightScaleLeftStart);
 				state = nextState(state);
 				break;
 			case 1:
-				if (DriveTrain.runMotionProfile(profileScaleRight_Opposite) & Elevator.moveToHeightAfterDriving(scaleHeight, scaleHeight - floorHeight, 1, 200)) {
+				if (DriveTrain.runMotionProfile(profileRightScaleLeftStart) & Elevator.moveToHeightAfterDriving(scaleHeight, scaleHeight - floorHeight, 1, 200)) {
 					DriveTrain.setupMotionProfile(profileGetCubeFromScaleLeft);
 					state = nextState(state);
 				}
@@ -1009,7 +1023,6 @@ public class Autonomous {
 				Intake.open();
 				if (DriveTrain.runMotionProfile(profileGetCubeFromScaleLeft)) {
 					Intake.close();
-					DriveTrain.setupMotionProfile(profileCubeToScaleLeft);
 					state = nextState(state);
 				}
 				break;
@@ -1020,7 +1033,6 @@ public class Autonomous {
 				break;
 			case 6:
 				if (DriveTrain.moveByDistance(-50, velocitySlow) & Elevator.moveToHeightAuto(scaleHeight, scaleHeight - previousElevatorHeight, 1)) {
-					DriveTrain.startMotionProfile(profileCubeToScaleLeft);
 					state = nextState(state);
 				}
 				break;
@@ -1035,6 +1047,11 @@ public class Autonomous {
 				}
 				break;
 			case 9:
+				if (DriveTrain.moveByDistance(-20, velocitySlow) & Elevator.moveToFloorAuto(previousElevatorHeight)) {
+					state = nextState(state);
+				}
+				break;
+			case 10:
 				endAuto();
 				break;
 			}
@@ -1044,8 +1061,8 @@ public class Autonomous {
 	
 	//************   SWITCH AUTO MOTION PROFILING   **************//
 	
-	MotionProfile profileSwitchLeft = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitchMiddleStart_L, leftSwitchMiddleStart_R, leftSwitchMiddleStart_L.length);
-	MotionProfile profileSwitchRight = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitchMiddleStart_L, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R.length);
+	MotionProfile profileLeftSwitchMiddleStart = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitchMiddleStart_L, leftSwitchMiddleStart_R, leftSwitchMiddleStart_L.length);
+	MotionProfile profileRightSwitchMiddleStart = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitchMiddleStart_L, leftSwitchMiddleStart_R, leftSwitchMiddleStart_R.length);
 	
 	MotionProfile profileResetFromSwitchLeft = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitchMiddleStart_R, leftSwitchMiddleStart_L, leftSwitchMiddleStart_R.length, true);
 	MotionProfile profileResetFromSwitchRight = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitchMiddleStart_R, leftSwitchMiddleStart_L, leftSwitchMiddleStart_R.length, true);
@@ -1061,12 +1078,12 @@ public class Autonomous {
 			switch (state) {
 			case 0:
 				setupAuto();
-				DriveTrain.setupMotionProfile(profileSwitchLeft);
-				DriveTrain.startMotionProfile(profileSwitchLeft);
+				DriveTrain.setupMotionProfile(profileLeftSwitchMiddleStart);
+				DriveTrain.startMotionProfile(profileLeftSwitchMiddleStart);
 				state = nextState(state);
 				break;
 			case 1:
-				if (DriveTrain.runMotionProfile(profileSwitchLeft) & Elevator.moveToHeightAuto(switchHeight, switchHeight - floorHeight, 1)) {
+				if (DriveTrain.runMotionProfile(profileLeftSwitchMiddleStart) & Elevator.moveToHeightAuto(switchHeight, switchHeight - floorHeight, 1)) {
 					DriveTrain.setupMotionProfile(profileResetFromSwitchLeft);
 					state = nextState(state);
 				}
@@ -1079,10 +1096,63 @@ public class Autonomous {
 				break;
 			case 3:
 				if (DriveTrain.runMotionProfile(profileResetFromSwitchLeft) & Elevator.moveToFloorAuto(previousElevatorHeight - floorHeight)) {
+					DriveTrain.setupMotionProfile(profileLeftSwitchMiddleStart);
 					state = nextState(state);
 				}
 				break;
 			case 4:
+				Intake.open();
+				if (DriveTrain.moveByDistance(55, velocityMedium)) {
+					Intake.close();
+					state = nextState(state);
+				}
+				break;
+			case 5:
+				if (Intake.intakeForTime(timeToRollIn, previousTime)) {
+					state = nextState(state);
+				}
+				break;
+			case 6:
+				if (DriveTrain.moveByDistance(-55, velocityMedium)) {
+					DriveTrain.startMotionProfile(profileLeftSwitchMiddleStart);
+					state = nextState(state);
+				}
+				break;
+			case 7:
+				if (DriveTrain.runMotionProfile(profileLeftSwitchMiddleStart) & Elevator.moveToHeightAuto(switchHeight, switchHeight, 1)) {
+					DriveTrain.setupMotionProfile(profileResetFromSwitchLeft);
+					DriveTrain.startMotionProfile(profileResetFromSwitchLeft);
+					state = nextState(state);
+				}
+				break;
+			case 8:
+				if (Intake.outtakeForTime(timeToRollOut, previousTime)) {
+					state = nextState(state);
+				}
+				break;
+			case 9:
+				if (DriveTrain.runMotionProfile(profileResetFromSwitchLeft) & Elevator.moveToFloorAuto(previousElevatorHeight)) {
+					state = nextState(state);
+				}
+				break;
+			case 10:
+				Intake.open();
+				if (DriveTrain.moveByDistance(55, velocityMedium)) {
+					Intake.close();
+					state = nextState(state);
+				}
+				break;
+			case 11:
+				if (Intake.intakeForTime(timeToRollIn, previousTime)) {
+					state = nextState(state);
+				}
+				break;
+			case 12:
+				if (DriveTrain.moveByDistance(-30, velocitySlow)) {
+					state = nextState(state);
+				}
+				break;
+			case 13:
 				endAuto();
 				break;
 			}
@@ -1090,12 +1160,12 @@ public class Autonomous {
 			switch (state) {
 			case 0:
 				setupAuto();
-				DriveTrain.setupMotionProfile(profileSwitchRight);
-				DriveTrain.startMotionProfile(profileSwitchRight);
+				DriveTrain.setupMotionProfile(profileRightSwitchMiddleStart);
+				DriveTrain.startMotionProfile(profileRightSwitchMiddleStart);
 				state = nextState(state);
 				break;
 			case 1:
-				if (DriveTrain.runMotionProfile(profileSwitchRight) & Elevator.moveToHeightAuto(switchHeight, switchHeight - floorHeight, 1)) {
+				if (DriveTrain.runMotionProfile(profileRightSwitchMiddleStart) & Elevator.moveToHeightAuto(switchHeight, switchHeight - floorHeight, 1)) {
 					DriveTrain.setupMotionProfile(profileResetFromSwitchRight);
 					state = nextState(state);
 				}
@@ -1108,10 +1178,63 @@ public class Autonomous {
 				break;
 			case 3:
 				if (DriveTrain.runMotionProfile(profileResetFromSwitchRight) & Elevator.moveToFloorAuto(previousElevatorHeight - floorHeight)) {
+					DriveTrain.setupMotionProfile(profileRightSwitchMiddleStart);
 					state = nextState(state);
 				}
 				break;
 			case 4:
+				Intake.open();
+				if (DriveTrain.moveByDistance(55, velocityMedium)) {
+					Intake.close();
+					state = nextState(state);
+				}
+				break;
+			case 5:
+				if (Intake.intakeForTime(timeToRollIn, previousTime)) {
+					state = nextState(state);
+				}
+				break;
+			case 6:
+				if (DriveTrain.moveByDistance(-55, velocityMedium)) {
+					DriveTrain.startMotionProfile(profileRightSwitchMiddleStart);
+					state = nextState(state);
+				}
+				break;
+			case 7:
+				if (DriveTrain.runMotionProfile(profileRightSwitchMiddleStart) & Elevator.moveToHeightAuto(switchHeight, switchHeight, 1)) {
+					DriveTrain.setupMotionProfile(profileResetFromSwitchRight);
+					DriveTrain.startMotionProfile(profileResetFromSwitchRight);
+					state = nextState(state);
+				}
+				break;
+			case 8:
+				if (Intake.outtakeForTime(timeToRollOut, previousTime)) {
+					state = nextState(state);
+				}
+				break;
+			case 9:
+				if (DriveTrain.runMotionProfile(profileResetFromSwitchRight) & Elevator.moveToFloorAuto(previousElevatorHeight)) {
+					state = nextState(state);
+				}
+				break;
+			case 10:
+				Intake.open();
+				if (DriveTrain.moveByDistance(55, velocityMedium)) {
+					Intake.close();
+					state = nextState(state);
+				}
+				break;
+			case 11:
+				if (Intake.intakeForTime(timeToRollIn, previousTime)) {
+					state = nextState(state);
+				}
+				break;
+			case 12:
+				if (DriveTrain.moveByDistance(-30, velocitySlow)) {
+					state = nextState(state);
+				}
+				break;
+			case 13:
 				endAuto();
 				break;
 			}
@@ -1140,12 +1263,12 @@ public class Autonomous {
 			switch (state) {
 			case 0:
 				setupAuto();
-				DriveTrain.setupMotionProfile(profileScaleLeft_Same);
-				DriveTrain.startMotionProfile(profileScaleLeft_Same);
+				DriveTrain.setupMotionProfile(profileLeftScaleLeftStart);
+				DriveTrain.startMotionProfile(profileLeftScaleLeftStart);
 				state = nextState(state);
 				break;
 			case 1:
-				if (DriveTrain.runMotionProfile(profileScaleLeft_Same) & Elevator.moveToHeightAfterDriving(scaleHeight, scaleHeight - floorHeight, 1, 117)) {
+				if (DriveTrain.runMotionProfile(profileLeftScaleLeftStart) & Elevator.moveToHeightAfterDriving(scaleHeight, scaleHeight - floorHeight, 1, 117)) {
 					DriveTrain.setupMotionProfile(profileGetCubeFromScaleLeft);
 					state = nextState(state);
 				}
@@ -1188,6 +1311,11 @@ public class Autonomous {
 				}
 				break;
 			case 9:
+				if (DriveTrain.moveByDistance(-20, velocitySlow) & Elevator.moveToFloorAuto(previousElevatorHeight)) {
+					state = nextState(state);
+				}
+				break;
+			case 10:
 				endAuto();
 				break;
 			}
@@ -1196,12 +1324,12 @@ public class Autonomous {
 			switch (state) {
 			case 0:
 				setupAuto();
-				DriveTrain.setupMotionProfile(profileScaleLeft_Same);
-				DriveTrain.startMotionProfile(profileScaleLeft_Same);
+				DriveTrain.setupMotionProfile(profileLeftScaleLeftStart);
+				DriveTrain.startMotionProfile(profileLeftScaleLeftStart);
 				state = nextState(state);
 				break;
 			case 1:
-				if (DriveTrain.runMotionProfile(profileScaleLeft_Same) & Elevator.moveToHeightAfterDriving(scaleHeight, scaleHeight - floorHeight, 1, 117)) {
+				if (DriveTrain.runMotionProfile(profileLeftScaleLeftStart) & Elevator.moveToHeightAfterDriving(scaleHeight, scaleHeight - floorHeight, 1, 117)) {
 					DriveTrain.setupMotionProfile(profileGetCubeFromScaleLeft_Opposite);
 					state = nextState(state);
 				}
@@ -1244,6 +1372,11 @@ public class Autonomous {
 				}
 				break;
 			case 9:
+				if (DriveTrain.moveByDistance(-20, velocitySlow) & Elevator.moveToFloorAuto(previousElevatorHeight)) {
+					state = nextState(state);
+				}
+				break;
+			case 10:
 				endAuto();
 				break;
 			}
@@ -1253,12 +1386,12 @@ public class Autonomous {
 			switch (state) {
 			case 0:
 				setupAuto();
-				DriveTrain.setupMotionProfile(profileScaleLeft_Opposite);
-				DriveTrain.startMotionProfile(profileScaleLeft_Opposite);
+				DriveTrain.setupMotionProfile(profileLeftScaleRightStart);
+				DriveTrain.startMotionProfile(profileLeftScaleRightStart);
 				state = nextState(state);
 				break;
 			case 1:
-				if (DriveTrain.runMotionProfile(profileScaleLeft_Opposite) & Elevator.moveToHeightAfterDriving(scaleHeight, scaleHeight - floorHeight, 1, 200)) {
+				if (DriveTrain.runMotionProfile(profileLeftScaleRightStart) & Elevator.moveToHeightAfterDriving(scaleHeight, scaleHeight - floorHeight, 1, 200)) {
 					DriveTrain.setupMotionProfile(profileGetCubeFromScaleRight);
 					state = nextState(state);
 				}
@@ -1301,6 +1434,11 @@ public class Autonomous {
 				}
 				break;
 			case 9:
+				if (DriveTrain.moveByDistance(-20, velocitySlow) & Elevator.moveToFloorAuto(previousElevatorHeight)) {
+					state = nextState(state);
+				}
+				break;
+			case 10:
 				endAuto();
 				break;
 			}
@@ -1384,12 +1522,12 @@ public class Autonomous {
 			switch (state) {
 			case 0:
 				setupAuto();
-				DriveTrain.setupMotionProfile(profileScaleRight_Same);
-				DriveTrain.startMotionProfile(profileScaleRight_Same);
+				DriveTrain.setupMotionProfile(profileRightScaleRightStart);
+				DriveTrain.startMotionProfile(profileRightScaleRightStart);
 				state = nextState(state);
 				break;
 			case 1:
-				if (DriveTrain.runMotionProfile(profileScaleRight_Same) & Elevator.moveToHeightAfterDriving(scaleHeight, scaleHeight - floorHeight, 1, 117)) {
+				if (DriveTrain.runMotionProfile(profileRightScaleRightStart) & Elevator.moveToHeightAfterDriving(scaleHeight, scaleHeight - floorHeight, 1, 117)) {
 					DriveTrain.setupMotionProfile(profileGetCubeFromScaleRight);
 					state = nextState(state);
 				}
@@ -1432,6 +1570,11 @@ public class Autonomous {
 				}
 				break;
 			case 9:
+				if (DriveTrain.moveByDistance(-20, velocitySlow) & Elevator.moveToFloorAuto(previousElevatorHeight)) {
+					state = nextState(state);
+				}
+				break;
+			case 10:
 				endAuto();
 				break;
 			}
@@ -1440,12 +1583,12 @@ public class Autonomous {
 			switch (state) {
 			case 0:
 				setupAuto();
-				DriveTrain.setupMotionProfile(profileScaleRight_Same);
-				DriveTrain.startMotionProfile(profileScaleRight_Same);
+				DriveTrain.setupMotionProfile(profileRightScaleRightStart);
+				DriveTrain.startMotionProfile(profileRightScaleRightStart);
 				state = nextState(state);
 				break;
 			case 1:
-				if (DriveTrain.runMotionProfile(profileScaleRight_Same) & Elevator.moveToHeightAfterDriving(scaleHeight, scaleHeight - floorHeight, 1, 117)) {
+				if (DriveTrain.runMotionProfile(profileRightScaleRightStart) & Elevator.moveToHeightAfterDriving(scaleHeight, scaleHeight - floorHeight, 1, 117)) {
 					DriveTrain.setupMotionProfile(profileGetCubeFromScaleRight_Opposite);
 					state = nextState(state);
 				}
@@ -1488,6 +1631,11 @@ public class Autonomous {
 				}
 				break;
 			case 9:
+				if (DriveTrain.moveByDistance(-20, velocitySlow) & Elevator.moveToFloorAuto(previousElevatorHeight)) {
+					state = nextState(state);
+				}
+				break;
+			case 10:
 				endAuto();
 				break;
 			}
@@ -1497,12 +1645,12 @@ public class Autonomous {
 			switch (state) {
 			case 0:
 				setupAuto();
-				DriveTrain.setupMotionProfile(profileScaleRight_Opposite);
-				DriveTrain.startMotionProfile(profileScaleRight_Opposite);
+				DriveTrain.setupMotionProfile(profileRightScaleLeftStart);
+				DriveTrain.startMotionProfile(profileRightScaleLeftStart);
 				state = nextState(state);
 				break;
 			case 1:
-				if (DriveTrain.runMotionProfile(profileScaleRight_Opposite) & Elevator.moveToHeightAfterDriving(scaleHeight, scaleHeight - floorHeight, 1, 200)) {
+				if (DriveTrain.runMotionProfile(profileRightScaleLeftStart) & Elevator.moveToHeightAfterDriving(scaleHeight, scaleHeight - floorHeight, 1, 200)) {
 					DriveTrain.setupMotionProfile(profileGetCubeFromScaleLeft);
 					state = nextState(state);
 				}
@@ -1545,6 +1693,11 @@ public class Autonomous {
 				}
 				break;
 			case 9:
+				if (DriveTrain.moveByDistance(-20, velocitySlow) & Elevator.moveToFloorAuto(previousElevatorHeight)) {
+					state = nextState(state);
+				}
+				break;
+			case 10:
 				endAuto();
 				break;
 			}

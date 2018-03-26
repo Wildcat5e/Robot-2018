@@ -48,8 +48,8 @@ public class Constants {
 			elevatorLimitSwitchDIO = 2;
 	
 	//Rollers
-	public static final double timeToRollIn = 0.5, //seconds
-		timeToRollOut = 1, //seconds
+	public static final double timeToRollIn = 0.25, //seconds
+		timeToRollOut = 0.5, //seconds
 		maxRollersSpeed = 0.7,
 		rollersSpeedAuto = 0.7;//[-1, 1]
 		

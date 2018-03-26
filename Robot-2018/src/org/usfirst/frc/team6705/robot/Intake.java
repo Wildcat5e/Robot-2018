@@ -72,18 +72,18 @@ public class Intake {
 	}
 	
 	public static void angleUp() {
-		actuator1.set(DoubleSolenoid.Value.kReverse);
+		actuator1.set(DoubleSolenoid.Value.kForward);
 		actuator2.set(DoubleSolenoid.Value.kOff);
 	}
 	
 	public static void angleDiagonal() {
-		actuator1.set(DoubleSolenoid.Value.kReverse);
-		actuator1.set(DoubleSolenoid.Value.kForward);
+		actuator1.set(DoubleSolenoid.Value.kOff);
+		actuator2.set(DoubleSolenoid.Value.kOff);
 	}
 	
 	public static void angleDown() {
 		actuator1.set(DoubleSolenoid.Value.kOff);
-		actuator1.set(DoubleSolenoid.Value.kReverse);
+		actuator2.set(DoubleSolenoid.Value.kForward);
 	}
 	
 	public static enum IntakeState {

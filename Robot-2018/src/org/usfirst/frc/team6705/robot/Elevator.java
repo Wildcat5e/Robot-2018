@@ -187,19 +187,16 @@ public class Elevator /*extends PIDSubsystem*/ {
 		if (fractionRemaining > 1) {
 			fractionRemaining = 1;
 		}
-		double scaledFraction = fractionRemaining * 1.25;
+		
+		double scaledFraction = fractionRemaining * 1.5;
 		
 		double fractionLifted = 1 - fractionRemaining;
-		if (fractionLifted <= 0.03) {
-			fractionLifted = 0.03;
-		}
-        double scaledFractionLifted = fractionLifted * 5;
+
+        double scaledFractionLifted = fractionLifted * 10;
 		
-        if (fractionLifted < 0.2) {
+        if (fractionLifted < 0.1) {
         	scaledFraction = scaledFractionLifted;
-        } /*else if (getCurrentPosition() < floorHeight + elevatorDecelerationDistance) {
-        	scaledFraction = (getCurrentPosition() - floorHeight)/elevatorDecelerationDistance;
-        }*/ else if (scaledFraction > 1) {
+        } else if (scaledFraction > 1) {
         	scaledFraction = 1;
         }
 		

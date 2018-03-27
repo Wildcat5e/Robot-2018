@@ -319,7 +319,8 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		
-		operatorControl();
+		//operatorControl();
+		testDriveTrain();
 		
 		//Log data to a .csv for analysis
 		double timeStamp = timer.get();

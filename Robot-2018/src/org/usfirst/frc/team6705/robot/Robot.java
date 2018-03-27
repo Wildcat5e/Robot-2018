@@ -394,17 +394,18 @@ public class Robot extends IterativeRobot {
 	}*/
 		
 		//Buttons - set Elevator lift to certain height - floor, switch, or scale
-		if ((driveStick.getAButton() && elevatorState != ElevatorState.FLOOR) && timer.get() < 145) {
+		if (((liftStick.getRawButton(11) || liftStick.getRawButton(12) || driveStick.getAButton()) && elevatorState != ElevatorState.FLOOR) && timer.get() < 145) {
 			System.out.println("Move to floor button pressed");
 			moveToFloor();
-		} else if ((driveStick.getBButton() && elevatorState != ElevatorState.SWITCH) && timer.get() < 145) {
+		} else if (((liftStick.getRawButton(9) || liftStick.getRawButton(10) || driveStick.getBButton()) && elevatorState != ElevatorState.SWITCH) && timer.get() < 145) {
 			moveToSwitch();
-		} else if ((driveStick.getYButton() && elevatorState != ElevatorState.SCALE) && timer.get() < 145) {
+		} else if (((liftStick.getRawButton(7) || liftStick.getRawButton(8) || driveStick.getYButton()) && elevatorState != ElevatorState.SCALE) && timer.get() < 145) {
 			moveToScale();
 		} else if (timer.get() > 145 && elevatorState != ElevatorState.FLOOR) {
 			moveToFloor();
 		}
 		
+		/*
 		//Control Intake Angle
 		if (liftStick.getRawButton(11) || liftStick.getRawButton(12)) {
 			Intake.angleDown();
@@ -412,7 +413,7 @@ public class Robot extends IterativeRobot {
 			Intake.angleDiagonal();
 		} else if (liftStick.getRawButton(8) || liftStick.getRawButton(7)) {
 			Intake.angleUp();
-		}
+		}*/
 				
 		//Operator Joystick - lift and lower Elevator
 		

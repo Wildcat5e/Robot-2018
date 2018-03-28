@@ -89,6 +89,7 @@ public class DriveTrain {
 	}
 	
 	public static void reverseDriveTrain() {
+		System.out.print("REVERSED DRIVE TRAIN");
 		leftTalon.setInverted(false);
 		rightTalon.setInverted(true);
 		leftVictor.setInverted(false);
@@ -96,6 +97,7 @@ public class DriveTrain {
 	}
 	
 	public static void undoReverseDriveTrain() {
+		System.out.print("RESET REVERSED DRIVE TRAIN");
 		leftTalon.setInverted(true);
 		rightTalon.setInverted(false);
 		leftVictor.setInverted(true);
@@ -352,8 +354,8 @@ public class DriveTrain {
 		leftTalon.set(ControlMode.Velocity, left * scale);
 		rightTalon.set(ControlMode.Velocity, right * scale);
 		
-		System.out.println("Setting velocities L: " + left + " R: " + right);
-		System.out.println("Actual speed L: " + leftTalon.getSelectedSensorVelocity(0) + " R: " + rightTalon.getSelectedSensorVelocity(0));
+		//System.out.println("Setting velocities L: " + left + " R: " + right);
+		//System.out.println("Actual speed L: " + leftTalon.getSelectedSensorVelocity(0) + " R: " + rightTalon.getSelectedSensorVelocity(0));
 	}
 	
 	public static void setSpeed(double left, double right) {

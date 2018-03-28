@@ -30,6 +30,8 @@ public class Autonomous {
 		DriveTrain.gyro.reset();
 		previousFinalTurningError = 0;
 		Elevator.hasCompletedLift = false;
+		//DriveTrain.leftTalon.clearMotionProfileTrajectories();
+		//DriveTrain.rightTalon.clearMotionProfileTrajectories();
 	}
 	
 	private void endAuto() {
@@ -58,7 +60,10 @@ public class Autonomous {
 		SmartDashboard.putNumber("Auto State", current + 1);
 		DriveTrain.stop();
 		Elevator.hasCompletedLift = false;
+		//DriveTrain.leftTalon.clearMotionProfileTrajectories();
+		//DriveTrain.rightTalon.clearMotionProfileTrajectories();
 		return current + 1;
+		
 	}
 	
 	//***************************************************************************//
@@ -76,8 +81,13 @@ public class Autonomous {
 			setupAuto();
 			state = nextState(state);
 			break;
-		case 1:
+		/*case 1:
 			if (DriveTrain.moveByDistance(50, velocitySlow) & Elevator.moveToHeightAuto(switchHeight, switchHeight, 1)) {
+				state = nextState(state);
+			}
+			break;*/
+		case 1: 
+			if (DriveTrain.moveByDistance(100, velocitySlow) & Elevator.moveToHeightAfterDriving(switchHeight, switchHeight, 1, 50)) {
 				state = nextState(state);
 			}
 			break;
@@ -86,11 +96,6 @@ public class Autonomous {
 				state = nextState(state);
 			}
 			break;
-		/*case 1: 
-			if (DriveTrain.moveByDistance(100, velocitySlow) & Elevator.moveToHeightAfterDriving(switchHeight, switchHeight, 1, 50)) {
-				state = nextState(state);
-			}
-			break;*/
 		case 3:
 			endAuto();
 			break;
@@ -99,7 +104,7 @@ public class Autonomous {
 	
 	//***************************************************************************//
 
-	MotionProfile profileStraight = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, straightTest_L, straightTest_R, straightTest_R.length);
+	MotionProfile profileStraight = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitchMiddleStart_L, leftSwitchMiddleStart_R, leftSwitchMiddleStart_L.length);
 	
 	public void motionProfileTest() {
 		
@@ -357,7 +362,7 @@ public class Autonomous {
 	//***************************************************************************//
 	
 	public void doubleScaleAuto(int scaleSide, String startingPosition) {
-		double angle1 = 15;
+		double angle1 = 20;
 		
 		if (!isLifting && !Elevator.isAtFloor()) {
 			Elevator.maintainHeight(previousElevatorHeight);
@@ -371,13 +376,13 @@ public class Autonomous {
 				state = nextState(state);
 				break;
 			case 1: //Move forward part way
-				if (DriveTrain.moveByDistance(130, velocityFast)) {
+				if (DriveTrain.moveByDistance(120, velocityMedium)) {
 					state = nextState(state);
 				}
 				break;
 			case 2: //Move at angle and lift elevator
 				//Elevator.setHeight(scaleHeight);
-				if (DriveTrain.moveByDistance(100, angle1 * -scaleSide, velocityMedium) & Elevator.moveToHeightAuto(scaleHeight, scaleHeight - previousElevatorHeight, 1)) {
+				if (DriveTrain.moveByDistance(85, angle1 * -scaleSide, velocityMedium) & Elevator.moveToHeightAuto(scaleHeight, scaleHeight - previousElevatorHeight, 1)) {
 					state = nextState(state);
 				}
 				break;
@@ -387,13 +392,13 @@ public class Autonomous {
 				}
 				break;
 			case 4: //Turn Around
-				if (DriveTrain.turnDegrees(scaleSide * (190 + angle1)) & Elevator.moveToFloorAuto(previousElevatorHeight)) {
+				if (DriveTrain.turnDegrees(-scaleSide * (155 - angle1)) & Elevator.moveToFloorAuto(previousElevatorHeight)) {
 					state = nextState(state);	
 				}
 				break;
 			case 5: //Outtake
 				Intake.open();
-				if (DriveTrain.moveByDistance(50, velocitySlow)) {
+				if (DriveTrain.moveByDistance(55, velocitySlow)) {
 					Intake.close();
 					state = nextState(state);
 				}
@@ -404,12 +409,12 @@ public class Autonomous {
 				}
 				break;
 			case 7:
-				if (DriveTrain.moveByDistance(-50, velocitySlow) & Elevator.moveToHeightAuto(scaleHeight, scaleHeight - previousElevatorHeight, 1)) {
+				if (DriveTrain.moveByDistance(-55, velocitySlow) & Elevator.moveToHeightAuto(scaleHeight, scaleHeight - previousElevatorHeight, 1)) {
 					state = nextState(state);
 				}
 				break;
 			case 8:
-				if (DriveTrain.turnDegrees(-scaleSide * (190 + angle1))) {
+				if (DriveTrain.turnDegrees(scaleSide * (140 - angle1))) {
 					state = nextState(state);
 				}
 				break;

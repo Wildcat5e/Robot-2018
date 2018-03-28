@@ -13,8 +13,9 @@ public class CSVLogger {
 	public CSVLogger(String fileName, String[] columnNames) {
 		
 		try {
-    		file = new File("/U/" + fileName + ".csv");
+    		file = new File("/media/sda1/" + fileName + ".csv");
     		if(!file.exists()){
+    			System.out.println("Creating new file");
     			file.createNewFile();
     		} else {
     			file.delete();

@@ -48,7 +48,7 @@ public class Constants {
 			elevatorLimitSwitchDIO = 2;
 	
 	//Rollers
-	public static final double timeToRollIn = 0.25, //seconds
+	public static final double timeToRollIn = 0.5, //seconds
 		timeToRollOut = 0.5, //seconds
 		maxRollersSpeed = 0.7,
 		rollersSpeedAuto = 0.7;//[-1, 1]
@@ -61,7 +61,7 @@ public class Constants {
 			deadband = 0.08, //-1 to 1
 			rampRateAuto = 1, //Seconds to ramp from 0 to full
 			rampRateTeleop = 0.25,
-			maxTicksPer100ms = 825,//This is the max speed in native units per 100 ms of the motors (percent output 100%)
+			maxTicksPer100ms = 870,//This is the max speed in native units per 100 ms of the motors (percent output 100%)
 			maxError = 400,
 			minimumSpeed = 75,//ticks per 100 ms
 			kP_StraightDriving = 50;
@@ -89,7 +89,7 @@ public class Constants {
 	public static final double elevatorEquilibriumSpeedWithCube = 0.31,
 			elevatorEquilibriumSpeedNoCube = 0.29,
 			elevatorMaxSpeedUp = 1,
-			elevatorMaxSpeedDown = -0.4,
+			elevatorMaxSpeedDown = -0.35,
 			elevatorMinimumSpeedUp = 0.45,
 			elevatorMinimumSpeedDown = 0.1,
 			ticksPerRotationElevator = 2048,
@@ -108,14 +108,14 @@ public class Constants {
 	        kP_R = (1023 * 0.05)/225,
 			kD = 0,//kP * 10,//1023.0/maxError,
 			kI = 0,//1.023/maxError,
-			kF_R = 1023/825,
-			kF_L = 1023/825;
+			kF_R = 1.164,
+			kF_L = 1.164;
 	
 	//PID for Motion profile
-	public static double kP_MP = 0.1,
+	public static double kP_MP = 0,
 			kD_MP = 0,
 			kI_MP = 0,
-			kF_MP = 1023/825;
+			kF_MP = 1.164;
 	
 	public static void getPreferences() {
 		Preferences prefs = Preferences.getInstance();

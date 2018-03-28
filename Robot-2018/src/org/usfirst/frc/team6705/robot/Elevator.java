@@ -112,14 +112,18 @@ public class Elevator /*extends PIDSubsystem*/ {
 		
 		if (fractionRemaining > 1) {
 			fractionRemaining = 1;
-		}
-		double scaledFraction = fractionRemaining * 1.5;
+		} 
+		
+		double scaledFraction = fractionRemaining * 1.25;
 		
 		double fractionLifted = 1 - fractionRemaining;
+		if (fractionLifted < 0.01) {
+			fractionLifted = 0.01;
+		}
 
-		double scaledFractionLifted = fractionLifted * 10;
+		double scaledFractionLifted = fractionLifted * 5;
 		
-		if (fractionLifted < 0.1) {
+		if (fractionLifted < 0.2) {
 			scaledFraction = scaledFractionLifted;
 		} else if (scaledFraction > 1) {
 			scaledFraction = 1;
@@ -149,14 +153,18 @@ public class Elevator /*extends PIDSubsystem*/ {
 		double fractionRemaining = Math.abs(absDistance/totalDistanceToLift);
 		if (fractionRemaining > 1) {
 			fractionRemaining = 1;
-		}
-		double scaledFraction = fractionRemaining * 1.5;
+		} 
+		
+		double scaledFraction = fractionRemaining * 1.25;
 		
 		double fractionLifted = 1 - fractionRemaining;
-
-        double scaledFractionLifted = fractionLifted * 10;
+		if (fractionLifted < 0.01) {
+			fractionLifted = 0.01;
+		}
 		
-        if (fractionLifted < 0.1) {
+        double scaledFractionLifted = fractionLifted * 5;
+		
+        if (fractionLifted < 0.2) {
 			scaledFraction = scaledFractionLifted;
 		} else if (scaledFraction > 1) {
 			scaledFraction = 1;
@@ -188,13 +196,16 @@ public class Elevator /*extends PIDSubsystem*/ {
 			fractionRemaining = 1;
 		}
 		
-		double scaledFraction = fractionRemaining * 1.5;
+		double scaledFraction = fractionRemaining * 1.25;
 		
 		double fractionLifted = 1 - fractionRemaining;
-
-        double scaledFractionLifted = fractionLifted * 10;
+		if (fractionLifted < 0.01) {
+			fractionLifted = 0.01;
+		}
 		
-        if (fractionLifted < 0.1) {
+        double scaledFractionLifted = fractionLifted * 5;
+		
+        if (fractionLifted < 0.2) {
         	scaledFraction = scaledFractionLifted;
         } else if (scaledFraction > 1) {
         	scaledFraction = 1;

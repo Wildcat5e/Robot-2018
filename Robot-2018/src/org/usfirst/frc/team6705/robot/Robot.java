@@ -86,8 +86,8 @@ public class Robot extends IterativeRobot {
 	
 	//Used for logging data during testing or matches onto USB stick
 	String[] dataColumns = {"Timestamp (s)", "Left Position (Ft)", "Right Position (Ft)", "Left Velocity (Ft/s)", "Right Velocity (Ft/s)", "Battery Voltage (V)"};
-	CSVLogger autoDataLogger = new CSVLogger("autoData", dataColumns);
-	CSVLogger teleopDataLogger = new CSVLogger("teleopData", dataColumns);
+	//CSVLogger autoDataLogger = new CSVLogger("autoData", dataColumns);
+	//CSVLogger teleopDataLogger = new CSVLogger("teleopData", dataColumns);
 	
 	int loops = 0;
 	
@@ -199,7 +199,7 @@ public class Robot extends IterativeRobot {
 		double voltage = RobotController.getBatteryVoltage();
 		
 		String[] data = {"" + timeStamp, "" + leftPos,"" + rightPos, "" + leftVel, "" + rightVel, "" + voltage};
-		autoDataLogger.writeLine(data);
+		//autoDataLogger.writeLine(data);
 		
 		//Reset encoder if at floor
 		if (Elevator.isAtFloor()) {
@@ -309,6 +309,11 @@ public class Robot extends IterativeRobot {
 			intakeOpen = false;
 		}
 		
+		if (Elevator.isAtFloor()) {
+			elevatorState = ElevatorState.MANUAL;
+			Elevator.stop();
+		}
+		
 		DriveTrain.setSpeed(0, 0);
 		
 	}
@@ -319,8 +324,9 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		
-		//operatorControl();
-		testDriveTrain();
+		operatorControl();
+		//testDriveTrain();
+		//updateSmartDashboard();
 		
 		//Log data to a .csv for analysis
 		double timeStamp = timer.get();
@@ -331,7 +337,7 @@ public class Robot extends IterativeRobot {
 		double voltage = RobotController.getBatteryVoltage();
 		
 		String[] data = {"" + timeStamp, "" + leftPos,"" + rightPos, "" + leftVel, "" + rightVel, "" + voltage};
-		teleopDataLogger.writeLine(data);
+		//teleopDataLogger.writeLine(data);
 	}
 
 	/**
@@ -591,10 +597,12 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Motor Output Left", DriveTrain.leftTalon.getMotorOutputPercent());
 		SmartDashboard.putNumber("Motor Output Right", DriveTrain.rightTalon.getMotorOutputPercent());
 		
+		/*
 		SmartDashboard.putNumber("Right MP position target", DriveTrain.rightTalon.getActiveTrajectoryPosition());
 		SmartDashboard.putNumber("Left MP position target", DriveTrain.leftTalon.getActiveTrajectoryPosition());
 		SmartDashboard.putNumber("Right MP velocity target", DriveTrain.leftTalon.getActiveTrajectoryVelocity());
 		SmartDashboard.putNumber("Left MP velocity target", DriveTrain.rightTalon.getActiveTrajectoryVelocity());
+		*/
 		
 		SmartDashboard.putNumber("Motor velocity left", DriveTrain.leftTalon.getSelectedSensorVelocity(0));
 		SmartDashboard.putNumber("Motor velocity right", DriveTrain.rightTalon.getSelectedSensorVelocity(0));

@@ -10,8 +10,10 @@ public class Intake {
 	static Spark rollersRight = new Spark(rightIntakeSparkChannel);
 	
 	static DoubleSolenoid solenoid = new DoubleSolenoid(intakeSolenoidA, intakeSolenoidB);
-	//static DoubleSolenoid actuator1 = new DoubleSolenoid(intakeActuatorSolenoidA, intakeActuatorSolenoidB);
+	static DoubleSolenoid actuator1 = new DoubleSolenoid(intakeActuatorSolenoidA, intakeActuatorSolenoidB);
 	//static DoubleSolenoid actuator2 = new DoubleSolenoid(intakeActuatorSolenoidA, intakeActuatorSolenoidB);
+	
+
 
 	public static void setup() {
 	    solenoid.set(DoubleSolenoid.Value.kReverse);
@@ -28,6 +30,16 @@ public class Intake {
 	public static void outtake() {
 		rollersLeft.set(-rollersSpeedAuto);
 		rollersRight.set(-rollersSpeedAuto);
+	}
+	
+	public static void actuateUp() {
+		System.out.print("Actuate Intake Up");
+		actuator1.set(DoubleSolenoid.Value.kReverse);	
+	}
+	
+	public static void actuateDown() {
+		System.out.print("Actuate Intake Down");
+		actuator1.set(DoubleSolenoid.Value.kForward);	
 	}
 	
 	public static void roll(double speed) {

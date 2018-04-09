@@ -45,7 +45,8 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 public class Robot extends IterativeRobot {
 	private String gameData;
 	
-	private static final String switchAuto = "switch";
+	private static final String switchAuto1Cube = "singleSwitch";
+	private static final String switchAuto2Cube = "doubleSwitch";
 	private static final String scaleSwitchAuto = "scaleSwitch";
 	private static final String doubleScaleAuto = "doubleScale";
 	private static final String baselineAuto = "baseline";
@@ -68,6 +69,8 @@ public class Robot extends IterativeRobot {
 	boolean intakeOpen = false; 
 	IntakeState intakeState = IntakeState.MANUAL;
 	double intakeStartTime = 0;
+	boolean intakeUp = false;
+	boolean actuateButtonPressed = false;
 	
 	double distanceToLift = 0;
 	int direction = 1;
@@ -107,7 +110,8 @@ public class Robot extends IterativeRobot {
 		camera.setExposureManual(35);
 		camera.setBrightness(50);*/
 		
-		autoChooser.addDefault("ONE cube on SWITCH", switchAuto);
+		autoChooser.addDefault("ONE cube on SWITCH", switchAuto1Cube);
+		autoChooser.addObject("TWO cube on SWITCH", switchAuto2Cube);
 		autoChooser.addObject("ONE cube on SCALE", singleScale);
 		autoChooser.addObject("TWO cubes - scale AND switch", scaleSwitchAuto);
 		autoChooser.addObject("TWO cubes on SCALE (only in playoffs or if teammate is doing switch)", doubleScaleAuto);
@@ -208,11 +212,18 @@ public class Robot extends IterativeRobot {
 		
 		//Run state machine based on selected auto and starting position
 		switch (autoSelected) {
-		case switchAuto:
+		case switchAuto1Cube:
 			if (gameData.charAt(0) == 'L') {
-				auto.switchAuto(startingPosition, 1, (gameData.charAt(1) == 'L') ? 1 : -1); //Note: side 1 means left, side -1 means right
+				auto.switchAuto1Cube(startingPosition, 1, (gameData.charAt(1) == 'L') ? 1 : -1); //Note: side 1 means left, side -1 means right
 			} else {
-				auto.switchAuto(startingPosition, -1, (gameData.charAt(1) == 'L') ? 1 : -1);
+				auto.switchAuto1Cube(startingPosition, -1, (gameData.charAt(1) == 'L') ? 1 : -1);
+			}
+			break;
+		case switchAuto2Cube:
+			if (gameData.charAt(0) == 'L') {
+				auto.switchAuto2Cube(startingPosition, 1, (gameData.charAt(1) == 'L') ? 1 : -1); //Note: side 1 means left, side -1 means right
+			} else {
+				auto.switchAuto2Cube(startingPosition, -1, (gameData.charAt(1) == 'L') ? 1 : -1);
 			}
 			break;
 		case singleScale:
@@ -389,6 +400,21 @@ public class Robot extends IterativeRobot {
 		else {
 			Intake.stopRollers();
 		}
+		
+		
+		//Actuating intake - toggle on side button (2) of big joystick
+		if(liftStick.getRawButton(2) && intakeUp && !actuateButtonPressed) {
+			Intake.actuateDown();
+			actuateButtonPressed = true;
+			intakeUp = false;
+		} else if(liftStick.getRawButton(2) && !intakeUp && !actuateButtonPressed){
+			Intake.actuateUp();
+			intakeUp = true;
+			actuateButtonPressed = true;
+		} else if(!liftStick.getRawButton(2)) {
+			actuateButtonPressed = false;
+		}
+		
 		
 		/*if (driveStick.getPOV(dPadChannel) > 325 || (driveStick.getPOV(dPadChannel) < 35 && driveStick.getPOV(dPadChannel) >= 0)) {
 		intakeState = IntakeState.MANUAL;

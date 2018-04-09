@@ -24,10 +24,10 @@ public class Constants {
 	//Solenoids
 	public static final int intakeSolenoidA = 0,
 			intakeSolenoidB = 1,
-			leftRampSolenoidA = 2,
-			leftRampSolenoidB = 3,
-			intakeActuatorSolenoidA = 4,
-			intakeActuatorSolenoidB = 5,
+			leftRampSolenoidA = 4,
+			leftRampSolenoidB = 5,
+			intakeActuatorSolenoidA = 3,
+			intakeActuatorSolenoidB = 2,
 			rightRampSolenoidA = 8,
 			rightRampSolenoidB = 9;
 	
@@ -83,7 +83,8 @@ public class Constants {
 				velocitySlow = 5.5,
 				velocityTurningLeft = 6,
 				velocityTurningRight = 6.3,
-				velocityVerySlow = 1.5;
+				velocityVerySlow = 1.5,
+				velocityQuiteSlow = 3.5;
 	
 	//Elevator Constants
 	public static final double elevatorEquilibriumSpeedWithCube = 0.31,
@@ -100,7 +101,7 @@ public class Constants {
 			floorHeight = 0.0,
 			autoDriveHeight = 5,
 			switchHeight = 30,
-			scaleHeight = 69, 
+			scaleHeight = 63, 
 			elevatorRampTime = 0.2; //seconds
 	
 	//PID for DriveTrain

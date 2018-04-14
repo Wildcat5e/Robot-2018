@@ -48,11 +48,28 @@ public class Constants {
 			elevatorLimitSwitchDIO = 2;
 	
 	//Rollers
-	public static final double timeToRollIn = 0.5, //seconds
+	public static final double timeToRollIn = 0.25, //seconds
 		timeToRollOut = 0.5, //seconds
 		maxRollersSpeed = 0.7,
-		rollersSpeedAuto = 0.7;//[-1, 1]
-		
+		rollersSpeedAuto = 0.7;//[-1, 1]	
+	
+	//Elevator Constants
+	public static final double elevatorEquilibriumSpeedWithCube = 0.31,
+			elevatorEquilibriumSpeedNoCube = 0.29,
+			elevatorMaxSpeedUp = 1,
+			elevatorMaxSpeedDown = -0.4,
+			elevatorMinimumSpeedUp = 0.45,
+			elevatorMinimumSpeedDown = 0.1,
+			ticksPerRotationElevator = 2048,
+			pulleyDiameter = 2.75,
+			verticalInchesPerTick = 2 * (pulleyDiameter * Math.PI) / ticksPerRotationElevator,
+			elevatorTolerance = 2, //Inches
+			maximumHeight = 70.8,
+			floorHeight = 0.0,
+			autoDriveHeight = 5,
+			switchHeight = 30,
+			scaleHeight = 63, 
+			elevatorRampTime = 0.2; //seconds
 	
 	//Drive Train
 	public static final double wheelRadius = 3.0, //inches
@@ -68,13 +85,13 @@ public class Constants {
 	
 	//Turning PID
 	public static double kP_Turning = 0.013,
-			kD_Turning = 0.025,
+			kD_Turning = 0.028,
 			kI_Turning = 0,
 			iZone = 8, //Degree range in which I-gain applies
 			turningTolerance = 4, //Degrees
 			steadyTurningIterations = 5, //Iterations to exit turning PID loops
 			maxTurningOutput = 0.9,
-			minimumTurningOutput = 0.25;
+			minimumTurningOutput = 0.27;
 	
 	//Driving Speeds in Feet Per Second (FPS)
 		public static final double velocityMax = getFPS(maxTicksPer100ms),
@@ -85,24 +102,6 @@ public class Constants {
 				velocityTurningRight = 6.3,
 				velocityVerySlow = 1.5,
 				velocityQuiteSlow = 3.5;
-	
-	//Elevator Constants
-	public static final double elevatorEquilibriumSpeedWithCube = 0.31,
-			elevatorEquilibriumSpeedNoCube = 0.29,
-			elevatorMaxSpeedUp = 1,
-			elevatorMaxSpeedDown = -0.35,
-			elevatorMinimumSpeedUp = 0.45,
-			elevatorMinimumSpeedDown = 0.1,
-			ticksPerRotationElevator = 2048,
-			pulleyDiameter = 2.75,
-			verticalInchesPerTick = 2 * (pulleyDiameter * Math.PI) / ticksPerRotationElevator,
-			elevatorTolerance = 2, //Inches
-			maximumHeight = 70.8,
-			floorHeight = 0.0,
-			autoDriveHeight = 5,
-			switchHeight = 30,
-			scaleHeight = 63, 
-			elevatorRampTime = 0.2; //seconds
 	
 	//PID for DriveTrain
 	public static double kP_L = (1023 * 0.05)/225,//-(1023 * 0.1)/maxError,

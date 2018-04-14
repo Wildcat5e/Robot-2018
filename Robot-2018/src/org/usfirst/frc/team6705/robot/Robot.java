@@ -114,7 +114,7 @@ public class Robot extends IterativeRobot {
 		autoChooser.addObject("TWO cube on SWITCH", switchAuto2Cube);
 		autoChooser.addObject("ONE cube on SCALE", singleScale);
 		autoChooser.addObject("TWO cubes - scale AND switch", scaleSwitchAuto);
-		autoChooser.addObject("TWO cubes on SCALE (only in playoffs or if teammate is doing switch)", doubleScaleAuto);
+		autoChooser.addObject("TWO cubes on SCALE", doubleScaleAuto);
 		//autoChooser.addObject("Best Simple Scoring Method", bestSimple);
 		autoChooser.addObject("Cross Baseline ONLY", baselineAuto);
 		autoChooser.addObject("Straight Motion Profile", motionProfileTest);

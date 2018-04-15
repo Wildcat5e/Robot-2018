@@ -47,6 +47,7 @@ public class Robot extends IterativeRobot {
 	
 	private static final String switchAuto1Cube = "singleSwitch";
 	private static final String switchAuto2Cube = "doubleSwitch";
+	private static final String switchAuto3Cube = "tripleSwitch";
 	private static final String scaleSwitchAuto = "scaleSwitch";
 	private static final String doubleScaleAuto = "doubleScale";
 	private static final String baselineAuto = "baseline";
@@ -112,6 +113,7 @@ public class Robot extends IterativeRobot {
 		
 		autoChooser.addDefault("ONE cube on SWITCH", switchAuto1Cube);
 		autoChooser.addObject("TWO cube on SWITCH", switchAuto2Cube);
+		autoChooser.addObject("THREE cube on SWITCH", switchAuto3Cube);
 		autoChooser.addObject("ONE cube on SCALE", singleScale);
 		autoChooser.addObject("TWO cubes - scale AND switch", scaleSwitchAuto);
 		autoChooser.addObject("TWO cubes on SCALE", doubleScaleAuto);
@@ -195,14 +197,14 @@ public class Robot extends IterativeRobot {
 		updateSmartDashboard();
 		
 		//Log data to a .csv for analysis
-		double timeStamp = timer.get();
+		/*double timeStamp = timer.get();
 		double leftPos = convertTicksToFeet(DriveTrain.leftTalon.getSelectedSensorPosition(0));
 		double rightPos = convertTicksToFeet(DriveTrain.rightTalon.getSelectedSensorPosition(0));
 		double leftVel = getFPS(DriveTrain.leftTalon.getSelectedSensorVelocity(0));
 		double rightVel = getFPS(DriveTrain.rightTalon.getSelectedSensorVelocity(0));
 		double voltage = RobotController.getBatteryVoltage();
-		
-		String[] data = {"" + timeStamp, "" + leftPos,"" + rightPos, "" + leftVel, "" + rightVel, "" + voltage};
+		*/
+		//String[] data = {"" + timeStamp, "" + leftPos,"" + rightPos, "" + leftVel, "" + rightVel, "" + voltage};
 		//autoDataLogger.writeLine(data);
 		
 		//Reset encoder if at floor
@@ -213,22 +215,21 @@ public class Robot extends IterativeRobot {
 		//Run state machine based on selected auto and starting position
 		switch (autoSelected) {
 		case switchAuto1Cube:
-			if (gameData.charAt(0) == 'L') {
-				auto.switchAuto1Cube(startingPosition, 1, (gameData.charAt(1) == 'L') ? 1 : -1); //Note: side 1 means left, side -1 means right
-			} else {
-				auto.switchAuto1Cube(startingPosition, -1, (gameData.charAt(1) == 'L') ? 1 : -1);
-			}
+			auto.switchAuto1Cube((gameData.charAt(0) == 'L') ? 1 : -1, (gameData.charAt(1) == 'L') ? 1 : -1, startingPosition);
 			break;
+			
 		case switchAuto2Cube:
-			if (gameData.charAt(0) == 'L') {
-				auto.switchAuto2Cube(startingPosition, 1, (gameData.charAt(1) == 'L') ? 1 : -1); //Note: side 1 means left, side -1 means right
-			} else {
-				auto.switchAuto2Cube(startingPosition, -1, (gameData.charAt(1) == 'L') ? 1 : -1);
-			}
+			auto.switchAuto2Cube((gameData.charAt(0) == 'L') ? 1 : -1, (gameData.charAt(1) == 'L') ? 1 : -1, startingPosition);
 			break;
+			
+		case switchAuto3Cube:
+			auto.switchAuto3Cube((gameData.charAt(0) == 'L') ? 1 : -1, (gameData.charAt(1) == 'L') ? 1 : -1, startingPosition);
+			break;
+			
 		case singleScale:
 			auto.singleScaleAuto((gameData.charAt(1) == 'L') ? 1 : -1, startingPosition);
 			break;
+			
 		case baselineAuto:
 			System.out.print("Baseline Auto Periodic");
 			auto.baselineAuto((gameData.charAt(1) == 'L') ? 1 : -1, startingPosition);
@@ -244,6 +245,7 @@ public class Robot extends IterativeRobot {
 		case motionProfileTest:
 			auto.motionProfileTest();
 			break;
+			
 		case scaleAutoMP:
 			if (startingPosition == left) {
 				auto.scaleAutoMPLeft((gameData.charAt(1) == 'L') ? 1: -1);
@@ -251,9 +253,11 @@ public class Robot extends IterativeRobot {
 				auto.scaleAutoMPRight((gameData.charAt(1) == 'L') ? 1: -1);
 			}
 			break;
+			
 		case switchAutoMP:
 			auto.switchAutoMP(startingPosition, (gameData.charAt(0) == 'L') ? 1: -1);
 			break;
+			
 		case switchScaleAutoMP:
 			if (startingPosition == left) {
 				auto.scaleSwitchAutoLeftMP((gameData.charAt(1) == 'L') ? 1: -1, (gameData.charAt(0) == 'L') ? 1: -1);
@@ -261,6 +265,7 @@ public class Robot extends IterativeRobot {
 				auto.scaleSwitchAutoRightMP((gameData.charAt(1) == 'L') ? 1: -1, (gameData.charAt(0) == 'L') ? 1: -1);
 			}
 			break;
+			
 		case test:
 			auto.testAuto();
 			break;
@@ -338,7 +343,7 @@ public class Robot extends IterativeRobot {
 		operatorControl();
 		//testDriveTrain();
 		//updateSmartDashboard();
-		
+		/*
 		//Log data to a .csv for analysis
 		double timeStamp = timer.get();
 		double leftPos = convertTicksToFeet(DriveTrain.leftTalon.getSelectedSensorPosition(0));
@@ -346,8 +351,8 @@ public class Robot extends IterativeRobot {
 		double leftVel = getFPS(DriveTrain.leftTalon.getSelectedSensorVelocity(0));
 		double rightVel = getFPS(DriveTrain.rightTalon.getSelectedSensorVelocity(0));
 		double voltage = RobotController.getBatteryVoltage();
-		
-		String[] data = {"" + timeStamp, "" + leftPos,"" + rightPos, "" + leftVel, "" + rightVel, "" + voltage};
+		*/
+		//String[] data = {"" + timeStamp, "" + leftPos,"" + rightPos, "" + leftVel, "" + rightVel, "" + voltage};
 		//teleopDataLogger.writeLine(data);
 	}
 

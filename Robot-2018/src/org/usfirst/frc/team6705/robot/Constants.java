@@ -122,15 +122,9 @@ public class Constants {
 		kP_Turning = prefs.getDouble("kP_Turning", kP_Turning);
 		kI_Turning = prefs.getDouble("kI_Turning", kI_Turning);
 		kD_Turning = prefs.getDouble("kD_Turning", kD_Turning);
-		iZone = prefs.getDouble("iZone", iZone); //Degree range in which I-gain applies
-		turningTolerance = prefs.getDouble("turningTolerance", turningTolerance); //Degrees
-		maxTurningOutput = prefs.getDouble("maxTurningOutput", maxTurningOutput);
 		minimumTurningOutput = prefs.getDouble("minimumTurningOutput", minimumTurningOutput);
+
 		
-		kP_MP = prefs.getDouble("kP_MP", kP_MP);
-		kD_MP = prefs.getDouble("kD_MP", kD_MP);
-		kI_MP = prefs.getDouble("kI_MP", kI_MP);
-		kF_MP = prefs.getDouble("kF_MP", kF_MP);
 
 	}
 	

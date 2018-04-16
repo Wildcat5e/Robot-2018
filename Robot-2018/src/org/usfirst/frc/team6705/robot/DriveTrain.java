@@ -230,6 +230,7 @@ public class DriveTrain {
 		boolean inTolerance = false;
 		
 		int turnMultiplier = (error < 0) ? -1 : 1;
+		double kP = (Math.abs(degrees) < 35) ? kP_Turning_Small : kP_Turning;
 		
 		if (previousTurningError == 0) {
 			previousTurningError = degrees;
@@ -279,7 +280,7 @@ public class DriveTrain {
 		}
 
 		double bias = minimumTurningOutput * turnMultiplier;
-		double proportional = error * kP_Turning;
+		double proportional = error * kP;
 		double derivative = (error - previousTurningError) * kD_Turning;
 		
 		previousTurningError = error; //Reset previous error to current error

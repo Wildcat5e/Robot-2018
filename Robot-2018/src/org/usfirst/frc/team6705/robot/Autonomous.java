@@ -625,7 +625,7 @@ public class Autonomous {
 	//***************************************************************************//
 	
 	public void doubleScaleAuto(int scaleSide, String startingPosition) {
-		double angle1 = 20;
+		//double angle1 = 20;
 		
 		if (!isLifting && !Elevator.isAtFloor()) {
 			Elevator.maintainHeight(previousElevatorHeight);
@@ -639,13 +639,13 @@ public class Autonomous {
 				state = nextState(state);
 				break;
 			case 1: //Move forward part way
-				if (DriveTrain.moveByDistance(120, velocityFast)) {
+				if (DriveTrain.moveByDistance(120, -5 * scaleSide, velocityFast)) {
 					state = nextState(state);
 				}
 				break;
 			case 2: //Move at angle and lift elevator
 				//Elevator.setHeight(scaleHeight);
-				if (DriveTrain.moveByDistance(106, angle1 * -scaleSide, velocityFast) & Elevator.moveToHeightAuto(scaleHeight, scaleHeight - previousElevatorHeight, 1)) {
+				if (DriveTrain.moveByDistance(106, -5 * scaleSide, velocityFast) & Elevator.moveToHeightAuto(scaleHeight, scaleHeight - previousElevatorHeight, 1)) {
 					state = nextState(state);
 				}
 				break;
@@ -655,7 +655,7 @@ public class Autonomous {
 				}
 				break;
 			case 4: //Turn Around
-				if (DriveTrain.turnDegrees(-scaleSide * 100) & Elevator.moveToFloorAuto(previousElevatorHeight)) {
+				if (DriveTrain.turnDegrees(scaleSide * -160) & Elevator.moveToFloorAuto(previousElevatorHeight)) {
 					state = nextState(state);	
 				}
 				break;
@@ -677,7 +677,7 @@ public class Autonomous {
 				}
 				break;
 			case 8:
-				if (DriveTrain.turnDegrees(scaleSide * 120)) {
+				if (DriveTrain.turnDegrees(scaleSide * 180)) {
 					state = nextState(state);
 				}
 				break;
@@ -703,6 +703,7 @@ public class Autonomous {
 				break;
 			case 13:
 				endAuto();
+				break;
 			}
 		} else if ((scaleSide == 1 && startingPosition == right) || (scaleSide == -1 && startingPosition == left)) { //Opposite side
 			//Cross field to go to opposite scale, drop it off, turn around, pick up new cube, turn around, drop it off
@@ -732,7 +733,7 @@ public class Autonomous {
 				}
 				break;
 			case 5:
-				if (DriveTrain.moveByDistance(45, velocityMedium) & Elevator.moveToHeightAuto(scaleHeight, scaleHeight - previousElevatorHeight, 1)) {
+				if (DriveTrain.moveByDistance(45, velocitySlow) & Elevator.moveToHeightAuto(scaleHeight, scaleHeight - previousElevatorHeight, 1)) {
 					state = nextState(state);
 				}
 				break;

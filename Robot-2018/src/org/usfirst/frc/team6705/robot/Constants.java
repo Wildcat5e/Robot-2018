@@ -85,6 +85,7 @@ public class Constants {
 	
 	//Turning PID
 	public static double kP_Turning = 0.013,
+			kP_Turning_Small = 0.005,
 			kD_Turning = 0.028,
 			kI_Turning = 0,
 			iZone = 8, //Degree range in which I-gain applies
@@ -122,9 +123,8 @@ public class Constants {
 		kP_Turning = prefs.getDouble("kP_Turning", kP_Turning);
 		kI_Turning = prefs.getDouble("kI_Turning", kI_Turning);
 		kD_Turning = prefs.getDouble("kD_Turning", kD_Turning);
+		kP_Turning_Small = prefs.getDouble("kP_Turning_Small", kP_Turning_Small);
 		minimumTurningOutput = prefs.getDouble("minimumTurningOutput", minimumTurningOutput);
-
-		
 
 	}
 	

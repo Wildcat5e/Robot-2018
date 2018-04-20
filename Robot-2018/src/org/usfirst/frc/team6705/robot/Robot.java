@@ -112,18 +112,18 @@ public class Robot extends IterativeRobot {
 		camera.setBrightness(50);*/
 		
 		autoChooser.addDefault("ONE cube on SWITCH", switchAuto1Cube);
-		autoChooser.addObject("TWO cube on SWITCH", switchAuto2Cube);
-		autoChooser.addObject("THREE cube on SWITCH", switchAuto3Cube);
+		//autoChooser.addObject("TWO cube on SWITCH", switchAuto2Cube);
+		autoChooser.addObject("THREE (TWO) cubes on SWITCH", switchAuto3Cube);
 		autoChooser.addObject("ONE cube on SCALE", singleScale);
-		autoChooser.addObject("TWO cubes - scale AND switch", scaleSwitchAuto);
+		//autoChooser.addObject("TWO cubes - scale AND switch", scaleSwitchAuto);
 		autoChooser.addObject("TWO cubes on SCALE", doubleScaleAuto);
 		//autoChooser.addObject("Best Simple Scoring Method", bestSimple);
 		autoChooser.addObject("Cross Baseline ONLY", baselineAuto);
-		autoChooser.addObject("Straight Motion Profile", motionProfileTest);
+		//autoChooser.addObject("Straight Motion Profile", motionProfileTest);
 		autoChooser.addObject("Test Auto", test);
-		autoChooser.addObject("Double Scale with Motion Profiling", scaleAutoMP);
-		autoChooser.addObject("Double Switch with Motion Profiling", switchAutoMP);
-		autoChooser.addObject("Switch AND Scale with Motion Profiling", switchScaleAutoMP);
+		//autoChooser.addObject("Double Scale with Motion Profiling", scaleAutoMP);
+		//autoChooser.addObject("Double Switch with Motion Profiling", switchAutoMP);
+		//autoChooser.addObject("Switch AND Scale with Motion Profiling", switchScaleAutoMP);
 		//autoChooser.addObject("Stalling Test Auto", stall);
 		SmartDashboard.putData("Auto choices", autoChooser);
 		

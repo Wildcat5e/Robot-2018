@@ -191,6 +191,7 @@ public class DriveTrain {
 		
 		double degreeErrorLeft = (getGyro() - correctedHeading > 0) ? getGyro() - correctedHeading : 0;
 		double degreeErrorRight = (getGyro() - correctedHeading < 0) ? correctedHeading - getGyro() : 0;
+		System.out.println("Driving forward with angle error left: " + degreeErrorLeft + " right: " + degreeErrorRight);
 
 		double velocityLeft = maxVelocity + (kP_StraightDriving * degreeErrorLeft * direction);
 		double velocityRight = maxVelocity + (kP_StraightDriving * degreeErrorRight * direction);
@@ -231,6 +232,7 @@ public class DriveTrain {
 		
 		int turnMultiplier = (error < 0) ? -1 : 1;
 		double kP = (Math.abs(degrees) < 35) ? kP_Turning_Small : kP_Turning;
+		double minimumOutput = (Math.abs(degrees) == 90) ? 0.27 : minimumTurningOutput;
 		
 		if (previousTurningError == 0) {
 			previousTurningError = degrees;
@@ -243,7 +245,7 @@ public class DriveTrain {
 			inTolerance = true;
 			
 			//System.out.println("Has been stable within target's tolerance for " + turningStableTicks + " iterations");
-			System.out.println("Within tolerance with velocities L: " + leftTalon.getSelectedSensorVelocity(0) + " and R: " + rightTalon.getSelectedSensorPosition(0));
+			System.out.println("Within tolerance with velocities L: " + leftTalon.getSelectedSensorVelocity(0) + " and R: " + rightTalon.getSelectedSensorVelocity(0));
 			
 			if (leftTalon.getSelectedSensorVelocity(0) < 75 && rightTalon.getSelectedSensorVelocity(0) < 75) {
 				System.out.println("STOP TURNING AT ANGLE: " + getGyro() + " with absolute error " + absoluteError);
@@ -279,7 +281,7 @@ public class DriveTrain {
 			turningIntegral = 0; //Reset the integral to 0 if we are overshooting
 		}
 
-		double bias = minimumTurningOutput * turnMultiplier;
+		double bias = minimumOutput * turnMultiplier;
 		double proportional = error * kP;
 		double derivative = (error - previousTurningError) * kD_Turning;
 		

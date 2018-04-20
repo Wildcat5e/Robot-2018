@@ -58,17 +58,17 @@ public class Constants {
 			elevatorEquilibriumSpeedNoCube = 0.29,
 			elevatorMaxSpeedUp = 1,
 			elevatorMaxSpeedDown = -0.4,
-			elevatorMinimumSpeedUp = 0.52,
+			elevatorMinimumSpeedUp = 0.55,
 			elevatorMinimumSpeedDown = 0.1,
 			ticksPerRotationElevator = 2048,
 			pulleyDiameter = 2.75,
 			verticalInchesPerTick = 2 * (pulleyDiameter * Math.PI) / ticksPerRotationElevator,
 			elevatorTolerance = 2, //Inches
-			maximumHeight = 70.8,
+			maximumHeight = 70,
 			floorHeight = 0.0,
 			autoDriveHeight = 5,
 			switchHeight = 30,
-			scaleHeight = 63, 
+			scaleHeight = 61, 
 			elevatorRampTime = 0.2; //seconds
 	
 	//Drive Train
@@ -81,7 +81,7 @@ public class Constants {
 			maxTicksPer100ms = 870,//This is the max speed in native units per 100 ms of the motors (percent output 100%)
 			maxError = 400,
 			minimumSpeed = 75,//ticks per 100 ms
-			kP_StraightDriving = 50;
+			kP_StraightDriving = 45;
 	
 	//Turning PID
 	public static double kP_Turning = 0.013,
@@ -92,13 +92,14 @@ public class Constants {
 			turningTolerance = 4, //Degrees
 			steadyTurningIterations = 5, //Iterations to exit turning PID loops
 			maxTurningOutput = 0.9,
-			minimumTurningOutput = 0.27;
+			minimumTurningOutput = 0.37,
+			minimumTurningOutput90 = 0.27;
 	
 	//Driving Speeds in Feet Per Second (FPS)
 		public static final double velocityMax = getFPS(maxTicksPer100ms),
 				velocityFast = 10,
 				velocityMedium = 7,
-				velocityMediumSlow = 6,
+				velocityMediumSlow = 5.5,
 				velocitySlow = 5.5,
 				velocityTurningLeft = 6,
 				velocityTurningRight = 6.3,
@@ -126,6 +127,7 @@ public class Constants {
 		kD_Turning = prefs.getDouble("kD_Turning", kD_Turning);
 		kP_Turning_Small = prefs.getDouble("kP_Turning_Small", kP_Turning_Small);
 		minimumTurningOutput = prefs.getDouble("minimumTurningOutput", minimumTurningOutput);
+		minimumTurningOutput90 = prefs.getDouble("minimumTurningOutput90", minimumTurningOutput90);
 
 	}
 	

@@ -1,14 +1,21 @@
 package org.usfirst.frc.team6705.robot;
+
+import static org.usfirst.frc.team6705.robot.Constants.LEFT_RAMP_SOLENOID_A;
+import static org.usfirst.frc.team6705.robot.Constants.LEFT_RAMP_SOLENOID_B;
+import static org.usfirst.frc.team6705.robot.Constants.RIGHT_RAMP_SOLENOID_A;
+import static org.usfirst.frc.team6705.robot.Constants.RIGHT_RAMP_SOLENOID_B;
+
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
-import static org.usfirst.frc.team6705.robot.Constants.*;
 public class Ramps {
 
-	static DoubleSolenoid leftSolenoid = new DoubleSolenoid(leftRampSolenoidA, leftRampSolenoidB);
-	static DoubleSolenoid rightSolenoid = new DoubleSolenoid(rightRampSolenoidA, rightRampSolenoidB);
-	
-	public static void deploy() {
-		leftSolenoid.set(DoubleSolenoid.Value.kForward);
-		rightSolenoid.set(DoubleSolenoid.Value.kForward);
-	}
+    private static DoubleSolenoid leftSolenoid = 
+            new DoubleSolenoid(LEFT_RAMP_SOLENOID_A, LEFT_RAMP_SOLENOID_B);
+    private static DoubleSolenoid rightSolenoid = 
+            new DoubleSolenoid(RIGHT_RAMP_SOLENOID_A, RIGHT_RAMP_SOLENOID_B);
+
+    public static void deploy() {
+        leftSolenoid.set(DoubleSolenoid.Value.kForward);
+        rightSolenoid.set(DoubleSolenoid.Value.kForward);
+    }
 }

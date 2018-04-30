@@ -1,32 +1,10 @@
 package org.usfirst.frc.team6705.robot;
 
-//import org.usfirst.frc.team6705.robot.PIDMotor;
-import static org.usfirst.frc.team6705.robot.Constants.convertInchesToTicks;
-import static org.usfirst.frc.team6705.robot.Constants.ELEVATOR_ENCODER_SOURCE_A;
-import static org.usfirst.frc.team6705.robot.Constants.ELEVATOR_ENCODER_SOURCE_B;
-import static org.usfirst.frc.team6705.robot.Constants.ELEVATOR_EQUILIBRIUM_SPEED_NO_CUBE;
-import static org.usfirst.frc.team6705.robot.Constants.ELEVATOR_EQUILIBRIUM_SPEED_WITH_CUBE;
-import static org.usfirst.frc.team6705.robot.Constants.ELEVATOR_LIMIT_SWITCH_DIO;
-import static org.usfirst.frc.team6705.robot.Constants.ELEVATOR_MAX_SPEED_DOWN;
-import static org.usfirst.frc.team6705.robot.Constants.ELEVATOR_MAX_SPEED_UP;
-import static org.usfirst.frc.team6705.robot.Constants.ELEVATOR_MIN_SPEED_DOWN;
-import static org.usfirst.frc.team6705.robot.Constants.ELEVATOR_MIN_SPEED_UP;
-import static org.usfirst.frc.team6705.robot.Constants.ELEVATOR_RAMP_TIME;
-import static org.usfirst.frc.team6705.robot.Constants.ELEVATOR_SPARK_1;
-import static org.usfirst.frc.team6705.robot.Constants.ELEVATOR_SPARK_2;
-import static org.usfirst.frc.team6705.robot.Constants.ELEVATOR_TOLERANCE;
-import static org.usfirst.frc.team6705.robot.Constants.FLOOR_HEIGHT;
-import static org.usfirst.frc.team6705.robot.Constants.MAX_HEIGHT;
-import static org.usfirst.frc.team6705.robot.Constants.VERTICAL_INCHES_PER_TICK;
+import static org.usfirst.frc.team6705.robot.Constants.*;
 
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Encoder;
-//import edu.wpi.first.wpilibj.PIDController;
-import edu.wpi.first.wpilibj.Spark;
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
-//import edu.wpi.first.wpilibj.command.PIDSubsystem;
+import edu.wpi.first.wpilibj.*;
+
 
 public class Elevator /* extends PIDSubsystem */ {
 

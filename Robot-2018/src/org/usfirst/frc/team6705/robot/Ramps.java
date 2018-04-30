@@ -1,9 +1,6 @@
 package org.usfirst.frc.team6705.robot;
 
-import static org.usfirst.frc.team6705.robot.Constants.LEFT_RAMP_SOLENOID_A;
-import static org.usfirst.frc.team6705.robot.Constants.LEFT_RAMP_SOLENOID_B;
-import static org.usfirst.frc.team6705.robot.Constants.RIGHT_RAMP_SOLENOID_A;
-import static org.usfirst.frc.team6705.robot.Constants.RIGHT_RAMP_SOLENOID_B;
+import static org.usfirst.frc.team6705.robot.Constants.*;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 

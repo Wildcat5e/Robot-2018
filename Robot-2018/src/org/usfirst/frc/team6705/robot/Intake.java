@@ -1,16 +1,8 @@
 package org.usfirst.frc.team6705.robot;
 
-import static org.usfirst.frc.team6705.robot.Constants.INTAKE_ACTUATOR_SOLENOID_A;
-import static org.usfirst.frc.team6705.robot.Constants.INTAKE_ACTUATOR_SOLENOID_B;
-import static org.usfirst.frc.team6705.robot.Constants.INTAKE_SOLENOID_A;
-import static org.usfirst.frc.team6705.robot.Constants.INTAKE_SOLENOID_B;
-import static org.usfirst.frc.team6705.robot.Constants.LEFT_INTAKE_SPARK_CHANNEL;
-import static org.usfirst.frc.team6705.robot.Constants.MAX_ROLLERS_SPEED;
-import static org.usfirst.frc.team6705.robot.Constants.RIGHT_INTAKE_SPARK_CHANNEL;
-import static org.usfirst.frc.team6705.robot.Constants.ROLLERS_SPEED_AUTO;
+import static org.usfirst.frc.team6705.robot.Constants.*;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.*;
 
 public class Intake {
 

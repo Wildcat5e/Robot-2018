@@ -1,10 +1,6 @@
 package org.usfirst.frc.team6705.robot;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 
 public class CSVLogger {
 

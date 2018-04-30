@@ -1,11 +1,7 @@
 package org.usfirst.frc.team6705.robot;
 
-import static org.usfirst.frc.team6705.robot.Constants.TICKS_PER_REVOLUTION;
-import static org.usfirst.frc.team6705.robot.Constants.WHEEL_RADIUS;
-
-import com.ctre.phoenix.motion.MotionProfileStatus;
-import com.ctre.phoenix.motion.SetValueMotionProfile;
-import com.ctre.phoenix.motion.TrajectoryPoint;
+import static org.usfirst.frc.team6705.robot.Constants.*;
+import com.ctre.phoenix.motion.*;
 import com.ctre.phoenix.motion.TrajectoryPoint.TrajectoryDuration;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;

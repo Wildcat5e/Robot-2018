@@ -1,20 +1,7 @@
 package org.usfirst.frc.team6705.robot;
 
-import static org.usfirst.frc.team6705.robot.Constants.FLOOR_HEIGHT;
-import static org.usfirst.frc.team6705.robot.Constants.LEFT;
-import static org.usfirst.frc.team6705.robot.Constants.MIDDLE;
-import static org.usfirst.frc.team6705.robot.Constants.RIGHT;
-import static org.usfirst.frc.team6705.robot.Constants.SCALE_HEIGHT;
-import static org.usfirst.frc.team6705.robot.Constants.SWITCH_HEIGHT;
-import static org.usfirst.frc.team6705.robot.Constants.TIME_TO_ROLL_IN;
-import static org.usfirst.frc.team6705.robot.Constants.TIME_TO_ROLL_OUT;
-import static org.usfirst.frc.team6705.robot.Constants.VELOCITY_FAST;
-import static org.usfirst.frc.team6705.robot.Constants.VELOCITY_MEDIUM;
-import static org.usfirst.frc.team6705.robot.Constants.VELOCITY_MEDIUM_SLOW;
-import static org.usfirst.frc.team6705.robot.Constants.VELOCITY_SLOW;
-import static org.usfirst.frc.team6705.robot.MotionProfileDataSets.LEFT_SWITCH_MIDDLE_START_L;
-import static org.usfirst.frc.team6705.robot.MotionProfileDataSets.LEFT_SWITCH_MIDDLE_START_R;
-import static org.usfirst.frc.team6705.robot.MotionProfileDataSets.STRAIGHT_TEST_L;
+import static org.usfirst.frc.team6705.robot.Constants.*;
+import static org.usfirst.frc.team6705.robot.MotionProfileDataSets.*;
 
 //import com.ctre.phoenix.motion.SetValueMotionProfile;
 import com.ctre.phoenix.motorcontrol.ControlMode;

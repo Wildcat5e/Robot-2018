@@ -11,32 +11,15 @@
 
 package org.usfirst.frc.team6705.robot;
 
-import static org.usfirst.frc.team6705.robot.Constants.convertVelocity;
-import static org.usfirst.frc.team6705.robot.Constants.DRIVE_STICK_CHANNEL;
-import static org.usfirst.frc.team6705.robot.Constants.ELEVATOR_TOLERANCE;
-import static org.usfirst.frc.team6705.robot.Constants.FLOOR_HEIGHT;
-import static org.usfirst.frc.team6705.robot.Constants.LEFT;
-import static org.usfirst.frc.team6705.robot.Constants.LIFT_STICK_CHANNEL;
-import static org.usfirst.frc.team6705.robot.Constants.MIDDLE;
-import static org.usfirst.frc.team6705.robot.Constants.RAMP_RATE_TELEOP;
-import static org.usfirst.frc.team6705.robot.Constants.RIGHT;
-import static org.usfirst.frc.team6705.robot.Constants.SCALE_HEIGHT;
-import static org.usfirst.frc.team6705.robot.Constants.SWITCH_HEIGHT;
+import static org.usfirst.frc.team6705.robot.Constants.*;
 
 import org.usfirst.frc.team6705.robot.Elevator.ElevatorState;
 import org.usfirst.frc.team6705.robot.Intake.IntakeState;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.smartdashboard.*;
 
 //import com.ctre.phoenix.motorcontrol.ControlMode;
 

@@ -56,18 +56,18 @@ public class Constants {
     public static final double ELEVATOR_EQUILIBRIUM_SPEED_NO_CUBE = 0.29;
     public static final double ELEVATOR_MAX_SPEED_UP = 1;
     public static final double ELEVATOR_MAX_SPEED_DOWN = -0.4; 
-    public static final double ELEVATOR_MIN_SPEED_UP = 0.52;
+    public static final double ELEVATOR_MIN_SPEED_UP = 0.55;
     public static final double ELEVATOR_MIN_SPEED_DOWN = 0.1;
     public static final double TICKS_PER_ROTATION_ELEVATOR = 2048; 
     public static final double PULLEY_DIAMETER = 2.75;
     public static final double VERTICAL_INCHES_PER_TICK = 
             2 * (PULLEY_DIAMETER * Math.PI) / TICKS_PER_ROTATION_ELEVATOR; 
     public static final double ELEVATOR_TOLERANCE = 2; // Inches
-    public static final double MAX_HEIGHT = 70.8;
+    public static final double MAX_HEIGHT = 70;
     public static final double FLOOR_HEIGHT = 0.0;
     public static final double AUTO_DRIVE_HEIGHT = 5;
     public static final double SWITCH_HEIGHT = 30; 
-    public static final double SCALE_HEIGHT = 63;
+    public static final double SCALE_HEIGHT = 61;
     public static final double ELEVATOR_RAMP_TIME = 0.2; // seconds
 
     // Drive Train
@@ -83,7 +83,7 @@ public class Constants {
     // This is the max speed in native units per 100 ms of the motors (percent output 100%)
     public static final double MAX_ERROR = 400;
     public static final double MINIMUM_SPEED = 75; // ticks per 100 ms
-    public static final double KP_STRAIGHT_DRIVING = 50;
+    public static final double KP_STRAIGHT_DRIVING = 45;
 
     // Turning PID
     private static double kPTurning = 0.013;
@@ -94,13 +94,14 @@ public class Constants {
     public static final double TURNING_TOLERANCE = 4; // Degrees
     public static final double STEADY_TURNING_ITERATIONS = 5; //Iterations to exit turning PID loops
     public static final double MAX_TURNING_OUTPUT = 0.9;
-    private static double minimumTurningOutput = 0.27;
+    private static double minimumTurningOutput = 0.37;
+    private static double minimumTurningOutput90 = 0.27;
     
     // Driving Speeds in Feet Per Second (FPS)
     public static final double VELOCITY_MAX = getFPS(MAX_TICKS_PER_100MS);
     public static final double VELOCITY_FAST = 10;
     public static final double VELOCITY_MEDIUM = 7;
-    public static final double VELOCITY_MEDIUM_SLOW = 6;
+    public static final double VELOCITY_MEDIUM_SLOW = 5.5;
     public static final double VELOCITY_SLOW = 5.5; 
     public static final double VELOCITY_TURNING_LEFT = 6;
     public static final double VELOCITY_TURNING_RIGHT = 6.3;
@@ -128,7 +129,7 @@ public class Constants {
         kDTurning = prefs.getDouble("kD_Turning", kDTurning);
         kPTurningSmall = prefs.getDouble("kP_Turning_Small", kPTurningSmall);
         minimumTurningOutput = prefs.getDouble("minimumTurningOutput", minimumTurningOutput);
-
+        minimumTurningOutput90 = prefs.getDouble("minimumTurningOutput90", minimumTurningOutput90);
     }
 
     public static double convertInchesToTicks(double inches) {

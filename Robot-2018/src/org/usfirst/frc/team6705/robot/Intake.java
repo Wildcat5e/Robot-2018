@@ -25,12 +25,12 @@ public class Intake {
     }
 
     public static void intake() {
-        ROLLERS_LEFT.set(ROLLERS_SPEED_AUTO);
+        ROLLERS_LEFT.set(-ROLLERS_SPEED_AUTO);
         ROLLERS_RIGHT.set(ROLLERS_SPEED_AUTO);
     }
 
     public static void outtake() {
-        ROLLERS_LEFT.set(-ROLLERS_SPEED_AUTO);
+        ROLLERS_LEFT.set(ROLLERS_SPEED_AUTO);
         ROLLERS_RIGHT.set(-ROLLERS_SPEED_AUTO);
     }
 
@@ -48,7 +48,7 @@ public class Intake {
 
     public static void roll(double speed) {
         System.out.println("Rolling speed: " + speed);
-        ROLLERS_LEFT.set(speed * MAX_ROLLERS_SPEED);
+        ROLLERS_LEFT.set(-speed * MAX_ROLLERS_SPEED);
         ROLLERS_RIGHT.set(speed * MAX_ROLLERS_SPEED);
     }
 

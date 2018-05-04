@@ -199,7 +199,8 @@ public class Elevator /* extends PIDSubsystem */ {
         } else if (scaledFraction > 1) {
             scaledFraction = 1;
         }
-
+        System.out.println("Moving to height " 
+                + targetHeight + " with current height " + Elevator.getCurrentPosition());
         Elevator.set(direction * scaledFraction);
 
         return false;

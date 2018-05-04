@@ -199,7 +199,8 @@ public class DriveTrain {
                 ? getGyro() - correctedHeading : 0;
         double degreeErrorRight = (getGyro() - correctedHeading < 0) 
                 ? correctedHeading - getGyro() : 0;
-
+        System.out.println("Driving forward with angle error left: " 
+                + degreeErrorLeft + " right: " + degreeErrorRight);        
         double velocityLeft = maxVelocity + (KP_STRAIGHT_DRIVING * degreeErrorLeft * direction);
         double velocityRight = maxVelocity + (KP_STRAIGHT_DRIVING * degreeErrorRight * direction);
 
@@ -239,7 +240,7 @@ public class DriveTrain {
 
         int turnMultiplier = (error < 0) ? -1 : 1;
         double kP = (Math.abs(degrees) < 35) ? kPTurningSmall() : kPTurning();
-
+        double minimumOutput = (Math.abs(degrees) == 90) ? 0.27 : minimumTurningOutput();
         if (previousTurningError == 0) {
             previousTurningError = degrees;
         }
@@ -256,7 +257,7 @@ public class DriveTrain {
             // turningStableTicks + " iterations");
             System.out.println("Within tolerance with velocities L: " 
                     + LEFT_TALON.getSelectedSensorVelocity(0)
-                    + " and R: " + RIGHT_TALON.getSelectedSensorPosition(0));
+                    + " and R: " + RIGHT_TALON.getSelectedSensorVelocity(0));
 
             if (LEFT_TALON.getSelectedSensorVelocity(0) < 75 
                     && RIGHT_TALON.getSelectedSensorVelocity(0) < 75) {
@@ -296,7 +297,7 @@ public class DriveTrain {
             turningIntegral = 0; // Reset the integral to 0 if we are overshooting
         }
 
-        double bias = minimumTurningOutput() * turnMultiplier;
+        double bias = minimumOutput * turnMultiplier;
         double proportional = error * kP;
         double derivative = (error - previousTurningError) * kDTurning();
 

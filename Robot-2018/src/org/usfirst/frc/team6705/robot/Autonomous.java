@@ -235,12 +235,13 @@ public class Autonomous {
             Elevator.maintainHeight(currentState);
         }
         // Parameters Left Right
-        double initialDistance = (switchSide == 1) ? 78 : 68;
+        double initialDistance = (switchSide == 1) ? 76 : 72;
         double initialAngle = (switchSide == 1) ? 30 : 20;
-        double backAndForthDistance = (switchSide == 1) ? 74 : 64;
+        double backAndForthDistance = (switchSide == 1) ? 74 : 70;
         double grabCubeDistance = (switchSide == 1) ? 32 : 32;
         double grabSecondCubeDistance = (switchSide == 1) ? 50 : 50;
-        double angle2 = (switchSide == 1) ? 30 : 20;
+        double angle2 = (switchSide == 1) ? 20 : 20;
+        double angle3 = (switchSide == 1) ? 25 : 23.5;
         /*
         double finalDistance = (switchSide == scaleSide) ? 80 : 100;
         double finalAngle = 0;
@@ -278,7 +279,7 @@ public class Autonomous {
                 commandList.add(() -> Intake.outtakeForTime(TIME_TO_ROLL_OUT, currentState));
                 commandList.add(() -> DriveTrain.moveByDistance(-grabCubeDistance, 
                         VELOCITY_SLOW, currentState));
-                commandList.add(() -> DriveTrain.turnDegrees(switchSide * angle2,
+                commandList.add(() -> DriveTrain.turnDegrees(switchSide * angle3,
                         6, currentState));
                 commandList.add(() -> DriveTrain.moveByDistance(backAndForthDistance, 
                         VELOCITY_MEDIUM_SLOW, currentState)
@@ -378,21 +379,23 @@ public class Autonomous {
             if (state == 0) {
                 setupAuto();
                 commandList = new ArrayList<>();
-                commandList.add(() -> DriveTrain.moveByDistance(120, -5 * scaleSide, 
+                commandList.add(() -> Intake.actuateUp());
+                commandList.add(() -> DriveTrain.moveByDistance(110, -5 * scaleSide, 
                         VELOCITY_FAST, currentState));
-                commandList.add(() -> DriveTrain.moveByDistance(106, -5 * scaleSide, 
-                        VELOCITY_FAST, currentState)
+                commandList.add(() -> DriveTrain.moveByDistance(113, -9 * scaleSide, 
+                        VELOCITY_MEDIUM, currentState)
                         & Elevator.moveToHeightAuto(SCALE_HEIGHT,
                                 currentState, 1));
                 commandList.add(() -> Intake.outtakeForTime(TIME_TO_ROLL_OUT, currentState));
-                commandList.add(() -> DriveTrain.turnDegrees(scaleSide * -160, currentState)
+                commandList.add(() -> DriveTrain.turnDegrees(scaleSide * -145, 5, currentState)
                         & Elevator.moveToFloorAuto(currentState));
+                commandList.add(() -> Intake.actuateDown());
                 commandList.add(() -> Intake.open());
-                commandList.add(() -> DriveTrain.moveByDistance(55, 
-                        VELOCITY_MEDIUM, currentState));
+                commandList.add(() -> DriveTrain.moveByDistance(53, 
+                        VELOCITY_FAST, currentState));
                 commandList.add(() -> Intake.close());
                 commandList.add(() -> Intake.outtakeForTime(TIME_TO_ROLL_OUT, currentState));
-                commandList.add(() -> DriveTrain.moveByDistance(-55, VELOCITY_SLOW, currentState)
+                commandList.add(() -> DriveTrain.moveByDistance(-53, VELOCITY_SLOW, currentState)
                         & Elevator.moveToHeightAuto(SCALE_HEIGHT, 
                                 currentState, 1));
                 commandList.add(() -> DriveTrain.turnDegrees(scaleSide * 180, currentState));
@@ -411,26 +414,21 @@ public class Autonomous {
             if (state == 0) {
                 setupAuto();
                 commandList = new ArrayList<>();
-                commandList.add(() -> DriveTrain.moveByDistance(185, VELOCITY_FAST, currentState));
+                commandList.add(() -> Intake.actuateUp());
+                commandList.add(() -> DriveTrain.moveByDistance(185, 
+                        VELOCITY_MEDIUM, currentState));
                 commandList.add(() -> DriveTrain.turnDegrees(scaleSide * 90, currentState));
-                commandList.add(() -> DriveTrain.moveByDistance(184, VELOCITY_FAST, currentState));
+                commandList.add(() -> DriveTrain.moveByDistance(184, 
+                        VELOCITY_MEDIUM, currentState));
                 commandList.add(() -> DriveTrain.turnDegrees(-scaleSide * 90, currentState));
-                commandList.add(() -> DriveTrain.moveByDistance(45, VELOCITY_SLOW, currentState)
-                        & Elevator.moveToHeightAuto(SCALE_HEIGHT,
+                commandList.add(() -> Elevator.moveToHeightAuto(SCALE_HEIGHT,
                                 currentState, 1));
-                commandList.add(() -> Intake.outtakeForTime(TIME_TO_ROLL_OUT, currentState));
-                commandList.add(() -> DriveTrain.turnDegrees(-scaleSide * 170, currentState) 
-                        & Elevator.moveToFloorAuto(currentState));
-                commandList.add(() -> Intake.open());
-                commandList.add(() -> DriveTrain.moveByDistance(45, VELOCITY_SLOW, currentState));
-                commandList.add(() -> Intake.close());
-                commandList.add(() -> Intake.outtakeForTime(TIME_TO_ROLL_OUT, currentState));
-                commandList.add(() -> DriveTrain.moveByDistance(-45, VELOCITY_SLOW, currentState)
-                        & Elevator.moveToHeightAuto(SCALE_HEIGHT, currentState, 1));
-                commandList.add(() -> DriveTrain.turnDegrees(scaleSide * 170, currentState));
+                commandList.add(() -> DriveTrain.moveByDistance(30, VELOCITY_SLOW, currentState));
                 commandList.add(() -> Intake.outtakeForTime(TIME_TO_ROLL_OUT, currentState));
                 commandList.add(() -> DriveTrain.moveByDistance(-20, VELOCITY_SLOW, currentState));
                 commandList.add(() -> Elevator.moveToFloorAuto(currentState));
+                commandList.add(() -> DriveTrain.turnDegrees(-150 * scaleSide, 10, currentState));
+                commandList.add(() -> Intake.actuateDown());
                 state = nextState(state);
             } else {
                 executeAuto();

@@ -2,6 +2,8 @@ package org.usfirst.frc.team6705.robot;
 
 import static org.usfirst.frc.team6705.robot.Constants.*;
 
+import org.usfirst.frc.team6705.robot.Autonomous.CurrentRobotState;
+
 import edu.wpi.first.wpilibj.*;
 
 public class Intake {
@@ -32,14 +34,16 @@ public class Intake {
         ROLLERS_RIGHT.set(-ROLLERS_SPEED_AUTO);
     }
 
-    public static void actuateUp() {
+    public static boolean actuateUp() {
         System.out.print("Actuate Intake Up");
         ACTUATOR_1.set(DoubleSolenoid.Value.kReverse);
+        return true;
     }
 
-    public static void actuateDown() {
+    public static boolean actuateDown() {
         System.out.print("Actuate Intake Down");
         ACTUATOR_1.set(DoubleSolenoid.Value.kForward);
+        return true;
     }
 
     public static void roll(double speed) {
@@ -48,7 +52,9 @@ public class Intake {
         ROLLERS_RIGHT.set(speed * MAX_ROLLERS_SPEED);
     }
 
-    public static boolean outtakeForTime(double time, double startTime) {
+    
+    public static boolean outtakeForTime(double time, CurrentRobotState robotState) {
+        double startTime = robotState.getPreviousTime();
         if (Robot.TIMER.get() - startTime >= time) {
             stopRollers();
             return true;
@@ -57,7 +63,9 @@ public class Intake {
         return false;
     }
 
-    public static boolean intakeForTime(double time, double startTime) {
+    
+    public static boolean intakeForTime(double time, CurrentRobotState robotState) {
+        double startTime = robotState.getPreviousTime();
         if (Robot.TIMER.get() - startTime >= time) {
             stopRollers();
             return true;
@@ -72,15 +80,16 @@ public class Intake {
         ROLLERS_RIGHT.set(0);
     }
 
-    public static void open() {
+    public static boolean open() {
         System.out.print("Open Pneumatics");
         SOLENOID.set(DoubleSolenoid.Value.kForward);
-
+        return true;
     }
 
-    public static void close() {
+    public static boolean close() {
         System.out.println("Close Pneumatics");
         SOLENOID.set(DoubleSolenoid.Value.kReverse);
+        return true;
     }
 
     /*

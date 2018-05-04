@@ -2,6 +2,8 @@ package org.usfirst.frc.team6705.robot;
 
 import static org.usfirst.frc.team6705.robot.Constants.*;
 
+import org.usfirst.frc.team6705.robot.Autonomous.CurrentRobotState;
+
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.*;
 
@@ -83,8 +85,24 @@ public class Elevator /* extends PIDSubsystem */ {
             set(speed);
         }
     }
-
+    
     public static void maintainHeight(double height) {
+        if (getCurrentPosition() < height + ELEVATOR_TOLERANCE) {
+            System.out.println("Trying to maintain height " + height 
+                    + "Current Position is " + getCurrentPosition());
+            double speed = (Intake.SOLENOID.get() == DoubleSolenoid.Value.kReverse) 
+                    ? ELEVATOR_EQUILIBRIUM_SPEED_WITH_CUBE
+                    : ELEVATOR_EQUILIBRIUM_SPEED_NO_CUBE;
+            // elevatorMinimumSpeedUp * (height - getCurrentPosition());
+            // speed = (height - getCurrentPosition()) * 0.1;
+            // System.out.println("Equilibrium speed: " + speed);
+            MOTOR.set(speed);
+        } /*
+           * else { motor.set(0); }
+           */
+    }
+    public static void maintainHeight(CurrentRobotState robotState) {
+        double height = robotState.getPreviousElevatorHeight();
         if (getCurrentPosition() < height + ELEVATOR_TOLERANCE) {
             System.out.println("Trying to maintain height " + height 
                     + "Current Position is " + getCurrentPosition());
@@ -139,8 +157,10 @@ public class Elevator /* extends PIDSubsystem */ {
         Elevator.set(direction * scaledFraction);
     }
 
+    
     public static boolean moveToHeightAuto(double targetHeight, 
-            double totalDistanceToLift, int direction) {
+            CurrentRobotState robotState, int direction) {
+        double totalDistanceToLift = targetHeight - robotState.getPreviousElevatorHeight();
         double currentHeight = getCurrentPosition();
         // int direction = (currentHeight > targetHeight) ? -1 : 1;
 
@@ -152,12 +172,12 @@ public class Elevator /* extends PIDSubsystem */ {
                 && currentHeight > targetHeight - ELEVATOR_TOLERANCE)
                 || hasCompletedLift) {
             hasCompletedLift = true;
-            Robot.AUTO.setIsLifting(false);
-            Robot.AUTO.setPreviousElevatorHeight(getCurrentPosition());
+            robotState.setIsLifting(false);
+            robotState.setPreviousElevatorHeight(getCurrentPosition());
             System.out.println("AUTO ELEVATOR MOVE DONE");
             return true;
         } else {
-            Robot.AUTO.setIsLifting(true);
+            robotState.setIsLifting(true);
         }
 
         double fractionRemaining = Math.abs(absDistance / totalDistanceToLift);
@@ -184,8 +204,8 @@ public class Elevator /* extends PIDSubsystem */ {
 
         return false;
     }
-
-    public static boolean moveToFloorAuto(double totalDistanceToLift) {
+    public static boolean moveToFloorAuto(double totalDistanceToLift, 
+            CurrentRobotState robotState) {
         double currentHeight = getCurrentPosition();
         int direction = -1;
 
@@ -195,10 +215,10 @@ public class Elevator /* extends PIDSubsystem */ {
         if (Elevator.isAtFloor()) {
             ENCODER.reset();
             // Elevator.stop();
-            Robot.AUTO.setIsLifting(false);
+            robotState.setIsLifting(false);
             return true;
         } else {
-            Robot.AUTO.setIsLifting(true);
+            robotState.setIsLifting(true);
         }
 
         double fractionRemaining = Math.abs(distanceRemaining / totalDistanceToLift);
@@ -225,9 +245,49 @@ public class Elevator /* extends PIDSubsystem */ {
         return false;
 
     }
+    public static boolean moveToFloorAuto(CurrentRobotState robotState) {
+        double totalDistanceToLift = robotState.getPreviousElevatorHeight() - FLOOR_HEIGHT;
+        double currentHeight = getCurrentPosition();
+        int direction = -1;
 
+        System.out.println("Move to floor auto");
+
+        double distanceRemaining = Math.abs(currentHeight - FLOOR_HEIGHT);
+        if (Elevator.isAtFloor()) {
+            ENCODER.reset();
+            // Elevator.stop();
+            robotState.setIsLifting(false);
+            return true;
+        } else {
+            robotState.setIsLifting(true);
+        }
+
+        double fractionRemaining = Math.abs(distanceRemaining / totalDistanceToLift);
+        if (fractionRemaining > 1) {
+            fractionRemaining = 1;
+        }
+
+        double scaledFraction = fractionRemaining * 1.25;
+
+        double fractionLifted = 1 - fractionRemaining;
+        if (fractionLifted < 0.01) {
+            fractionLifted = 0.01;
+        }
+
+        double scaledFractionLifted = fractionLifted * 5;
+
+        if (fractionLifted < 0.2) {
+            scaledFraction = scaledFractionLifted;
+        } else if (scaledFraction > 1) {
+            scaledFraction = 1;
+        }
+
+        Elevator.set(direction * scaledFraction);
+        return false;
+
+    }
     public static boolean moveToHeightAfterDriving(double targetHeight,
-            double totalDistanceToLift, int direction,
+            CurrentRobotState robotState, int direction,
             double distanceInches) {
         double leftDistance = DriveTrain.LEFT_TALON.getSelectedSensorPosition(0);
         double rightDistance = DriveTrain.RIGHT_TALON.getSelectedSensorPosition(0);
@@ -236,13 +296,13 @@ public class Elevator /* extends PIDSubsystem */ {
         if (averageDistance < convertInchesToTicks(distanceInches)) {
             System.out.println("Has only driven " + averageDistance 
                     + " ticks, so not yet lifting elevator");
-            Robot.AUTO.setIsLifting(false);
+            robotState.setIsLifting(false);
             return false;
         } else {
             System.out.println(
                     "Has driven at least " + convertInchesToTicks(distanceInches) 
                     + " ticks, so now lifting elevator");
-            return moveToHeightAuto(targetHeight, totalDistanceToLift, direction);
+            return moveToHeightAuto(targetHeight, robotState, direction);
         }
     }
     static boolean hasCompletedLift() {

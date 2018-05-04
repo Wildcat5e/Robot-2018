@@ -2,6 +2,8 @@ package org.usfirst.frc.team6705.robot;
 
 import static org.usfirst.frc.team6705.robot.Constants.*;
 
+import org.usfirst.frc.team6705.robot.Autonomous.CurrentRobotState;
+
 import com.ctre.phoenix.motion.SetValueMotionProfile;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.*;
@@ -145,7 +147,7 @@ public class DriveTrain {
 
     // Autonomous move method
     public static boolean moveByDistance(double inches, double degrees, 
-            double velocity, double timeOutSeconds) {
+            double velocity, double timeOutSeconds, CurrentRobotState robotState) {
         double targetEncoderTicks = Math.abs(convertInchesToTicks(inches));
         double ticksSoFar = Math
                 .abs((LEFT_TALON.getSelectedSensorPosition(0) 
@@ -160,7 +162,7 @@ public class DriveTrain {
             if (endMoveTicks > 5) { // Pause very briefly after the move
                 // resetEncoders();
                 // gyro.reset();
-                Robot.AUTO.setPreviousFinalTurningError(0);
+                robotState.setPreviousFinalTurningError(0);
                 endMoveTicks = 0;
                 return true;
             } else {
@@ -172,7 +174,7 @@ public class DriveTrain {
             timeOutTicks++;
             if (timeOutTicks > timeOutSeconds * 50) {
                 DriveTrain.stop();
-                Robot.AUTO.setPreviousFinalTurningError(0);
+                robotState.setPreviousFinalTurningError(0);
                 endMoveTicks = 0;
                 timeOutTicks = 0;
                 return true;
@@ -191,7 +193,7 @@ public class DriveTrain {
             scaledFraction = 1;
         }
 
-        double correctedHeading = degrees + Robot.AUTO.previousFinalTurningError();
+        double correctedHeading = degrees + robotState.getPreviousFinalTurningError();
 
         double degreeErrorLeft = (getGyro() - correctedHeading > 0) 
                 ? getGyro() - correctedHeading : 0;
@@ -215,16 +217,19 @@ public class DriveTrain {
         return false;
     }
 
-    public static boolean moveByDistance(double inches, double heading, double velocity) {
-        return moveByDistance(inches, heading, velocity, 0);
+    public static boolean moveByDistance(double inches, double heading, 
+            double velocity, CurrentRobotState robotState) {
+        return moveByDistance(inches, heading, velocity, 0, robotState);
     }
 
-    public static boolean moveByDistance(double inches, double velocity) {
-        return moveByDistance(inches, 0, velocity, 0);
+    public static boolean moveByDistance(double inches, double velocity, 
+            CurrentRobotState robotState) {
+        return moveByDistance(inches, 0, velocity, 0, robotState);
     }
 
     // Autonomous turn method
-    public static boolean turnDegrees(double degrees, double timeOutDegreeTolerance) {
+    public static boolean turnDegrees(double degrees, double timeOutDegreeTolerance, 
+            CurrentRobotState robotState) {
         // Positive degrees -> counterclockwise; negative degrees -> clockwise
 
         double currentAngle = getGyro();
@@ -258,7 +263,7 @@ public class DriveTrain {
                 System.out.println("STOP TURNING AT ANGLE: " + getGyro() 
                     + " with absolute error " + absoluteError);
 
-                Robot.AUTO.setPreviousFinalTurningError(error);
+                robotState.setPreviousFinalTurningError(error);
 
                 DriveTrain.stop();
                 // gyro.reset();
@@ -278,7 +283,7 @@ public class DriveTrain {
                 previousTurningError = 0;
                 turningIntegral = 0;
 
-                Robot.AUTO.setPreviousFinalTurningError(error);
+                robotState.setPreviousFinalTurningError(error);
 
                 DriveTrain.stop();
                 return true;
@@ -332,20 +337,22 @@ public class DriveTrain {
         return false;
     }
 
-    public static boolean turnDegrees(double degrees) {
-        return turnDegrees(degrees, 0);
+    public static boolean turnDegrees(double degrees, CurrentRobotState robotState) {
+        return turnDegrees(degrees, 0, robotState);
     }
 
     // ***************************************//
 
-    public static void setupMotionProfile(MotionProfile profile) {
+    public static boolean setupMotionProfile(MotionProfile profile) {
         profile.setup();
         profile.startFilling();
+        return true;
     }
 
-    public static void startMotionProfile(MotionProfile profile) {
+    public static boolean startMotionProfile(MotionProfile profile) {
         profile.periodic();
         profile.startMotionProfile();
+        return true;
     }
 
     public static boolean runMotionProfile(MotionProfile profile) {

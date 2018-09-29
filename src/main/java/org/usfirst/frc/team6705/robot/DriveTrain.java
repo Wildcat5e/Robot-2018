@@ -26,7 +26,9 @@ public class DriveTrain {
 	private static double turningIntegral = 0;
 	private static int endMoveTicks = 0;
 	private static int timeOutTicks = 0;
-	
+	/**
+	 * Configure all motor controller ports, PID configs, and reset gyro
+	 */
 	public static void setup() {
 		leftVictor.follow(leftTalon);
 		rightVictor.follow(rightTalon);
@@ -66,7 +68,7 @@ public class DriveTrain {
 		resetEncoders();
 	}
 	
-	public static void configPID() {
+	private static void configPID() {
 		//Velocity PID in slot 0
 		leftTalon.config_kP(0, kP_L, 0);
 		leftTalon.config_kI(0, kI, 0);
@@ -87,7 +89,9 @@ public class DriveTrain {
 		rightTalon.config_kD(1, kD_MP, 0);
 		rightTalon.config_kF(1, kF_MP, 0);
 	}
-	
+	/**
+	 * Reverses all drive train controllers
+	 */
 	public static void reverseDriveTrain() {
 		System.out.print("REVERSED DRIVE TRAIN");
 		leftTalon.setInverted(false);
@@ -95,7 +99,9 @@ public class DriveTrain {
 		leftVictor.setInverted(false);
 		rightVictor.setInverted(true);
 	}
-	
+	/**
+	 * Reset drive train directions back to default
+	 */
 	public static void undoReverseDriveTrain() {
 		System.out.print("RESET REVERSED DRIVE TRAIN");
 		leftTalon.setInverted(true);
@@ -103,18 +109,26 @@ public class DriveTrain {
 		leftVictor.setInverted(true);
 		rightVictor.setInverted(false);
 	}
-	
+	/**
+	 * Switch control mode to velocity mode
+	 */
 	public static void switchToVelocityMode() {
 		leftTalon.selectProfileSlot(0, 0);
 		rightTalon.selectProfileSlot(0, 0);
 	}
-	
+	/**
+	 * Switch control mode to motion profiling
+	 */
 	public static void switchToMotionProfile() {
 		leftTalon.selectProfileSlot(1, 0);
 		rightTalon.selectProfileSlot(1, 0);
 	}
 	
-	//Tank drive for teleop control
+	/**
+	 * Teleop control tank drive, sets left and right motors to passed in speeds
+	 * @param leftSpeed speed to set the left wheels to
+	 * @param rightSpeed speed to set the right wheels to 
+	 */
 	public static void tankDrive(double leftSpeed, double rightSpeed) {
 		leftSpeed = applyDeadband(leftSpeed);
 		rightSpeed = applyDeadband(rightSpeed);
@@ -133,7 +147,7 @@ public class DriveTrain {
 
 	}
 	
-	public static double applyDeadband(double speed) {
+	private static double applyDeadband(double speed) {
 		if ((speed < deadband && speed > 0) || (speed > -deadband && speed < 0)) {
 			speed = 0;
 		} else if (speed > 0.92) {
@@ -144,7 +158,14 @@ public class DriveTrain {
 		return speed;
 	}
 
-	//Autonomous move method
+	/**
+	 * Autonomous moving-moves forward by passed in distance and turn
+	 * @param inches distance to move in inches
+	 * @param degrees amount to turn in degrees (positive is counterclockwise)
+	 * @param velocity velocity to move at
+	 * @param timeOutSeconds amount of time to stop after if the action is not completed
+	 * @return true when the action is complete
+	 */
 	public static boolean moveByDistance(double inches, double degrees, double velocity, double timeOutSeconds) {
 		double targetEncoderTicks = Math.abs(convertInchesToTicks(inches));
 		double ticksSoFar = Math.abs((leftTalon.getSelectedSensorPosition(0) + rightTalon.getSelectedSensorPosition(0))/2);
@@ -209,18 +230,34 @@ public class DriveTrain {
 		setVelocity(direction * -scaledSpeedL, direction * -scaledSpeedR);
 		return false;
 	}
-	
+	/**
+	 * Autonomous moving-moves forward by a passed in distance with a specific heading (no timeout)
+	 * @param inches distance to move by
+	 * @param heading angle to turn at
+	 * @param velocity velocity to move at
+	 * @return true when the action is complete
+	 */
 	public static boolean moveByDistance(double inches, double heading, double velocity) {
 		return moveByDistance(inches, heading, velocity, 0);
 	}
 
-	
+	/**
+	 * Autonomous moving-moves forward by a specific distance
+	 * @param inches distance to move by
+	 * @param velocity velocity to move at
+	 * @return true when the action is complete
+	 */
 	public static boolean moveByDistance(double inches, double velocity) {
 		return moveByDistance(inches, 0, velocity, 0);
 	}
 	
 
-	//Autonomous turn method
+	/**
+	 * Autonomous turning method
+	 * @param degrees amount to turn by
+	 * @param timeOutDegreeTolerance tolerance for acceptable turning variation
+	 * @return true when the action is complete
+	 */
 	public static boolean turnDegrees(double degrees, double timeOutDegreeTolerance) {
 		//Positive degrees -> counterclockwise; negative degrees -> clockwise
 		
@@ -316,23 +353,37 @@ public class DriveTrain {
 		}
 		return false;
 	}
-	
+	/**
+	 * Autonomous turning method
+	 * @param degrees amount to turn by
+	 * @return true when the action is complete
+	 */
 	public static boolean turnDegrees(double degrees) {
 		return turnDegrees(degrees, 0);
 	}
 
 	//***************************************//
-	
+	/**
+	 * Set up a motion profile
+	 * @param profile the profile to set up
+	 */
 	public static void setupMotionProfile(MotionProfile profile) {
 		profile.setup();
 		profile.startFilling();
 	}
-	
+	/**
+	 * Begin the motion profile
+	 * @param profile the profile to start
+	 */
 	public static void startMotionProfile(MotionProfile profile) {
 		profile.periodic();
 		profile.startMotionProfile();
 	}
-
+	/**
+	 * Start running the motion profile
+	 * @param profile the profile to run
+	 * @return true when the profile is finished running
+	 */
 	public static boolean runMotionProfile(MotionProfile profile) {
 		SetValueMotionProfile setValue = profile.getSetValue();
 		leftTalon.set(ControlMode.MotionProfile, setValue.value);
@@ -346,7 +397,11 @@ public class DriveTrain {
 	}
 	
 	//***************************************//
-	
+	/**
+	 * Set the velocity of the left and right motors (slows down proportionally to elevator height)
+	 * @param left left motor speed to set
+	 * @param right right motor speed to set
+	 */
 	public static void setVelocity(double left, double right) {
 	    double elevatorHeight = Elevator.encoder.get();
 	    double scale = 1; 
@@ -360,12 +415,18 @@ public class DriveTrain {
 		//System.out.println("Setting velocities L: " + left + " R: " + right);
 		//System.out.println("Actual speed L: " + leftTalon.getSelectedSensorVelocity(0) + " R: " + rightTalon.getSelectedSensorVelocity(0));
 	}
-	
+	/**
+	 * Set the left and right motors to a specific speed (no elevator height adjusting)
+	 * @param left left motor speed to set
+	 * @param right right motor speed to set
+	 */
 	public static void setSpeed(double left, double right) {
 		leftTalon.set(ControlMode.PercentOutput, left);
 		rightTalon.set(ControlMode.PercentOutput, right);
 	}
-	
+	/**
+	 * Stop both motors
+	 */
 	public static void stop() {
 		leftTalon.set(ControlMode.PercentOutput, 0);
 		rightTalon.set(ControlMode.PercentOutput, 0);
@@ -373,18 +434,28 @@ public class DriveTrain {
 		//rightVictor.set(ControlMode.PercentOutput, 0);
 	}
 	
-	
+	/**
+	 * Wait for a specific amount of time
+	 * @param time the time to wait
+	 * @param previousTime the starting time when the command was called
+	 * @return true when the wait is over
+	 */
 	public static boolean wait(double time, double previousTime) {
 		if (Robot.timer.get() - previousTime >= time) {
 			return true;
 		}
 		return false;
 	}
-	
+	/**
+	 * Get the current angle of the gyro relative to the robot
+	 * @return -1 * the current gyro angle
+	 */
 	public static double getGyro() {
 		return -gyro.getAngle();
 	}
-	
+	/**
+	 * Reset the encoders back to 0
+	 */
 	public static void resetEncoders() {
 		leftTalon.setSelectedSensorPosition(0, 0, 0);
 		rightTalon.setSelectedSensorPosition(0, 0, 0);

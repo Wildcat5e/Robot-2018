@@ -150,16 +150,16 @@ public class Autonomous {
 		}
 
 		switch (state) {
-		case 0:
+		case 0://if state == 0
 			setupAuto();
 			state = nextState(state);
 			break;
-		case 1:
+		case 1://if state == 1
 			if (DriveTrain.moveByDistance(120, velocityMedium)) {
 				state = nextState(state);
 			}
 			break;
-		case 2:
+		case 2://if state == 2
 			endAuto();
 			break;
 		}

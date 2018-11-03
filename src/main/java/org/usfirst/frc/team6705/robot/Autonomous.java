@@ -107,7 +107,7 @@ public class Autonomous {
 		}
 	}
 	
-	//***************************************************************************//
+	//**************************************************************************//
 
 	MotionProfile profileStraight = new MotionProfile(DriveTrain.leftTalon, DriveTrain.rightTalon, leftSwitchMiddleStart_L, leftSwitchMiddleStart_R, leftSwitchMiddleStart_L.length);
 	

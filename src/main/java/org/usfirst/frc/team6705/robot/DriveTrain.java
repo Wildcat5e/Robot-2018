@@ -68,7 +68,7 @@ public class DriveTrain {
 		resetEncoders();
 	}
 	
-	private static void configPID() {
+	public static void configPID() {
 		//Velocity PID in slot 0
 		leftTalon.config_kP(0, kP_L, 0);
 		leftTalon.config_kI(0, kI, 0);

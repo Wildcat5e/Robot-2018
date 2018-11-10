@@ -1,3 +1,4 @@
+package org.usfirst.frc.team6705.robot;
 
 public class arms{
 /* static DoubleSolenoid doubleSolenoid = new DoubleSolenoid(5,9);
